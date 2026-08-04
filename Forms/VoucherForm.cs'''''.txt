@@ -1,0 +1,383 @@
+﻿using AlRowad_ERP.Core;
+using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.Windows.Forms;
+
+namespace AlRowad_ERP.Forms
+{
+    public partial class VoucherForm : BaseEntryForm
+    {
+        // الثوابت المحاسبية (تطابق الهيكل الذي بنيناه في الدستور)
+        protected override string PrimaryIdFieldName => "Voucher_NO";
+
+        public VoucherForm()
+        {
+            InitializeComponent();
+            this.Load += VoucherForm_Load;
+        }
+
+        private void VoucherForm_Load(object sender, EventArgs e)
+        {
+            // ربط معالج الأخطاء لمنع انهيار الـ Grid
+            grid_Details.DataError += DataGridView1_DataError;
+
+            // ربط أحداث تغيير العملة والنقر المزدوج للبحث
+            cur_IDComboBox.SelectedIndexChanged += cur_IDComboBox_SelectedIndexChanged;
+            grid_Details.CellDoubleClick += grid_Details_CellDoubleClick;
+            grid_Details.KeyDown += grid_Details_KeyDown;
+
+            SetupControls();
+            SetupCurrencyGridColumn();
+            grid_Details.CellValueChanged += grid_Details_CellValueChanged;
+           
+        }
+        private void grid_Details_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            // إذا كان المستخدم يعدل في عمود العملة، نقوم بإنهاء حالة التعديل فوراً لإطلاق حدث CellValueChanged
+            if (grid_Details.IsCurrentCellDirty && grid_Details.CurrentCell.ColumnIndex == grid_Details.Columns["Cur_ID"].Index)
+            {
+                grid_Details.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+        }
+
+        private void SetupCurrencyGridColumn()
+        {
+            // جلب كل العملات المفعلة فقط
+            DataTable dtCurrencies = DatabaseHelper.GetTable("SELECT Cur_ID, Cur_Name FROM Currencies WHERE Is_Active = 1");
+
+            // ربط العمود الخاص بالعملة في الجريد
+            DataGridViewComboBoxColumn col = (DataGridViewComboBoxColumn)grid_Details.Columns["Cur_ID"];
+            col.DataSource = dtCurrencies;
+            col.DisplayMember = "Cur_Name";
+            col.ValueMember = "Cur_ID";
+        }
+        private void SetupControls()
+        {
+            // ضبط الافتراضيات بعد تحرير الشاشة من الـ Bindings
+            voucher_DateDateTimePicker.Value = DateTime.Now;
+            exchange_RateTextBox.Text = "1.0000";
+            exchange_RateTextBox.ReadOnly = true; // يُقفل افتراضياً
+
+            // منع توليد الأعمدة آلياً لضمان الاعتماد على الأعمدة المرسومة في الـ Designer
+            grid_Details.AutoGenerateColumns = false;
+        }
+
+        // حدث عند تغيير العملة لجلب سعر الصرف آلياً وقفل/فتح الحقل
+        private void cur_IDComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cur_IDComboBox.SelectedValue != null && cur_IDComboBox.SelectedValue.ToString() != "System.Data.DataRowView")
+            {
+                try
+                {
+                    int curId = Convert.ToInt32(cur_IDComboBox.SelectedValue);
+                    // جلب سعر الصرف الجديد من المرجع
+                    decimal rate = CurrencyHelper.GetExchangeRate(curId);
+
+                    // تحديث سعر الصرف في الواجهة (للرأس) أو الجدول (للأسطر)
+                    exchange_RateTextBox.Text = rate.ToString("F4");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("خطأ في تحديث سعر الصرف: " + ex.Message);
+                }
+            }
+        }
+        // النقر المزدوج لفتح شاشة البحث وإنزال الحساب وعملته
+        // 1. الدالة المركزية لفتح شاشة البحث
+        private void OpenAccountSearch(int rowIndex)
+        {
+            try
+            {
+                string query = "SELECT Acc_ID, Acc_Name FROM Accounts WHERE Acc_Type = 1";
+
+                using (var search = new AlRowad_ERP.HelpForms.UniversalSearchForm("بحث عن الحسابات", query))
+                {
+                    if (search.ShowDialog() == DialogResult.OK)
+                    {
+                        string selectedAcc = search.المعرف_المختار;
+                        DataRow accRow = DatabaseHelper.GetRow("SELECT Acc_ID, Acc_Name FROM Accounts WHERE Acc_ID = '" + selectedAcc + "'");
+
+                        if (accRow != null)
+                        {
+                            grid_Details.Rows[rowIndex].Cells["Acc_ID"].Value = accRow["Acc_ID"];
+                            grid_Details.Rows[rowIndex].Cells["Acc_Name"].Value = accRow["Acc_Name"];
+
+                            // جلب العملات المسموحة للحساب مع جلب حقل تفعيلها للحساب AAC.Is_Active
+                            string curQuery = @"SELECT C.Cur_ID, C.Cur_Name, AAC.Is_Default, AAC.Is_Active AS Account_Cur_Active
+                                       FROM Currencies C 
+                                       INNER JOIN Account_Allowed_Currencies AAC ON C.Cur_ID = AAC.Cur_ID 
+                                       WHERE AAC.Acc_ID = '" + selectedAcc + "' AND C.Is_Active = 1"; // نشطة بالنظام العام
+
+                            DataTable dtAllowedCur = DatabaseHelper.GetTable(curQuery);
+
+                            if (dtAllowedCur != null && dtAllowedCur.Rows.Count > 0)
+                            {
+                                DataGridViewComboBoxCell comboCell = (DataGridViewComboBoxCell)grid_Details.Rows[rowIndex].Cells["Cur_ID"];
+                                comboCell.DataSource = dtAllowedCur;
+                                comboCell.DisplayMember = "Cur_Name";
+                                comboCell.ValueMember = "Cur_ID";
+
+                                int defaultCurId = 0;
+
+                                // البحث عن العملة الافتراضية بشرط أن تكون نشطة أيضاً لهذا الحساب
+                                DataRow[] defaultRows = dtAllowedCur.Select("(Is_Default = 1 OR Is_Default = 'True') AND (Account_Cur_Active = 1 OR Account_Cur_Active = 'True')");
+
+                                if (defaultRows.Length > 0)
+                                {
+                                    defaultCurId = Convert.ToInt32(defaultRows[0]["Cur_ID"]);
+                                }
+                                else
+                                {
+                                    // إذا لم توجد افتراضية نشطة، نأخذ أول عملة نشطة ومتاحة للحساب
+                                    DataRow[] activeRows = dtAllowedCur.Select("Account_Cur_Active = 1 OR Account_Cur_Active = 'True'");
+                                    if (activeRows.Length > 0)
+                                        defaultCurId = Convert.ToInt32(activeRows[0]["Cur_ID"]);
+                                    else
+                                        defaultCurId = Convert.ToInt32(dtAllowedCur.Rows[0]["Cur_ID"]);
+                                }
+
+                                // تعيين القيمة الافتراضية الابتدائية وسعر صرفها
+                                comboCell.Value = defaultCurId;
+                                grid_Details.Rows[rowIndex].Cells["Exchange_Rate"].Value = CurrencyHelper.GetExchangeRate(defaultCurId).ToString("F4");
+                            }
+                            else
+                            {
+                                MessageBox.Show("لا توجد عملات مرتبطة بهذا الحساب!", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("خطأ في الربط: " + ex.Message, "نظام الرواد", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private bool isHandlingCurrencyChange = false;
+
+        private void grid_Details_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.ColumnIndex != grid_Details.Columns["Cur_ID"].Index) return;
+            if (isHandlingCurrencyChange) return;
+
+            try
+            {
+                var row = grid_Details.Rows[e.RowIndex];
+                var comboCell = row.Cells["Cur_ID"] as DataGridViewComboBoxCell;
+
+                if (comboCell != null && comboCell.Value != null && comboCell.DataSource != null)
+                {
+                    int selectedCurId = Convert.ToInt32(comboCell.Value);
+                    DataTable dtAllowedCur = (DataTable)comboCell.DataSource;
+
+                    // فحص السطر المختار
+                    DataRow[] selectedRows = dtAllowedCur.Select($"Cur_ID = {selectedCurId}");
+
+                    if (selectedRows.Length > 0)
+                    {
+                        var targetRow = selectedRows[0]; // تم تصحيح جلب السطر الأول هنا [0]
+                        bool isCurActiveForAccount = Convert.ToBoolean(targetRow["Account_Cur_Active"]);
+
+                        if (!isCurActiveForAccount)
+                        {
+                            // 1. إظهار رسالة التحذير فوراً
+                            MessageBox.Show("هذه العملة غير مسموح التعامل معها لهذا الحساب (موقوفة للعميل)!", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                            // 2. جلب العملة الافتراضية للعودة إليها
+                            int defaultCurId = 0;
+                            DataRow[] defaultRows = dtAllowedCur.Select("(Is_Default = 1 OR Is_Default = 'True') AND (Account_Cur_Active = 1 OR Account_Cur_Active = 'True')");
+
+                            if (defaultRows.Length > 0)
+                            {
+                                defaultCurId = Convert.ToInt32(defaultRows[0]["Cur_ID"]);
+                            }
+                            else
+                            {
+                                DataRow[] activeRows = dtAllowedCur.Select("Account_Cur_Active = 1 OR Account_Cur_Active = 'True'");
+                                if (activeRows.Length > 0) defaultCurId = Convert.ToInt32(activeRows[0]["Cur_ID"]);
+                            }
+
+                            // 3. إرجاع القيمة برمجياً وسعر الصرف
+                            isHandlingCurrencyChange = true;
+                            comboCell.Value = defaultCurId;
+                            row.Cells["Exchange_Rate"].Value = CurrencyHelper.GetExchangeRate(defaultCurId).ToString("F4");
+                            isHandlingCurrencyChange = false;
+                        }
+                        else
+                        {
+                            // العملة سليمة -> تحديث سعر الصرف فوراً
+                            isHandlingCurrencyChange = true;
+                            row.Cells["Exchange_Rate"].Value = CurrencyHelper.GetExchangeRate(selectedCurId).ToString("F4");
+                            isHandlingCurrencyChange = false;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                isHandlingCurrencyChange = false;
+                MessageBox.Show("خطأ أثناء فحص تفعيل العملة: " + ex.Message, "نظام الرواد", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void grid_Details_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+            // عند تغيير قيمة خلية العملة
+            if (grid_Details.Columns[e.ColumnIndex].Name == "Cur_ID" && e.FormattedValue != null)
+            {
+                int curId;
+                if (int.TryParse(e.FormattedValue.ToString(), out curId))
+                {
+                    // نستخدم دالة التأكد من حالة العملة
+                    if (!CurrencyHelper.IsCurrencyActive(curId))
+                    {
+                        MessageBox.Show("عذراً، هذه العملة موقوفة ولا يمكن التعامل بها حالياً.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                        e.Cancel = true; // نمنع التغيير ونبقي الخلية كما هي
+                    }
+                }
+            }
+        }
+        private void grid_Details_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // التحقق من أن النقر تم على أعمدة الحسابات
+            if (e.RowIndex >= 0 && (grid_Details.Columns[e.ColumnIndex].Name == "Acc_ID" || grid_Details.Columns[e.ColumnIndex].Name == "Acc_Name"))
+            {
+                // استدعاء الدالة الموحدة المذكورة سابقاً فقط
+                OpenAccountSearch(e.RowIndex);
+            }
+        }        // 3. حدث الضغط على F7 (KeyDown)
+        private void grid_Details_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F7 && grid_Details.CurrentCell != null)
+            {
+                string colName = grid_Details.Columns[grid_Details.CurrentCell.ColumnIndex].Name;
+                if (colName == "Acc_ID" || colName == "Acc_Name")
+                {
+                    OpenAccountSearch(grid_Details.CurrentCell.RowIndex);
+                    e.Handled = true; // منع انتقال الحدث الافتراضي للزر
+                }
+            }
+        }
+        private void DataGridView1_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            e.ThrowException = false;
+            e.Cancel = true; // منع ظهور نافذة الخطأ الافتراضية المزعجة
+        }
+
+        // الاختصار F2 (جديد) - وفقاً لدستور النظام
+        public override void OnNew()
+        {
+            base.OnNew();
+
+            // جلب رقم سند جديد عبر المحرك
+            voucher_NoTextBox.Text = DatabaseHelper.GetNewDocNo("Payment_Vouchers", "Voucher_No");
+
+            // تعبئة العملات
+            CurrencyHelper.FillCurrencyComboBox(cur_IDComboBox);
+
+            // جلب الحسابات النقدية للصندوق/البنك المتاحة (تم التصحيح لجدول Accounts)
+            box_Acc_IDComboBox.DataSource = DatabaseHelper.GetTable("SELECT Acc_ID, Acc_Name FROM Accounts WHERE Acc_ID LIKE '1101010%'");
+            box_Acc_IDComboBox.DisplayMember = "Acc_Name";
+            box_Acc_IDComboBox.ValueMember = "Acc_ID";
+
+            // نوع المستند
+            doc_Type_IDComboBox.DataSource = DatabaseHelper.GetTable("SELECT Doc_Type_ID, Doc_Name FROM Doc_Types");
+            doc_Type_IDComboBox.DisplayMember = "Doc_Name";
+            doc_Type_IDComboBox.ValueMember = "Doc_Type_ID";
+
+            // تصفير التفاصيل
+            grid_Details.Rows.Clear();
+            amountTextBox.Text = "0.00";
+            notesTextBox.Clear();
+            voucher_DateDateTimePicker.Value = DateTime.Now;
+        }
+
+        // الاختصار F5 (حفظ) - الترحيل المحاسبي
+        public override void OnSave()
+        {
+            // التحقق من القيم قبل الحفظ
+            if (string.IsNullOrEmpty(voucher_NoTextBox.Text))
+            {
+                MessageBox.Show("يرجى التأكد من توليد رقم السند.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // استخدام كلاس DatabaseHelper للحصول على الاتصال المركزي الموحد
+            using (SqlConnection conn = DatabaseHelper.GetConnection())
+            {
+                if (conn.State != ConnectionState.Open) conn.Open();
+                SqlTransaction trans = conn.BeginTransaction();
+                try
+                {
+                    // ترحيل الرأس (Header) بجميع بياناته الأساسية
+                    string sqlHeader = "INSERT INTO Payment_Vouchers (Voucher_No, Voucher_Date, Doc_Type_ID, Box_Acc_ID, Amount, Cur_ID, Exchange_Rate, Notes, Is_Posted) VALUES (@No, @Date, @DocType, @BoxAcc, @Amount, @CurID, @ExchRate, @Notes, 1)";
+                    using (SqlCommand cmd = new SqlCommand(sqlHeader, conn, trans))
+                    {
+                        cmd.Parameters.AddWithValue("@No", voucher_NoTextBox.Text);
+                        cmd.Parameters.AddWithValue("@Date", voucher_DateDateTimePicker.Value);
+                        cmd.Parameters.AddWithValue("@DocType", doc_Type_IDComboBox.SelectedValue ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@BoxAcc", box_Acc_IDComboBox.SelectedValue ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@Amount", string.IsNullOrEmpty(amountTextBox.Text) ? 0 : decimal.Parse(amountTextBox.Text));
+                        cmd.Parameters.AddWithValue("@CurID", cur_IDComboBox.SelectedValue ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@ExchRate", string.IsNullOrEmpty(exchange_RateTextBox.Text) ? 1 : decimal.Parse(exchange_RateTextBox.Text));
+                        cmd.Parameters.AddWithValue("@Notes", notesTextBox.Text);
+
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    // ترحيل التفاصيل إلى الأستاذ العام (القيود) - الاعتماد على المحرك المركزي CurrencyHelper
+                    foreach (DataGridViewRow row in grid_Details.Rows)
+                    {
+                        if (row.IsNewRow || row.Cells["Acc_ID"].Value == null) continue;
+
+                        // حماية لتجنب قيم فارغة (Null) في مبالغ الجريد
+                        decimal debit = 0, credit = 0;
+                        if (grid_Details.Columns.Contains("Amount_Debit") && row.Cells["Amount_Debit"].Value != null)
+                            debit = Convert.ToDecimal(row.Cells["Amount_Debit"].Value);
+                        if (grid_Details.Columns.Contains("Amount_Credit") && row.Cells["Amount_Credit"].Value != null)
+                            credit = Convert.ToDecimal(row.Cells["Amount_Credit"].Value);
+
+                        int lineCurId = cur_IDComboBox.SelectedValue != null ? Convert.ToInt32(cur_IDComboBox.SelectedValue) : 1;
+                        if (grid_Details.Columns.Contains("Cur_ID") && row.Cells["Cur_ID"].Value != null)
+                            lineCurId = Convert.ToInt32(row.Cells["Cur_ID"].Value);
+
+                        decimal lineRate = string.IsNullOrEmpty(exchange_RateTextBox.Text) ? 1 : Convert.ToDecimal(exchange_RateTextBox.Text);
+                        if (grid_Details.Columns.Contains("Exchange_Rate") && row.Cells["Exchange_Rate"].Value != null)
+                            lineRate = Convert.ToDecimal(row.Cells["Exchange_Rate"].Value);
+
+                        string lineNotes = grid_Details.Columns.Contains("Notes") ? row.Cells["Notes"].Value?.ToString() : notesTextBox.Text;
+
+                        CurrencyHelper.PostToLedger(
+                            row.Cells["Acc_ID"].Value.ToString(),
+                            debit,
+                            credit,
+                            lineCurId,
+                            lineRate,
+                            lineNotes,
+                            trans
+                        );
+                    }
+
+                    trans.Commit();
+                    MessageBox.Show("تم الحفظ والترحيل بنجاح", "تأكيد", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // العودة لوضع الإدخال الجديد بعد الحفظ
+                    OnNew();
+                }
+                catch (Exception ex)
+                {
+                    trans.Rollback();
+                    MessageBox.Show("خطأ أثناء الحفظ أو الترحيل: " + ex.Message, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+        // أضف هذه الدالة داخل كلاس CurrencyHelper
+        public static bool IsCurrencyActive(int curId)
+        {
+            // تحقق من أن العملة فعالة
+            object result = DatabaseHelper.GetTable("SELECT Is_Active FROM Currencies WHERE Cur_ID = " + curId).Rows[0][0];
+            return result != DBNull.Value && Convert.ToBoolean(result);
+        }
+    }
+}

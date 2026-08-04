@@ -1,0 +1,695 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <metadata name="acc_IDLabel.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="acc_IDLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="acc_IDLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>29, 161</value>
+  </data>
+  <data name="acc_IDLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 25</value>
+  </data>
+  <data name="acc_IDLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="acc_IDLabel.Text" xml:space="preserve">
+    <value>رقم الحساب:</value>
+  </data>
+  <data name="&gt;&gt;acc_IDLabel.Name" xml:space="preserve">
+    <value>acc_IDLabel</value>
+  </data>
+  <data name="&gt;&gt;acc_IDLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;acc_IDLabel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;acc_IDLabel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <metadata name="acc_NameLabel.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
+  <data name="acc_NameLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="acc_NameLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>29, 223</value>
+  </data>
+  <data name="acc_NameLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 25</value>
+  </data>
+  <data name="acc_NameLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="acc_NameLabel.Text" xml:space="preserve">
+    <value>اسم الحساب:</value>
+  </data>
+  <data name="&gt;&gt;acc_NameLabel.Name" xml:space="preserve">
+    <value>acc_NameLabel</value>
+  </data>
+  <data name="&gt;&gt;acc_NameLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;acc_NameLabel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;acc_NameLabel.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <metadata name="acc_Name_EnLabel.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
+  <data name="acc_Name_EnLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="acc_Name_EnLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>469, 220</value>
+  </data>
+  <data name="acc_Name_EnLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>118, 25</value>
+  </data>
+  <data name="acc_Name_EnLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="acc_Name_EnLabel.Text" xml:space="preserve">
+    <value>اسم الحسابEn:</value>
+  </data>
+  <data name="&gt;&gt;acc_Name_EnLabel.Name" xml:space="preserve">
+    <value>acc_Name_EnLabel</value>
+  </data>
+  <data name="&gt;&gt;acc_Name_EnLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;acc_Name_EnLabel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;acc_Name_EnLabel.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <metadata name="parent_IDLabel.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
+  <data name="parent_IDLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="parent_IDLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>427, 158</value>
+  </data>
+  <data name="parent_IDLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>150, 25</value>
+  </data>
+  <data name="parent_IDLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="parent_IDLabel.Text" xml:space="preserve">
+    <value>رقم الحساب الرئيسي:</value>
+  </data>
+  <data name="&gt;&gt;parent_IDLabel.Name" xml:space="preserve">
+    <value>parent_IDLabel</value>
+  </data>
+  <data name="&gt;&gt;parent_IDLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;parent_IDLabel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;parent_IDLabel.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <metadata name="account_LevelLabel.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
+  <data name="account_LevelLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="account_LevelLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>469, 263</value>
+  </data>
+  <data name="account_LevelLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>142, 25</value>
+  </data>
+  <data name="account_LevelLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="account_LevelLabel.Text" xml:space="preserve">
+    <value>Account Level:</value>
+  </data>
+  <data name="&gt;&gt;account_LevelLabel.Name" xml:space="preserve">
+    <value>account_LevelLabel</value>
+  </data>
+  <data name="&gt;&gt;account_LevelLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;account_LevelLabel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;account_LevelLabel.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <metadata name="acc_TypeLabel.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
+  <data name="acc_TypeLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="acc_TypeLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>469, 306</value>
+  </data>
+  <data name="acc_TypeLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>102, 25</value>
+  </data>
+  <data name="acc_TypeLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
+  </data>
+  <data name="acc_TypeLabel.Text" xml:space="preserve">
+    <value>Acc Type:</value>
+  </data>
+  <data name="&gt;&gt;acc_TypeLabel.Name" xml:space="preserve">
+    <value>acc_TypeLabel</value>
+  </data>
+  <data name="&gt;&gt;acc_TypeLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;acc_TypeLabel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;acc_TypeLabel.ZOrder" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <metadata name="acc_NatureLabel.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
+  <data name="acc_NatureLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="acc_NatureLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>29, 308</value>
+  </data>
+  <data name="acc_NatureLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>115, 25</value>
+  </data>
+  <data name="acc_NatureLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>15</value>
+  </data>
+  <data name="acc_NatureLabel.Text" xml:space="preserve">
+    <value>Acc Nature:</value>
+  </data>
+  <data name="&gt;&gt;acc_NatureLabel.Name" xml:space="preserve">
+    <value>acc_NatureLabel</value>
+  </data>
+  <data name="&gt;&gt;acc_NatureLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;acc_NatureLabel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;acc_NatureLabel.ZOrder" xml:space="preserve">
+    <value>12</value>
+  </data>
+  <metadata name="report_TypeLabel.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
+  <data name="report_TypeLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="report_TypeLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>469, 348</value>
+  </data>
+  <data name="report_TypeLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>125, 25</value>
+  </data>
+  <data name="report_TypeLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>17</value>
+  </data>
+  <data name="report_TypeLabel.Text" xml:space="preserve">
+    <value>Report Type:</value>
+  </data>
+  <data name="&gt;&gt;report_TypeLabel.Name" xml:space="preserve">
+    <value>report_TypeLabel</value>
+  </data>
+  <data name="&gt;&gt;report_TypeLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;report_TypeLabel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;report_TypeLabel.ZOrder" xml:space="preserve">
+    <value>14</value>
+  </data>
+  <metadata name="is_StoppedLabel.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
+  <data name="is_StoppedLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="is_StoppedLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>29, 348</value>
+  </data>
+  <data name="is_StoppedLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>112, 25</value>
+  </data>
+  <data name="is_StoppedLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>19</value>
+  </data>
+  <data name="is_StoppedLabel.Text" xml:space="preserve">
+    <value>Is Stopped:</value>
+  </data>
+  <data name="&gt;&gt;is_StoppedLabel.Name" xml:space="preserve">
+    <value>is_StoppedLabel</value>
+  </data>
+  <data name="&gt;&gt;is_StoppedLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;is_StoppedLabel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;is_StoppedLabel.ZOrder" xml:space="preserve">
+    <value>16</value>
+  </data>
+  <data name="alRowadToolBar2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>126, 36</value>
+  </data>
+  <data name="alRowadToolBar2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1014, 53</value>
+  </data>
+  <data name="alRowadToolBar2.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;alRowadToolBar2.Name" xml:space="preserve">
+    <value>alRowadToolBar2</value>
+  </data>
+  <data name="&gt;&gt;alRowadToolBar2.Type" xml:space="preserve">
+    <value>AlRowad_ERP.Controls.AlRowadToolBar, AlRowad_ERP, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;alRowadToolBar2.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;alRowadToolBar2.ZOrder" xml:space="preserve">
+    <value>19</value>
+  </data>
+  <data name="treeAccounts.Location" type="System.Drawing.Point, System.Drawing">
+    <value>746, 93</value>
+  </data>
+  <data name="treeAccounts.Size" type="System.Drawing.Size, System.Drawing">
+    <value>410, 639</value>
+  </data>
+  <data name="treeAccounts.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;treeAccounts.Name" xml:space="preserve">
+    <value>treeAccounts</value>
+  </data>
+  <data name="&gt;&gt;treeAccounts.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TreeView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;treeAccounts.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;treeAccounts.ZOrder" xml:space="preserve">
+    <value>18</value>
+  </data>
+  <metadata name="AlRowad_ERPDataSet.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <metadata name="accounts_ChartBindingSource.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>260, 17</value>
+  </metadata>
+  <metadata name="accounts_ChartTableAdapter.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>560, 17</value>
+  </metadata>
+  <metadata name="tableAdapterManager1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>850, 17</value>
+  </metadata>
+  <metadata name="accountsTableAdapter1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>602, 51</value>
+  </metadata>
+  <metadata name="accountsBindingSource1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>341, 51</value>
+  </metadata>
+  <data name="acc_ID.Location" type="System.Drawing.Point, System.Drawing">
+    <value>177, 158</value>
+  </data>
+  <data name="acc_ID.Size" type="System.Drawing.Size, System.Drawing">
+    <value>186, 30</value>
+  </data>
+  <data name="acc_ID.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;acc_ID.Name" xml:space="preserve">
+    <value>acc_ID</value>
+  </data>
+  <data name="&gt;&gt;acc_ID.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;acc_ID.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;acc_ID.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="acc_Name.Location" type="System.Drawing.Point, System.Drawing">
+    <value>177, 220</value>
+  </data>
+  <data name="acc_Name.Size" type="System.Drawing.Size, System.Drawing">
+    <value>274, 30</value>
+  </data>
+  <data name="acc_Name.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;acc_Name.Name" xml:space="preserve">
+    <value>acc_Name</value>
+  </data>
+  <data name="&gt;&gt;acc_Name.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;acc_Name.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;acc_Name.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="acc_Name_En.Location" type="System.Drawing.Point, System.Drawing">
+    <value>617, 217</value>
+  </data>
+  <data name="acc_Name_En.Size" type="System.Drawing.Size, System.Drawing">
+    <value>104, 30</value>
+  </data>
+  <data name="acc_Name_En.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="&gt;&gt;acc_Name_En.Name" xml:space="preserve">
+    <value>acc_Name_En</value>
+  </data>
+  <data name="&gt;&gt;acc_Name_En.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;acc_Name_En.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;acc_Name_En.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="parent_ID.Location" type="System.Drawing.Point, System.Drawing">
+    <value>583, 155</value>
+  </data>
+  <data name="parent_ID.Size" type="System.Drawing.Size, System.Drawing">
+    <value>104, 30</value>
+  </data>
+  <data name="parent_ID.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="&gt;&gt;parent_ID.Name" xml:space="preserve">
+    <value>parent_ID</value>
+  </data>
+  <data name="&gt;&gt;parent_ID.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;parent_ID.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;parent_ID.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="account_Level.Location" type="System.Drawing.Point, System.Drawing">
+    <value>617, 260</value>
+  </data>
+  <data name="account_Level.Size" type="System.Drawing.Size, System.Drawing">
+    <value>104, 30</value>
+  </data>
+  <data name="account_Level.TabIndex" type="System.Int32, mscorlib">
+    <value>12</value>
+  </data>
+  <data name="&gt;&gt;account_Level.Name" xml:space="preserve">
+    <value>account_Level</value>
+  </data>
+  <data name="&gt;&gt;account_Level.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;account_Level.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;account_Level.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="acc_Type.Location" type="System.Drawing.Point, System.Drawing">
+    <value>617, 303</value>
+  </data>
+  <data name="acc_Type.Size" type="System.Drawing.Size, System.Drawing">
+    <value>104, 30</value>
+  </data>
+  <data name="acc_Type.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
+  <data name="&gt;&gt;acc_Type.Name" xml:space="preserve">
+    <value>acc_Type</value>
+  </data>
+  <data name="&gt;&gt;acc_Type.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;acc_Type.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;acc_Type.ZOrder" xml:space="preserve">
+    <value>11</value>
+  </data>
+  <data name="acc_Nature.Location" type="System.Drawing.Point, System.Drawing">
+    <value>177, 305</value>
+  </data>
+  <data name="acc_Nature.Size" type="System.Drawing.Size, System.Drawing">
+    <value>104, 30</value>
+  </data>
+  <data name="acc_Nature.TabIndex" type="System.Int32, mscorlib">
+    <value>16</value>
+  </data>
+  <data name="&gt;&gt;acc_Nature.Name" xml:space="preserve">
+    <value>acc_Nature</value>
+  </data>
+  <data name="&gt;&gt;acc_Nature.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;acc_Nature.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;acc_Nature.ZOrder" xml:space="preserve">
+    <value>13</value>
+  </data>
+  <data name="report_Type.Location" type="System.Drawing.Point, System.Drawing">
+    <value>617, 345</value>
+  </data>
+  <data name="report_Type.Size" type="System.Drawing.Size, System.Drawing">
+    <value>104, 30</value>
+  </data>
+  <data name="report_Type.TabIndex" type="System.Int32, mscorlib">
+    <value>18</value>
+  </data>
+  <data name="&gt;&gt;report_Type.Name" xml:space="preserve">
+    <value>report_Type</value>
+  </data>
+  <data name="&gt;&gt;report_Type.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;report_Type.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;report_Type.ZOrder" xml:space="preserve">
+    <value>15</value>
+  </data>
+  <data name="is_Stopped.Location" type="System.Drawing.Point, System.Drawing">
+    <value>177, 343</value>
+  </data>
+  <data name="is_Stopped.Size" type="System.Drawing.Size, System.Drawing">
+    <value>104, 24</value>
+  </data>
+  <data name="is_Stopped.TabIndex" type="System.Int32, mscorlib">
+    <value>20</value>
+  </data>
+  <data name="is_Stopped.Text" xml:space="preserve">
+    <value>checkBox1</value>
+  </data>
+  <data name="&gt;&gt;is_Stopped.Name" xml:space="preserve">
+    <value>is_Stopped</value>
+  </data>
+  <data name="&gt;&gt;is_Stopped.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;is_Stopped.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;is_Stopped.ZOrder" xml:space="preserve">
+    <value>17</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>103</value>
+  </metadata>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>1178, 752</value>
+  </data>
+  <data name="&gt;&gt;AlRowad_ERPDataSet.Name" xml:space="preserve">
+    <value>AlRowad_ERPDataSet</value>
+  </data>
+  <data name="&gt;&gt;AlRowad_ERPDataSet.Type" xml:space="preserve">
+    <value>AlRowad_ERP.AlRowad_ERPDataSet, AlRowad_ERPDataSet.Designer.cs.dll, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;accounts_ChartBindingSource.Name" xml:space="preserve">
+    <value>accounts_ChartBindingSource</value>
+  </data>
+  <data name="&gt;&gt;accounts_ChartBindingSource.Type" xml:space="preserve">
+    <value>System.Windows.Forms.BindingSource, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;accounts_ChartTableAdapter.Name" xml:space="preserve">
+    <value>accounts_ChartTableAdapter</value>
+  </data>
+  <data name="&gt;&gt;accounts_ChartTableAdapter.Type" xml:space="preserve">
+    <value>AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.Accounts_ChartTableAdapter, AlRowad_ERPDataSet.Designer.cs.dll, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;tableAdapterManager1.Name" xml:space="preserve">
+    <value>tableAdapterManager1</value>
+  </data>
+  <data name="&gt;&gt;tableAdapterManager1.Type" xml:space="preserve">
+    <value>AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.TableAdapterManager, AlRowad_ERPDataSet.Designer.cs.dll, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;accountsTableAdapter1.Name" xml:space="preserve">
+    <value>accountsTableAdapter1</value>
+  </data>
+  <data name="&gt;&gt;accountsTableAdapter1.Type" xml:space="preserve">
+    <value>AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.AccountsTableAdapter, AlRowad_ERPDataSet.Designer.cs.dll, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;accountsBindingSource1.Name" xml:space="preserve">
+    <value>accountsBindingSource1</value>
+  </data>
+  <data name="&gt;&gt;accountsBindingSource1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.BindingSource, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>AccountsForm1</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>AlRowad_ERP.Core.BaseEntryForm, AlRowad_ERP, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+</root>

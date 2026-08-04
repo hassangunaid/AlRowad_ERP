@@ -1,0 +1,12 @@
+﻿## استثناءات فيجوال استديو النموذجية
+[Bb]in/
+[Oo]bj/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.vs/
+App_Data/
+*.ldf
+*.mdf
+*.cfg
