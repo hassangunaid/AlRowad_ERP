@@ -265,7 +265,6 @@
     <None Include="AlRowad_ERPDataSet.xss">
       <DependentUpon>AlRowad_ERPDataSet.xsd</DependentUpon>
     </None>
-    <None Include="AlRowad_ERP_TemporaryKey.pfx" />
     <None Include="App.config" />
     <None Include="CHANGES_SUMMARY.md" />
     <None Include="FIXES_COMPLETED.md" />
@@ -277,7 +276,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="اسم الزر في الخصائص.docx" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
