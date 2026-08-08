@@ -24,6 +24,41 @@ namespace AlRowad_ERP.Core.Constants
         public const string IsDeleted = "Is_Deleted";
         public const string DeletedBy = "Deleted_By";
         public const string DeletedAt = "Deleted_At";
+        public static class Statuses
+        {
+            public const string PeriodOpen = "Open";
+            public const string PeriodClosed = "Closed";
+        }
 
+        public static class Messages
+        {
+            public const string InsufficientStock = "عفواً، الرصيد المخزني غير كافٍ لإتمام العملية.";
+            public const string UnbalancedJournal = "لا يمكن حفظ القيد: إجمالي المدين لا يساوي إجمالي الدائن.";
+            public const string ZeroAmountJournal = "لا يمكن حفظ قيد بقيمة صفرية.";
+            public const string ClosedFinancialPeriod = "لا يمكن إتمام العملية: الفترة المالية مغلقة.";
+            public const string SaveSuccess = "تم حفظ البيانات بنجاح.";
+            public const string SaveFailed = "حدث خطأ أثناء الحفظ:";
+            public const string CannotDeletePosted = "لا يمكن حذف مستند مُرحل إلى الحسابات. يرجى إلغاء الترحيل أولاً.";
+            public const string ConfirmDelete = "هل أنت متأكد من حذف هذا السجل؟";
+            public const string DeleteSuccess = "تم الحذف بنجاح.";
+            public const string DeleteFailed = "فشل الحذف! السبب:";
+        }
+        public static class AuditFields
+        {
+            public const string CreatedBy = "Created_By";
+            public const string CreatedDate = "Created_Date";
+        }
+
+        public static class Descriptions
+        {
+            public const string SalesInvoice = "فاتورة مبيعات";
+        }
+
+        public static class Accounts
+        {
+            // سيتم ربط هذه الحسابات لاحقاً بقاعدة البيانات، حالياً نضع قيماً افتراضية
+            public const int SalesRevenue = 4101;
+        }
     }
+
 }

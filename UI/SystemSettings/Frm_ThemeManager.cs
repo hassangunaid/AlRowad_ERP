@@ -1,6 +1,5 @@
 ﻿using AlRowad_ERP.Core;
 using AlRowad_ERP.Core.Constants;
-using AlRowad_ERP.Core.Constants;
 using AlRowad_ERP.Core.Entities;
 using AlRowad_ERP.Data;
 using AlRowad_ERP.UI.Base;
@@ -99,7 +98,7 @@ namespace AlRowadERP.UI.Themes
         }
 
         // 5. سلامة البيانات (ACID) & السلاسة: عملية الحفظ 
-        protected override async Task<bool> ExecuteSaveToDatabaseAsync()
+        protected override async Task<bool> ExecuteSaveToDatabaseAsync(SqlTransaction transaction)
         {
             try
             {

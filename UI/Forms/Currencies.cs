@@ -505,7 +505,7 @@ namespace AlRowad_ERP.Forms
                 }
                 else
                 {
-                    ClearForm(this);
+                    ClearFormFields(this);
                     if (currenciesDataGridView != null) currenciesDataGridView.DataSource = null;
                     ChangeFormMode(FormMode.View);
                 }
@@ -549,7 +549,8 @@ namespace AlRowad_ERP.Forms
                             trans.Commit();
                             MessageBox.Show("تم حذف العملة بنجاح.", "تأكيد", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                            ClearForm(this);
+                            ClearFormFields(this);
+
                             if (currenciesDataGridView != null) currenciesDataGridView.DataSource = null;
                             ChangeFormMode(FormMode.View);
                         }

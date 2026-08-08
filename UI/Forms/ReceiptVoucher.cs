@@ -749,7 +749,7 @@ namespace AlRowad_ERP.Forms
         #endregion
 
         #region الاختصارات السيادية الموروثة
-        protected override void OnF9Pressed()
+        internal override void OnF9Pressed()
         {
             if (grid_Details.CurrentCell != null)
             {
@@ -761,7 +761,7 @@ namespace AlRowad_ERP.Forms
             }
         }
 
-        protected override void OnF7Pressed()
+        internal override void OnF7Pressed()
         {
             if (grid_Details.CurrentCell != null)
             {
@@ -773,7 +773,7 @@ namespace AlRowad_ERP.Forms
             }
         }
 
-        protected override void OnF3Pressed()
+        internal override void OnF3Pressed()
         {
             if (grid_Details.CurrentCell == null) return;
 
@@ -794,7 +794,7 @@ namespace AlRowad_ERP.Forms
             }
         }
 
-        protected override void OnF2Pressed()
+        internal override void OnF2Pressed()
         {
             if (grid_Details.CurrentCell == null) return;
 
@@ -827,9 +827,7 @@ namespace AlRowad_ERP.Forms
         {
             currentVoucherId = 0;
             DetachHeaderEvents();
-            ClearForm(this);
-
-            // 🌟 استخدام المحرك اللامتزامن
+            ClearFormFields(this);
             voucher_NoTextBox.Text = await VoucherRepository.GetNewVoucherNoAsync(1);
 
             rbtnCash.Checked = true;
@@ -1154,7 +1152,7 @@ namespace AlRowad_ERP.Forms
                 }
                 else
                 {
-                    ClearForm(this);
+                    ClearFormFields(this);
                     grid_Details.Rows.Clear();
                     if (txt_Difference != null) { txt_Difference.Text = "0.00"; txt_Difference.ForeColor = System.Drawing.Color.Green; }
                     if (total_grid != null) total_grid.Text = "0.00";

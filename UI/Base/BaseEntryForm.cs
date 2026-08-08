@@ -13,8 +13,6 @@ using AlRowad_ERP.Core.Constants;
 using AlRowad_ERP.AlRowad_ERPDataSetTableAdapters;
 using AlRowad_ERP.Core;
 
-
-
 namespace AlRowad_ERP.UI.Base
 {
     public enum DocumentStatus { Draft = 0, Pending = 1, Posted = 2 }
@@ -22,14 +20,15 @@ namespace AlRowad_ERP.UI.Base
 
     public class BaseEntryForm : BaseForm
     {
-
         protected AlRowadToolBar MainToolBar { get; private set; }
 
         public FormMode CurrentMode { get; private set; } = FormMode.View;
         public DocumentStatus CurrentDocumentStatus { get; set; } = DocumentStatus.Draft;
         public virtual string PrimaryIdFieldName { get; set; } = "";
         public virtual string MainTableName { get; set; } = "";
-        private readonly UserEntity _formOwnerUser; protected Dictionary<string, string> DeleteDependencies { get; private set; } = new Dictionary<string, string>();
+
+        private readonly UserEntity _formOwnerUser;
+        protected Dictionary<string, string> DeleteDependencies { get; private set; } = new Dictionary<string, string>();
 
         // 🌟 الذاكرة المؤقتة لربط الأدوات (Caching)
         private Dictionary<string, Control> _boundControlsCache = new Dictionary<string, Control>();
@@ -49,7 +48,6 @@ namespace AlRowad_ERP.UI.Base
         protected string CurrentUserFullName => _formOwnerUser?.FullName ?? "مستخدم غير معروف";
 
         #region محرك الربط والذاكرة المؤقتة (Auto-Bind Engine)
-
         private void BuildControlsCache(Control parent)
         {
             foreach (Control ctrl in parent.Controls)
@@ -90,10 +88,8 @@ namespace AlRowad_ERP.UI.Base
                 }
             }
 
-            if (_boundControlsCache.TryGetValue(SystemConstants.CreatedBy, out Control createdByCtrl))
-                createdByCtrl.Text = FormatUserInfo(row[SystemConstants.CreatedBy], row.Table.Columns.Contains("CreatedByName") ? row["CreatedByName"] : null);
-            if (_boundControlsCache.TryGetValue(SystemConstants.UpdatedBy, out Control updatedByCtrl))
-                updatedByCtrl.Text = FormatUserInfo(row[SystemConstants.UpdatedBy], row.Table.Columns.Contains("UpdatedByName") ? row["UpdatedByName"] : null);
+            if (_boundControlsCache.TryGetValue(SystemConstants.AuditFields.CreatedBy, out Control createdByCtrl))
+                createdByCtrl.Text = FormatUserInfo(row[SystemConstants.AuditFields.CreatedBy], row.Table.Columns.Contains("CreatedByName") ? row["CreatedByName"] : null);
         }
 
         protected virtual string FormatUserInfo(object userIdObj, object userNameObj)
@@ -116,11 +112,9 @@ namespace AlRowad_ERP.UI.Base
 
             return await DatabaseHelper.GetTableAsync(query, p);
         }
-
         #endregion
 
         #region محرك الفحص والحذف الديناميكي
-
         protected virtual async Task<bool> ValidateDependenciesBeforeDeleteAsync()
         {
             if (DeleteDependencies.Count == 0) return true;
@@ -139,7 +133,6 @@ namespace AlRowad_ERP.UI.Base
             return true;
         }
 
-
         protected async Task<bool> IsRecordUsedInTableAsync(string tableName, string columnName, object idValue)
         {
             string query = $"SELECT COUNT(1) FROM {tableName} WHERE {columnName} = @ID";
@@ -147,45 +140,40 @@ namespace AlRowad_ERP.UI.Base
             object result = await DatabaseHelper.ExecuteScalarAsync(query, p);
             return (result != null ? Convert.ToInt32(result) : 0) > 0;
         }
-
         #endregion
 
         #region العقود السيادية (Async Contracts)
-
+        // تم توحيد عقد الحفظ ليصبح الدستوري (الذي يمرر SqlTransaction) كمعيار رئيسي
         protected virtual async Task<bool> ExecuteSaveToDatabaseAsync(SqlTransaction transaction)
         {
             return await Task.FromResult(false);
         }
+
         protected virtual async Task<bool> ExecuteDeleteFromDatabaseAsync(SqlTransaction transaction)
         {
-            // الدالة الافتراضية تعيد false. 
-            // يجب على الشاشة الابنة (مثل شاشة الموردين أو الثيمات) تجاوز هذه الدالة 
-            // وإرسال أمر الحذف إلى طبقة الـ Repository الخاصة بها.
             return await Task.FromResult(false);
         }
+
         protected virtual bool ValidateFields(Control parent) => true;
         protected virtual string GetNextId() { return string.Empty; }
         protected virtual void RefreshData() { }
-        protected virtual void OnF9Pressed() { }
-        protected virtual void OnF8Pressed() { }
-        protected virtual void OnF7Pressed() { }
-        protected virtual void OnF3Pressed() { }
-        protected virtual void OnF2Pressed() { }
+        internal virtual void OnF9Pressed() { }
+        internal virtual void OnF8Pressed() { }
+        internal virtual void OnF7Pressed() { }
+        internal virtual void OnF3Pressed() { }
+        internal virtual void OnF2Pressed() { }
         protected virtual void OnAddFrom() { }
-
         #endregion
 
-        #region العمليات الأساسية مع دعم التزامن (CRUD Operations - Async)
-
+        #region العمليات الأساسية مع دعم التزامن (CRUD Operations - Async) - مطابقة للدستور
         public virtual async void OnSave()
         {
             if (!ValidateFields(this)) return;
 
             MainToolBar.Enabled = false;
 
-            using (SqlConnection conn = DatabaseHelper.GetConnection())
+            using (SqlConnection conn = await DatabaseHelper.GetConnectionAsync())
             {
-                await conn.OpenAsync();
                 using (SqlTransaction transaction = conn.BeginTransaction())
                 {
                     try
@@ -196,7 +184,7 @@ namespace AlRowad_ERP.UI.Base
                         {
                             transaction.Commit();
                             ChangeFormMode(FormMode.RecordSelected);
-                            MessageBox.Show("تم حفظ البيانات بنجاح.", "نظام الرواد ERP", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show(SystemConstants.Messages.SaveSuccess, "نظام الرواد ERP", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             RefreshData();
                         }
                         else
@@ -207,7 +195,8 @@ namespace AlRowad_ERP.UI.Base
                     catch (Exception ex)
                     {
                         transaction?.Rollback();
-                        MessageBox.Show($"حدث خطأ أثناء الحفظ:\n{ex.Message}", "خطأ برمجي - نظام الرواد", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        DatabaseHelper.LogSystemError(ex.Message, ex.StackTrace, "UI_Save");
+                        MessageBox.Show($"{SystemConstants.Messages.SaveFailed}\n{ex.Message}", "خطأ برمجي - نظام الرواد", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     finally
                     {
@@ -221,19 +210,18 @@ namespace AlRowad_ERP.UI.Base
         {
             if (this.CurrentDocumentStatus == DocumentStatus.Posted && !UserSession.IsSuperAdmin)
             {
-                MessageBox.Show("لا يمكن حذف مستند مُرحل إلى الحسابات. يرجى إلغاء الترحيل أولاً.", "حظر رقابي", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show(SystemConstants.Messages.CannotDeletePosted, "حظر رقابي", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
 
             if (!await ValidateDependenciesBeforeDeleteAsync()) return;
 
-            if (MessageBox.Show("هل أنت متأكد من حذف هذا السجل؟", "تأكيد الحذف", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes) return;
+            if (MessageBox.Show(SystemConstants.Messages.ConfirmDelete, "تأكيد الحذف", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes) return;
 
             MainToolBar.Enabled = false;
 
-            using (SqlConnection conn = DatabaseHelper.GetConnection())
+            using (SqlConnection conn = await DatabaseHelper.GetConnectionAsync())
             {
-                await conn.OpenAsync();
                 using (SqlTransaction trans = conn.BeginTransaction())
                 {
                     try
@@ -241,7 +229,7 @@ namespace AlRowad_ERP.UI.Base
                         if (await ExecuteDeleteFromDatabaseAsync(trans))
                         {
                             trans.Commit();
-                            MessageBox.Show("تم الحذف بنجاح.", "نظام الرواد", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show(SystemConstants.Messages.DeleteSuccess, "نظام الرواد", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             OnNew();
                         }
                         else trans.Rollback();
@@ -249,20 +237,19 @@ namespace AlRowad_ERP.UI.Base
                     catch (Exception ex)
                     {
                         trans?.Rollback();
-                        MessageBox.Show("فشل الحذف! السبب: \n" + ex.Message, "حماية النظام", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        DatabaseHelper.LogSystemError(ex.Message, ex.StackTrace, "UI_Delete");
+                        MessageBox.Show($"{SystemConstants.Messages.DeleteFailed}\n{ex.Message}", "حماية النظام", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     finally { MainToolBar.Enabled = true; }
                 }
             }
         }
-
         #endregion
 
         #region إدارة الحالة والواجهة
-
         private void BaseEntryForm_Load(object sender, EventArgs e)
         {
-                MainToolBar = this.Controls.OfType<AlRowadToolBar>().FirstOrDefault();
+            MainToolBar = this.Controls.OfType<AlRowadToolBar>().FirstOrDefault();
             if (MainToolBar != null)
             {
                 MainToolBar.btn_New.Click += (s, ev) => OnNew();
@@ -350,7 +337,9 @@ namespace AlRowad_ERP.UI.Base
 
         public virtual void OnNew()
         {
-            ClearForm(this);
+            // تم الاستغناء عن دالة ClearForm واستدعاء ClearFormFields الموروثة من BaseForm
+            ClearFormFields(this);
+
             if (!string.IsNullOrEmpty(PrimaryIdFieldName))
             {
                 var controls = this.Controls.Find(PrimaryIdFieldName, true);
@@ -373,7 +362,7 @@ namespace AlRowad_ERP.UI.Base
 
             if (CurrentMode == FormMode.New)
             {
-                ClearForm(this);
+                ClearFormFields(this); // تم الاستغناء عن دالة ClearForm
                 ChangeFormMode(FormMode.View);
             }
             else if (CurrentMode == FormMode.Edit)
@@ -424,22 +413,13 @@ namespace AlRowad_ERP.UI.Base
         {
             if (IsPeriodClosed(transactionDate))
             {
-                MessageBox.Show("خطأ أمني ومحاسبي: لا يمكن إجراء حفظ لحركة تقع ضمن 'فترة محاسبية مقفلة'.", "إقفال المحاسبة", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show(SystemConstants.Messages.ClosedFinancialPeriod, "إقفال المحاسبة", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return false;
             }
             return true;
         }
 
-        protected void ClearForm(Control parent)
-        {
-            foreach (Control c in parent.Controls)
-            {
-                if (c is TextBox t) t.Clear();
-                else if (c is ComboBox cb) cb.SelectedIndex = -1;
-                else if (c is CheckBox chk) chk.Checked = false;
-                if (c.HasChildren) ClearForm(c);
-            }
-        }
+        // تم نقل دالة ClearForm إلى الأب BaseForm لتجنب التكرار (ClearFormFields)
 
         protected virtual void CaptureOriginalValues(Control parent)
         {
@@ -484,51 +464,25 @@ namespace AlRowad_ERP.UI.Base
             }
         }
 
+        #region إدارة الاختصارات المركزية
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            if (keyData == Keys.F10 && MainToolBar != null && MainToolBar.btn_Save.Enabled) { OnSave(); return true; }
-            if (keyData == Keys.F6 && MainToolBar != null && MainToolBar.btn_New.Enabled) { OnNew(); return true; }
-            if (keyData == Keys.F5 && MainToolBar != null && MainToolBar.btn_Edit.Enabled) { OnEdit(); return true; }
-            if (keyData == Keys.F4 && CurrentMode != FormMode.View && MainToolBar != null && MainToolBar.btn_Cancel.Enabled) { OnCancel(); return true; }
-            if (keyData == (Keys.Control | Keys.D) && CurrentMode == FormMode.RecordSelected && MainToolBar != null && MainToolBar.btn_Delete.Enabled) { OnDelete(); return true; }
-            if (keyData == Keys.F9)
+            // الدستور: الفصل المعماري - تفويض إدارة الاختصارات للمحرك المستقل
+            if (AlRowad_ERP.UI.Helpers.ShortcutManager.HandleCommandKey(this, MainToolBar, ref msg, keyData))
             {
-                if ((CurrentMode == FormMode.View || CurrentMode == FormMode.RecordSelected) && MainToolBar != null && MainToolBar.btn_Search.Enabled) OnSearch();
-                else if (CurrentMode != FormMode.View && CurrentMode != FormMode.RecordSelected) OnF9Pressed();
-                return true;
+                return true; // تم تنفيذ الاختصار بنجاح
             }
-            if (CurrentMode == FormMode.New || CurrentMode == FormMode.Edit)
-            {
-                if (keyData == Keys.F8) { OnF8Pressed(); return true; }
-                if (keyData == Keys.F7) { OnF7Pressed(); return true; }
-                if (keyData == Keys.F3) { OnF3Pressed(); return true; }
-                if (keyData == Keys.F2) { OnF2Pressed(); return true; }
-            }
-            if (keyData == Keys.Enter)
-            {
-                Control activeControl = this.ActiveControl;
-                if (activeControl != null && !(activeControl is Button) && !(activeControl is TextBox txt && txt.Multiline) && !(activeControl is DataGridView || activeControl.Parent is DataGridView))
-                {
-                    SendKeys.Send("{TAB}");
-                    return true;
-                }
-            }
-            return base.ProcessCmdKey(ref msg, keyData);
+
+            return base.ProcessCmdKey(ref msg, keyData); // تمرير المفتاح لنظام الويندوز الافتراضي
         }
         #endregion
+        
+        #endregion
+
         // 2. دالة تسجيل الأخطاء المركزية
         protected void LogError(Exception ex)
         {
-            // تطبيقاً للدستور، يتم معالجة الأخطاء هنا لعدم تكرار الكود
             MessageBox.Show(ex.Message, "خطأ في النظام", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-
-
-        // 3. الدالة السيادية للحفظ المتزامن (يجب أن تكون virtual ليتم تجاوزها)
-        protected virtual Task<bool> ExecuteSaveToDatabaseAsync()
-        {
-            // الدالة الافتراضية تعيد false، والشاشات الابنة (مثل شاشة الثيمات) ستقوم بكتابة المنطق الخاص بها
-            return Task.FromResult(false);
         }
 
         #region محرك قائمة الشبكة السياقية

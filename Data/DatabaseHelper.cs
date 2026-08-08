@@ -229,36 +229,32 @@ namespace AlRowad_ERP.Core
         /// <summary>
         /// دالة مركزية لإنشاء وفتح الاتصال بقاعدة البيانات بشكل غير متزامن
         /// </summary>
+        // الكود الدستوري المحدث داخل DatabaseHelper.cs
         public static async Task<SqlConnection> GetConnectionAsync()
         {
-            // 1. استدعاء نص الاتصال من ملف الإعدادات (App.config) التزاماً بمنع الـ Magic Strings
-            // يفترض وجود إعداد باسم "AlRowadERP_DB" في ملف التكوين الخاص بالمشروع
-            string connectionString = ConfigurationManager.ConnectionStrings["AlRowadERP_DB"]?.ConnectionString;
+            // الدستور: قراءة نص الاتصال من ملف الإعدادات بالاسم الفعلي المُولد
+            string connectionStringName = "AlRowad_ERP.Properties.Settings.AlRowad_ERPConnectionString";
+            string connectionString = ConfigurationManager.ConnectionStrings[connectionStringName]?.ConnectionString;
 
             if (string.IsNullOrWhiteSpace(connectionString))
             {
-                throw new System.InvalidOperationException("نص الاتصال 'AlRowadERP_DB' غير متاح أو غير معرّف في إعدادات النظام.");
+                throw new System.InvalidOperationException($"نص الاتصال '{connectionStringName}' غير متاح أو غير معرّف في إعدادات النظام.");
             }
 
-            // 2. تهيئة كائن الاتصال
             var connection = new SqlConnection(connectionString);
 
             try
             {
-                // 3. فتح الاتصال بشكل غير متزامن لضمان عدم تجميد واجهة المستخدم (UI)
                 await connection.OpenAsync();
             }
             catch (SqlException ex)
             {
-                // في حال فشل الاتصال، نقوم بتحرير الموارد وتمرير الخطأ بوضوح
-                // يُفضل لاحقاً ربط هذا الجزء بمحرك تسجيل الأخطاء (Error Logging Engine)
                 connection.Dispose();
                 throw new System.Exception("تعذر إنشاء اتصال بقاعدة البيانات. يرجى التحقق من إعدادات الخادم.", ex);
             }
 
             return connection;
         }
-
         public static async Task<bool> ExecuteTransactionAsync(Func<SqlTransaction, Task> action)
         {
             using (var connection = await GetConnectionAsync()) // بافتراض أن لديك دالة GetConnectionAsync
