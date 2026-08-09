@@ -78,8 +78,6 @@ namespace AlRowad_ERP.Forms
 
             try
             {
-                string next = DatabaseHelper.GetNextCode("Stores", "Store_ID");
-                SetTextBoxValue("store_IDTextBox", next);
             }
             catch { }
 

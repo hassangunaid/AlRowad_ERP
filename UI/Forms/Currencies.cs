@@ -270,8 +270,8 @@ namespace AlRowad_ERP.Forms
         {
             base.OnNew();
 
-            cur_IDTextBox.Text = DatabaseHelper.GetNextCode("Currencies", "Cur_ID");
-
+            var systemRepo = new AlRowad_ERP.Data.SystemRepository();
+                
             if (exchange_RateTextBox != null) exchange_RateTextBox.Text = "1.0000";
             if (min_RateTextBox != null) min_RateTextBox.Text = "1.0000";
             if (max_RateTextBox != null) max_RateTextBox.Text = "1.0000";

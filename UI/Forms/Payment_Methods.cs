@@ -36,15 +36,12 @@ namespace AlRowad_ERP.Forms
         private void payment_MethodsBindingNavigatorSaveItem_Click(object sender, EventArgs e)
         {
             this.Validate();
-            this.payment_MethodsBindingSource.EndEdit();
-            this.tableAdapterManager.UpdateAll(this.alRowad_ERPDataSet);
 
         }
 
         private void Payment_Methods_Load(object sender, EventArgs e)
         {
             // TODO: This line of code loads data into the 'alRowad_ERPDataSet.Payment_Methods' table. You can move, or remove it, as needed.
-            this.payment_MethodsTableAdapter.Fill(this.alRowad_ERPDataSet.Payment_Methods);
 
         }
     }

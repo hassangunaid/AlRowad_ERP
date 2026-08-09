@@ -210,20 +210,6 @@ namespace AlRowad_ERP.Core
             }
         }
 
-        public static string GetNewDocNo(string tableName, string columnName, string additionalFilter = "")
-        {
-            string sql = $"SELECT ISNULL(MAX(CAST({columnName} AS INT)), 0) + 1 FROM {tableName} WHERE ISNUMERIC({columnName}) = 1";
-            if (!string.IsNullOrEmpty(additionalFilter)) sql += $" AND {additionalFilter}";
-            object res = ExecuteScalar(sql);
-            return res != null ? res.ToString().PadLeft(4, '0') : "0001";
-        }
-
-        public static string GetNextCode(string tableName, string columnName)
-        {
-            string query = $"SELECT ISNULL(MAX(CAST({columnName} AS INT)), 0) + 1 FROM {tableName} WHERE ISNUMERIC({columnName}) = 1";
-            object result = ExecuteScalar(query);
-            return result != null ? Convert.ToInt32(result).ToString("D4") : "0001";
-        }
         #endregion
 
         /// <summary>

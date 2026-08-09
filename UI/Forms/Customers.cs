@@ -1,15 +1,15 @@
 ﻿using AlRowad_ERP.Core;
+using AlRowad_ERP.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Threading.Tasks; // 🌟 إضافة دعم التزامن
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using AlRowad_ERP.Data;
 using AlRowad_ERP.UI.Base;
 using AlRowad_ERP.Core.Constants;
-
-
+using AlRowad_ERP.Core.Helpers;
 
 namespace AlRowad_ERP.Forms
 {
@@ -103,22 +103,13 @@ namespace AlRowad_ERP.Forms
             }
         }
 
-        // 🌟 جلب سريع ولا متزامن للبيانات
+        // 🌟 جلب بيانات العميل وتعبئتها (مفصولة عبر المستودع)
         private async Task جلب_بيانات_العميل_وتعبئتها_Async(string customerCode)
         {
             try
             {
-                string query = $@"
-                    SELECT c.Cust_ID, c.Cust_Name, c.Cust_Phone, c.Cust_Address, c.Acc_ID, c.RowVersion,
-                           c.{SystemConstants.CreatedBy}, c.{SystemConstants.CreatedAt}, c.{SystemConstants.UpdatedBy}, c.{SystemConstants.UpdatedAt},
-                           ISNULL(uc.Full_Name, uc.Username) AS CreatedByName,
-                           ISNULL(uu.Full_Name, uu.Username) AS UpdatedByName
-                    FROM Customers c
-                    LEFT JOIN Users uc ON c.{SystemConstants.CreatedBy} = uc.User_ID
-                    LEFT JOIN Users uu ON c.{SystemConstants.UpdatedBy} = uu.User_ID
-                    WHERE c.Cust_ID = @Code";
-
-                DataTable dt = await DatabaseHelper.GetTableAsync(query, new[] { new SqlParameter("@Code", customerCode.Trim()) });
+                // الدستور: استخدام CustomerRepository بدلاً من SQL المباشر
+                DataTable dt = await CustomerRepository.GetCustomerDetailsAsync(customerCode);
 
                 if (dt.Rows.Count > 0)
                 {
@@ -129,7 +120,7 @@ namespace AlRowad_ERP.Forms
                         _currentRowVersion = (byte[])row["RowVersion"];
                     }
 
-                    AutoBindRecord(row); // 👈 استخدام محرك الذاكرة المؤقتة (Caching) الجديد في BaseEntryForm
+                    AutoBindRecord(row);
 
                     string currentAssociatedAccount = row["Acc_ID"].ToString().Trim();
                     if (cmb_parent_ID != null && currentAssociatedAccount.Length >= 6)
@@ -149,7 +140,7 @@ namespace AlRowad_ERP.Forms
             }
         }
 
-        // 🌟 الحفظ اللامتزامن باستخدام الـ Transactions
+        // 🌟 الحفظ اللامتزامن باستخدام الـ Transactions (مفصول عبر المستودع)
         protected override async Task<bool> ExecuteSaveToDatabaseAsync(SqlTransaction trans)
         {
             if (string.IsNullOrWhiteSpace(cust_Name.Text) || string.IsNullOrWhiteSpace(acc_ID.Text))
@@ -158,12 +149,25 @@ namespace AlRowad_ERP.Forms
                 return false;
             }
 
+            var currencies = new List<CustomerCurrencyDto>();
             bool hasActiveCurrency = false, hasDefaultCurrency = false;
+
             foreach (DataGridViewRow row in dgv_currencies.Rows)
             {
                 if (row.IsNewRow) continue;
-                if (Convert.ToBoolean(row.Cells[0].Value ?? false)) hasActiveCurrency = true;
-                if (Convert.ToBoolean(row.Cells[2].Value ?? false)) hasDefaultCurrency = true;
+
+                var currency = new CustomerCurrencyDto
+                {
+                    IsActive = Convert.ToBoolean(row.Cells[0].Value ?? false),
+                    IsDefault = Convert.ToBoolean(row.Cells[2].Value ?? false),
+                    IsFrozen = Convert.ToBoolean(row.Cells[3].Value ?? false),
+                    CurrencyId = Convert.ToInt32(row.Cells[4].Value ?? 0)
+                };
+
+                if (currency.IsActive) hasActiveCurrency = true;
+                if (currency.IsDefault) hasDefaultCurrency = true;
+
+                currencies.Add(currency);
             }
 
             if (!hasActiveCurrency || !hasDefaultCurrency)
@@ -174,65 +178,18 @@ namespace AlRowad_ERP.Forms
 
             try
             {
-                if (CurrentMode == FormMode.New)
-                {
-                    string accSql = $@"INSERT INTO Accounts (Acc_ID, Acc_Name, Is_Stopped, Account_Level, Parent_ID, Acc_Type, Acc_Nature, Report_Type, {SystemConstants.CreatedBy}, {SystemConstants.CreatedAt}) 
-                                       VALUES (@AccID, @AccName, 0, 5, @ParentID, 1, 1, 1, @Created_By, @Created_At)";
-                    await DatabaseHelper.ExecuteNonQueryAsync(accSql, new[] {
-                        new SqlParameter("@AccID", acc_ID.Text.Trim()), new SqlParameter("@AccName", cust_Name.Text.Trim()),
-                        new SqlParameter("@ParentID", cmb_parent_ID.SelectedValue ?? (object)DBNull.Value),
-                        new SqlParameter("@Created_By", UserSession.UserId), new SqlParameter("@Created_At", DateTime.Now)
-                    }, trans);
+                // الدستور: استدعاء دالة الحفظ من المستودع للحفاظ على الفصل المعماري وحماية ACID
+                await CustomerRepository.SaveCustomerTransactionAsync(
+                    CurrentMode, cust_ID.Text.Trim(), cust_Name.Text.Trim(), cust_Phone.Text.Trim(),
+                    cust_Address.Text.Trim(), acc_ID.Text.Trim(), cmb_parent_ID.SelectedValue,
+                    _currentRowVersion, UserSession.UserId, currencies, trans);
 
-                    string custSql = $@"INSERT INTO Customers (Cust_ID, Cust_Name, Cust_Phone, Cust_Address, Acc_ID, {SystemConstants.CreatedBy}, {SystemConstants.CreatedAt}) 
-                                        VALUES (@Code, @Name, @Phone, @Address, @AccNo, @Created_By, @Created_At)";
-                    await DatabaseHelper.ExecuteNonQueryAsync(custSql, new[] {
-                        new SqlParameter("@Code", cust_ID.Text.Trim()), new SqlParameter("@Name", cust_Name.Text.Trim()),
-                        new SqlParameter("@Phone", cust_Phone.Text.Trim()), new SqlParameter("@Address", cust_Address.Text.Trim()),
-                        new SqlParameter("@AccNo", acc_ID.Text.Trim()), new SqlParameter("@Created_By", UserSession.UserId),
-                        new SqlParameter("@Created_At", DateTime.Now)
-                    }, trans);
-                }
-                else if (CurrentMode == FormMode.Edit)
-                {
-                    string updateAcc = $@"UPDATE Accounts SET Acc_Name = @Name, {SystemConstants.UpdatedBy} = @Updated_By, {SystemConstants.UpdatedAt} = @Updated_At WHERE Acc_ID = @AccID";
-                    await DatabaseHelper.ExecuteNonQueryAsync(updateAcc, new[] {
-                        new SqlParameter("@Name", cust_Name.Text.Trim()), new SqlParameter("@AccID", acc_ID.Text.Trim()),
-                        new SqlParameter("@Updated_By", UserSession.UserId), new SqlParameter("@Updated_At", DateTime.Now)
-                    }, trans);
-
-                    string updateCust = $@"UPDATE Customers SET Cust_Name = @Name, Cust_Phone = @Phone, Cust_Address = @Address, {SystemConstants.UpdatedBy} = @Updated_By, {SystemConstants.UpdatedAt} = @Updated_At 
-                                           WHERE Cust_ID = @Code AND RowVersion = @OldRowVersion";
-
-                    int rowsAffected = await DatabaseHelper.ExecuteNonQueryAsync(updateCust, new[] {
-                        new SqlParameter("@Name", cust_Name.Text.Trim()), new SqlParameter("@Phone", cust_Phone.Text.Trim()),
-                        new SqlParameter("@Address", cust_Address.Text.Trim()), new SqlParameter("@Code", cust_ID.Text.Trim()),
-                        new SqlParameter("@Updated_By", UserSession.UserId), new SqlParameter("@Updated_At", DateTime.Now),
-                        new SqlParameter("@OldRowVersion", SqlDbType.Timestamp) { Value = _currentRowVersion ?? (object)DBNull.Value }
-                    }, trans);
-
-                    if (rowsAffected == 0) throw new InvalidOperationException("تضارب بيانات: تم تعديل بيانات هذا العميل من قبل مستخدم آخر أثناء استعراضك لها.");
-
-                    DatabaseHelper.LogAuditTransaction(trans, "Customers", cust_ID.Text.Trim(), "UPDATE", "تم الحفظ المسبق", $"الاسم: {cust_Name.Text.Trim()}", "تعديل عميل");
-                }
-
-                await DatabaseHelper.ExecuteNonQueryAsync("DELETE FROM Account_Allowed_Currencies WHERE Acc_ID = @AccID", new[] { new SqlParameter("@AccID", acc_ID.Text.Trim()) }, trans);
-                string curSql = "INSERT INTO Account_Allowed_Currencies (Acc_ID, Cur_ID, Is_Default, Is_Frozen, Is_Active) VALUES (@AccID, @CurID, @IsDefault, @IsFrozen, 1)";
-                foreach (DataGridViewRow row in dgv_currencies.Rows)
-                {
-                    if (!row.IsNewRow && Convert.ToBoolean(row.Cells[0].Value))
-                    {
-                        await DatabaseHelper.ExecuteNonQueryAsync(curSql, new[] {
-                            new SqlParameter("@AccID", acc_ID.Text.Trim()), new SqlParameter("@CurID", row.Cells[4].Value.ToString()),
-                            new SqlParameter("@IsDefault", row.Cells[2].Value ?? false), new SqlParameter("@IsFrozen", row.Cells[3].Value ?? false)
-                        }, trans);
-                    }
-                }
                 return true;
             }
             catch (InvalidOperationException ex)
             {
-                MessageBox.Show(ex.Message, "تضارب في التزامن", MessageBoxButtons.OK, MessageBoxIcon.Stop); return false;
+                MessageBox.Show(ex.Message, "تضارب في التزامن", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return false;
             }
             catch (Exception ex)
             {
@@ -240,25 +197,18 @@ namespace AlRowad_ERP.Forms
             }
         }
 
-        // 🌟 الحذف اللامتزامن المنطقي (Soft Delete)
+        // 🌟 الحذف اللامتزامن المنطقي (مفصول عبر المستودع)
         protected override async Task<bool> ExecuteDeleteFromDatabaseAsync(SqlTransaction transaction)
         {
-            string updateCust = $@"UPDATE Customers SET {SystemConstants.IsDeleted} = 1, {SystemConstants.DeletedBy} = @UserId, {SystemConstants.DeletedAt} = GETDATE() WHERE Cust_ID = @CustID";
-            await DatabaseHelper.ExecuteNonQueryAsync(updateCust, new[] {
-                new SqlParameter("@CustID", cust_ID.Text.Trim()), new SqlParameter("@UserId", UserSession.UserId)
-            }, transaction);
+            // 1. الفحص والحذف للحساب المالي أولاً (لأنه يحتوي على جدار الحماية السيادي القوي)
+            await AccountRepository.SoftDeleteAccountAsync(acc_ID.Text.Trim(), UserSession.UserId, transaction);
 
-            if (!string.IsNullOrWhiteSpace(acc_ID.Text))
-            {
-                string updateAcc = $@"UPDATE Accounts SET Is_Stopped = 1, {SystemConstants.UpdatedBy} = @UserId, {SystemConstants.UpdatedAt} = GETDATE() WHERE Acc_ID = @AccID";
-                await DatabaseHelper.ExecuteNonQueryAsync(updateAcc, new[] {
-                    new SqlParameter("@AccID", acc_ID.Text.Trim()), new SqlParameter("@UserId", UserSession.UserId)
-                }, transaction);
-            }
+            // 2. إذا اجتاز الحساب الفحص بنجاح، نقوم بحذف بيانات العميل المرتبطة
+            await CustomerRepository.SoftDeleteCustomerAsync(cust_ID.Text.Trim(), UserSession.UserId, transaction);
+
             return true;
         }
-
-        #region دوال العمليات الحسابية والتهيئة 
+        #region دوال العمليات الحسابية والتهيئة (واجهة المستخدم)
 
         private void dgv_currencies_CurrentCellDirtyStateChanged(object sender, EventArgs e)
         {
@@ -559,12 +509,6 @@ namespace AlRowad_ERP.Forms
                 return false;
             }
 
-         /*  if (await IsRecordUsedInTableAsync("Sales_Quotations", "Customer_ID", customerId))
-            {
-                MessageBox.Show("منع أمني: العميل مرتبط بعروض أسعار مسجلة.", "ارتباط مرجعي", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                return false;
-            }
-             */
             return true;
         }
     }

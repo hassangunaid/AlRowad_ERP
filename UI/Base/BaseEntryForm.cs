@@ -142,7 +142,7 @@ namespace AlRowad_ERP.UI.Base
         }
         #endregion
 
-        #region العقود السيادية (Async Contracts)
+            #region العقود السيادية (Async Contracts)
         // تم توحيد عقد الحفظ ليصبح الدستوري (الذي يمرر SqlTransaction) كمعيار رئيسي
         protected virtual async Task<bool> ExecuteSaveToDatabaseAsync(SqlTransaction transaction)
         {
@@ -476,8 +476,35 @@ namespace AlRowad_ERP.UI.Base
             return base.ProcessCmdKey(ref msg, keyData); // تمرير المفتاح لنظام الويندوز الافتراضي
         }
         #endregion
-        
+
         #endregion
+        #region التغذية الراجعة المرئية (Async UI Feedback)
+
+        /// <summary>
+        /// تفعيل وضع التحميل لمنع التداخل البصري وإعلام المستخدم بوجود معالجة في الخلفية
+        /// </summary>
+        protected virtual void ShowLoading()
+        {
+            // تحويل مؤشر الماوس إلى وضع الانتظار
+            this.UseWaitCursor = true;
+
+            // يمكن لاحقاً ربط هذه الدالة بشريط تقدم (ProgressBar) في شريط الحالة السفلي (StatusBar) إن وجد
+
+            // إجبار الواجهة على التحديث اللحظي لضمان ظهور التغيير فوراً
+            Application.DoEvents();
+        }
+
+        /// <summary>
+        /// إنهاء وضع التحميل وإعادة الشاشة لحالتها الطبيعية
+        /// </summary>
+        protected virtual void HideLoading()
+        {
+            // إعادة مؤشر الماوس للحالة الطبيعية
+            this.UseWaitCursor = false;
+        }
+
+        #endregion
+
 
         // 2. دالة تسجيل الأخطاء المركزية
         protected void LogError(Exception ex)

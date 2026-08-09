@@ -104,11 +104,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AlRowad_ERPDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Data\CustomerRepository.cs" />
     <Compile Include="Data\InvoiceRepository.cs" />
+    <Compile Include="Data\SystemRepository.cs" />
     <Compile Include="Data\ItemRepository.cs" />
     <Compile Include="Data\JournalRepository.cs" />
     <Compile Include="Models\InvoiceModel.cs" />
     <Compile Include="Models\JournalHeaderModel.cs" />
+    <Compile Include="Models\CustomerCurrencyDto.cs" />
     <Compile Include="Services\Accounting\FinancialPeriodService.cs" />
     <Compile Include="Services\Accounting\JournalService.cs" />
     <Compile Include="Services\Inventory\StockMovementService.cs" />

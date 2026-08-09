@@ -77,8 +77,6 @@ namespace AlRowad_ERP.Forms
 
             try
             {
-                string next = DatabaseHelper.GetNextCode("Units", "Unit_ID");
-                unit_IDTextBox.Text = next;
                 unit_NameTextBox.Focus();
 
                 ChangeFormMode(FormMode.New);
@@ -92,76 +90,76 @@ namespace AlRowad_ERP.Forms
             ChangeFormMode(FormMode.Edit);
             unit_NameTextBox.Focus();
         }
-          /*
-        protected override bool ExecuteSaveToDatabase(SqlTransaction trans)
-        {
-            // 1. التحقق المبدئي من الحقول الإجبارية (يرجى مطابقة أسماء الأدوات مع ما هو موجود في واجهة التصميم)
-            if (string.IsNullOrWhiteSpace(unit_NameTextBox.Text))
-            {
-                MessageBox.Show("يجب إدخال اسم الوحدة.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
+        /*
+      protected override bool ExecuteSaveToDatabase(SqlTransaction trans)
+      {
+          // 1. التحقق المبدئي من الحقول الإجبارية (يرجى مطابقة أسماء الأدوات مع ما هو موجود في واجهة التصميم)
+          if (string.IsNullOrWhiteSpace(unit_NameTextBox.Text))
+          {
+              MessageBox.Show("يجب إدخال اسم الوحدة.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+              return false;
+          }
 
-            try
-            {
-                // 2. صياغة الاستعلام مع حقول التدقيق (ملاحظة: Unit_ID هو IDENTITY ولا يتم إدراجه يدوياً)
-                string sqlQuery = (CurrentMode == FormMode.Edit)
-                    ? @"UPDATE Units 
-                        SET Unit_Name = @Unit_Name, Conversion_Factor = @Conversion_Factor, 
-                            Updated_By = @Updated_By, Updated_At = @Updated_At 
-                        WHERE Unit_ID = @Unit_ID"
-                    : @"INSERT INTO Units 
-                        (Unit_Name, Conversion_Factor, Created_By, Created_At) 
-                        VALUES (@Unit_Name, @Conversion_Factor, @Created_By, @Created_At)";
+          try
+          {
+              // 2. صياغة الاستعلام مع حقول التدقيق (ملاحظة: Unit_ID هو IDENTITY ولا يتم إدراجه يدوياً)
+              string sqlQuery = (CurrentMode == FormMode.Edit)
+                  ? @"UPDATE Units 
+                      SET Unit_Name = @Unit_Name, Conversion_Factor = @Conversion_Factor, 
+                          Updated_By = @Updated_By, Updated_At = @Updated_At 
+                      WHERE Unit_ID = @Unit_ID"
+                  : @"INSERT INTO Units 
+                      (Unit_Name, Conversion_Factor, Created_By, Created_At) 
+                      VALUES (@Unit_Name, @Conversion_Factor, @Created_By, @Created_At)";
 
-                // معالجة القيم الرقمية بأمان
-                decimal.TryParse(conversion_FactorTextBox.Text, out decimal conversionFactor);
-                if (conversionFactor <= 0) conversionFactor = 1; // القيمة الافتراضية لمعامل التحويل هي 1
+              // معالجة القيم الرقمية بأمان
+              decimal.TryParse(conversion_FactorTextBox.Text, out decimal conversionFactor);
+              if (conversionFactor <= 0) conversionFactor = 1; // القيمة الافتراضية لمعامل التحويل هي 1
 
-                // 3. تجهيز البارامترات الأساسية
-                var pHeader = new System.Collections.Generic.List<SqlParameter>
-                {
-                    new SqlParameter("@Unit_Name", unit_NameTextBox.Text.Trim()),
-                    new SqlParameter("@Conversion_Factor", conversionFactor)
-                };
+              // 3. تجهيز البارامترات الأساسية
+              var pHeader = new System.Collections.Generic.List<SqlParameter>
+              {
+                  new SqlParameter("@Unit_Name", unit_NameTextBox.Text.Trim()),
+                  new SqlParameter("@Conversion_Factor", conversionFactor)
+              };
 
-                // إضافة مفتاح السجل في حالة التعديل فقط
-                if (CurrentMode == FormMode.Edit)
-                {
-                    pHeader.Add(new SqlParameter("@Unit_ID", unit_IDTextBox.Text.Trim()));
-                }
+              // إضافة مفتاح السجل في حالة التعديل فقط
+              if (CurrentMode == FormMode.Edit)
+              {
+                  pHeader.Add(new SqlParameter("@Unit_ID", unit_IDTextBox.Text.Trim()));
+              }
 
-                // 4. حقن بيانات المستخدم والوقت أوتوماتيكياً (Audit Trail)
-                if (CurrentMode == FormMode.New)
-                {
-                    pHeader.Add(new SqlParameter("@Created_By", UserSession.UserId));
-                    pHeader.Add(new SqlParameter("@Created_At", DateTime.Now));
-                }
-                else if (CurrentMode == FormMode.Edit)
-                {
-                    pHeader.Add(new SqlParameter("@Updated_By", UserSession.UserId));
-                    pHeader.Add(new SqlParameter("@Updated_At", DateTime.Now));
-                }
+              // 4. حقن بيانات المستخدم والوقت أوتوماتيكياً (Audit Trail)
+              if (CurrentMode == FormMode.New)
+              {
+                  pHeader.Add(new SqlParameter("@Created_By", UserSession.UserId));
+                  pHeader.Add(new SqlParameter("@Created_At", DateTime.Now));
+              }
+              else if (CurrentMode == FormMode.Edit)
+              {
+                  pHeader.Add(new SqlParameter("@Updated_By", UserSession.UserId));
+                  pHeader.Add(new SqlParameter("@Updated_At", DateTime.Now));
+              }
 
-                // 5. التنفيذ الآمن تحت مظلة المعاملة المركزية (SqlTransaction)
-                DatabaseHelper.ExecuteNonQuery(sqlQuery, pHeader.ToArray(), trans);
+              // 5. التنفيذ الآمن تحت مظلة المعاملة المركزية (SqlTransaction)
+              DatabaseHelper.ExecuteNonQuery(sqlQuery, pHeader.ToArray(), trans);
 
-                // 6. تسجيل الحركة في الجدول الرقابي عند التعديل
-                if (CurrentMode == FormMode.Edit)
-                {
-                    string oldValues = "تم الحفظ المسبق"; // مستقبلاً يمكن استخراج النسخة من الذاكرة
-                    string newValues = $"الاسم: {unit_NameTextBox.Text.Trim()} | معامل التحويل: {conversionFactor}";
-                    DatabaseHelper.LogAuditTransaction(trans, "Units", unit_IDTextBox.Text.Trim(), "UPDATE", oldValues, newValues, "تعديل وحدة قياس");
-                }
+              // 6. تسجيل الحركة في الجدول الرقابي عند التعديل
+              if (CurrentMode == FormMode.Edit)
+              {
+                  string oldValues = "تم الحفظ المسبق"; // مستقبلاً يمكن استخراج النسخة من الذاكرة
+                  string newValues = $"الاسم: {unit_NameTextBox.Text.Trim()} | معامل التحويل: {conversionFactor}";
+                  DatabaseHelper.LogAuditTransaction(trans, "Units", unit_IDTextBox.Text.Trim(), "UPDATE", oldValues, newValues, "تعديل وحدة قياس");
+              }
 
-                return true;
-            }
-            catch (Exception ex)
-            {
-                // رمي الخطأ ليتم التقاطه وتنفيذ Rollback بأمان في الـ BaseEntryForm
-                throw new Exception($"خطأ أثناء حفظ بيانات الوحدة: {ex.Message}");
-            }
-        }        */
+              return true;
+          }
+          catch (Exception ex)
+          {
+              // رمي الخطأ ليتم التقاطه وتنفيذ Rollback بأمان في الـ BaseEntryForm
+              throw new Exception($"خطأ أثناء حفظ بيانات الوحدة: {ex.Message}");
+          }
+      }        */
 
         // 7. يمكنك عمل Override لدالة RefreshData من الـ BaseEntryForm لتحديث الشجرة أو الجدول بعد الحفظ الناجح
         protected override void RefreshData()

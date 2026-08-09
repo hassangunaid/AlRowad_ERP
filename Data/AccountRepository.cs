@@ -1,7 +1,9 @@
 ﻿using AlRowad_ERP.Core;
+using AlRowad_ERP.Core.Constants;
 using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AlRowad_ERP.Data
@@ -27,7 +29,46 @@ namespace AlRowad_ERP.Data
 
             return DatabaseHelper.ExecuteQuery(query, new[] { new SqlParameter("@Acc_ID", accId) });
         }
+        /// <summary>
+        /// الفحص السيادي: التأكد من خلو الحساب من أي ارتباطات مالية أو مرجعية قبل الحذف المنطقي
+        /// </summary>
+        private static async Task<bool> HasFinancialTransactionsAsync(string accId, SqlTransaction trans)
+        {
+            // الدستور: فحص شامل على مستوى قاعدة البيانات لكل الجداول التي قد تحتوي على الحساب
+            // (يرجى التأكد من مطابقة أسماء الجداول لحالة قاعدة بياناتك الفعلية)
+            string query = @"
+                SELECT 
+                    (SELECT COUNT(1) FROM Journal_Details WHERE Acc_ID = @AccID) +
+                    (SELECT COUNT(1) FROM Invoice_Header WHERE Acc_ID = @AccID) +
+                    (SELECT COUNT(1) FROM Receipt_Vouchers WHERE Acc_ID = @AccID) +
+                    (SELECT COUNT(1) FROM Payment_Vouchers WHERE Acc_ID = @AccID)";
 
+            object result = await DatabaseHelper.ExecuteScalarAsync(query, new[] { new SqlParameter("@AccID", accId) }, trans);
+
+            return (result != null && Convert.ToInt32(result) > 0);
+        }
+
+        /// <summary>
+        /// الحذف المنطقي الآمن (Soft Delete)
+        /// </summary>
+        public static async Task SoftDeleteAccountAsync(string accId, int currentUserId, SqlTransaction trans)
+        {
+            // 🌟 1. جدار الحماية الأول والأخير: لا يمكن تجاوزه أبداً
+            bool hasTransactions = await HasFinancialTransactionsAsync(accId, trans);
+            if (hasTransactions)
+            {
+                // رمي خطأ سيادي يوقف العملية تماماً ويجبر الشاشة على إظهاره للمستخدم
+                throw new InvalidOperationException("حظر سيادي: يُمنع منعاً باتاً حذف أو إيقاف هذا الحساب لارتباطه بحركات مالية أو قيود محاسبية سابقة.");
+            }
+
+            // 🌟 2. التنفيذ في حال اجتياز الفحص الأمني (تحديث حالة الحساب فقط - Soft Delete)
+            string updateAcc = $@"UPDATE Accounts SET Is_Stopped = 1, {SystemConstants.AuditFields.UpdatedBy} = @UserId, {SystemConstants.AuditFields.UpdatedAt} = GETDATE() WHERE Acc_ID = @AccID";
+
+            await DatabaseHelper.ExecuteNonQueryAsync(updateAcc, new[] {
+                new SqlParameter("@AccID", accId),
+                new SqlParameter("@UserId", currentUserId)
+            }, trans);
+        }
         public static DataTable GetDropdownData(string tableName, string idCol, string nameCol)
         {
             return DatabaseHelper.GetTable($"SELECT {idCol}, {nameCol} FROM {tableName} ORDER BY {idCol}");

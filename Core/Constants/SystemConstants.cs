@@ -20,6 +20,9 @@ namespace AlRowad_ERP.Core.Constants
         public const string CreatedAt = "Created_At";
         public const string UpdatedAt = "Updated_At";
 
+        public const string UnexpectedSystemError = "عذراً، حدث خطأ غير متوقع في النظام. تم تسجيل المشكلة برقم تسلسلي وسيتم مراجعتها من قبل الدعم الفني.\n\nالرجاء إعادة المحاولة لاحقاً.";
+        public const string SystemProtectionTitle = "حماية نظام الرواد ERP";
+
         // حقول الحذف المنطقي (Soft Delete)
         public const string IsDeleted = "Is_Deleted";
         public const string DeletedBy = "Deleted_By";
@@ -42,11 +45,19 @@ namespace AlRowad_ERP.Core.Constants
             public const string ConfirmDelete = "هل أنت متأكد من حذف هذا السجل؟";
             public const string DeleteSuccess = "تم الحذف بنجاح.";
             public const string DeleteFailed = "فشل الحذف! السبب:";
+            // ثوابت الحارس الأخير المطلوبة
+            public const string UnexpectedSystemError = "عذراً، حدث خطأ غير متوقع في النظام. تم تسجيل المشكلة برقم تسلسلي وسيتم مراجعتها من قبل الدعم الفني.\n\nالرجاء إعادة المحاولة لاحقاً.";
+            public const string SystemProtectionTitle = "حماية نظام الرواد ERP";
         }
-        public static class AuditFields
+                public static class AuditFields
         {
             public const string CreatedBy = "Created_By";
-            public const string CreatedDate = "Created_Date";
+            public const string CreatedAt = "Created_At";
+            public const string UpdatedBy = "Updated_By";
+            public const string UpdatedAt = "Updated_At";
+            public const string IsDeleted = "Is_Deleted";
+            public const string DeletedBy = "Deleted_By";
+            public const string DeletedAt = "Deleted_At";
         }
 
         public static class Descriptions

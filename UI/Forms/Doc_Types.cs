@@ -30,8 +30,6 @@ namespace AlRowad_ERP.Forms
         {
             try
             {
-                // تحميل بيانات أنواع المستندات
-                this.doc_TypesTableAdapter.Fill(this.alRowad_ERPDataSet.Doc_Types);
 
                 // الدستور: وضع الاستعراض المحمي فور الفتح
                 ChangeFormMode(FormMode.View);
@@ -74,12 +72,9 @@ namespace AlRowad_ERP.Forms
             try
             {
                 // استخدام AddNew بدلاً من ClearForm للحفاظ على سلامة الربط مع الداتا سيت
-                doc_TypesBindingSource.AddNew();
 
                 // توليد الرقم التلقائي
-                string next = DatabaseHelper.GetNextCode("Doc_Types", "DocType_ID");
                 var tb = this.Controls.Find("docType_IDTextBox", true).FirstOrDefault() as TextBox;
-                if (tb != null) tb.Text = next;
 
                 // إبلاغ الأب بفتح الشاشة في وضع جديد
                 ChangeFormMode(FormMode.New);
@@ -97,7 +92,6 @@ namespace AlRowad_ERP.Forms
         // 🎯 الالتزام بالدستور: زر التعديل
         public override void OnEdit()
         {
-            if (doc_TypesBindingSource.Current == null) return;
 
             // فتح الحقول للتعديل على المستند الحالي
             ChangeFormMode(FormMode.Edit);
@@ -171,7 +165,6 @@ namespace AlRowad_ERP.Forms
         {
             if (MessageBox.Show("هل أنت متأكد من إلغاء العملية والتراجع؟", "تأكيد", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                doc_TypesBindingSource.CancelEdit();
                 ChangeFormMode(FormMode.View);
             }
         }
@@ -179,7 +172,6 @@ namespace AlRowad_ERP.Forms
         // 🎯 الالتزام بالدستور: زر الحذف (F4)
         public override void OnDelete()
         {
-            if (CurrentMode != FormMode.View || doc_TypesBindingSource.Current == null)
             {
                 MessageBox.Show("يرجى اختيار نوع مستند واستعراضه قبل محاولة حذفه.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -191,15 +183,12 @@ namespace AlRowad_ERP.Forms
             {
                 try
                 {
-                    this.doc_TypesBindingSource.RemoveCurrent();
-                    this.tableAdapterManager.UpdateAll(this.alRowad_ERPDataSet);
                     MessageBox.Show("تم حذف نوع المستند بنجاح.", "تم", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (System.Data.SqlClient.SqlException)
                 {
                     // اصطياد أخطاء الارتباط (Foreign Key)
                     MessageBox.Show("لا يمكن حذف هذا المستند لارتباطه بعمليات أخرى مسجلة في النظام.", "حماية النظام", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                    this.doc_TypesTableAdapter.Fill(this.alRowad_ERPDataSet.Doc_Types); // استعادة البيانات
                 }
                 catch (Exception ex)
                 {
