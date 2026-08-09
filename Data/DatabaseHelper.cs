@@ -12,7 +12,26 @@ namespace AlRowad_ERP.Core
         #region إعدادات الاتصال
         private static string GetConnectionString()
         {
-            return @"Server=DESKTOP-U2PUV95\SQLEXPRESS;Database=AlRowad_ERP;Trusted_Connection=True;Connect Timeout=60;Pooling=True;Max Pool Size=200;";
+            // قراءة سلسلة الاتصال من ملف الإعدادات (App.config / machine.config)
+            // الاسم الموحد المستخدم في المشروع
+            string connectionStringName = "AlRowad_ERP.Properties.Settings.AlRowad_ERPConnectionString";
+
+            // حاول قراءة من مقاطع connectionStrings أولاً
+            string cs = ConfigurationManager.ConnectionStrings[connectionStringName]?.ConnectionString;
+
+            // إذا لم تتوفر هناك، حاول قراءة من AppSettings بعنوان أبسط لدعم بيئات التطوير
+            if (string.IsNullOrWhiteSpace(cs))
+            {
+                cs = ConfigurationManager.AppSettings["AlRowad_ERPConnectionString"];
+            }
+
+            // كحل مؤقت فقط (fallback) — لا تستخدم في الإنتاج، سيُرمى استثناء إذا لم تُعرّف السلسلة
+            if (string.IsNullOrWhiteSpace(cs))
+            {
+                throw new InvalidOperationException($"سلسلة الاتصال للمفتاح '{connectionStringName}' غير معرّفة في App.config أو AppSettings.");
+            }
+
+            return cs;
         }
 
         public static SqlConnection GetConnection()
@@ -289,7 +308,7 @@ namespace AlRowad_ERP.Core
             catch (Exception fallbackEx)
             {
                 // الخطة ب (Fallback): إذا كان الخطأ الأصلي هو انقطاع السيرفر، فلن نتمكن من الحفظ في قاعدة البيانات.
-                // لذلك نحفظ الخطأ في ملف نصي (Text File) داخل مجلد النظام.
+                // لذلك نحفظ الخط�� في ملف نصي (Text File) داخل مجلد النظام.
                 try
                 {
                     string logDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SystemLogs");
@@ -315,4 +334,3 @@ namespace AlRowad_ERP.Core
         }
     }
 }
-
