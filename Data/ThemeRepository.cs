@@ -47,9 +47,9 @@ namespace AlRowad_ERP.Data
             // بناء استعلام نظيف خالٍ من الـ Magic Strings
             string query = $@"
             UPDATE [Themes] 
-            SET {SystemConstants.IsDeleted} = 1, 
-                {SystemConstants.DeletedBy} = @UserId, 
-                {SystemConstants.DeletedAt} = GETDATE() 
+            SET {SystemConstants.AuditFields.IsDeleted} = 1, 
+                {SystemConstants.AuditFields.DeletedBy} = @UserId, 
+                {SystemConstants.AuditFields.DeletedAt} = GETDATE() 
             WHERE Theme_ID = @ID";
 
             SqlParameter[] parameters = {

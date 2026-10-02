@@ -61,7 +61,7 @@ namespace AlRowad_ERP.Forms
                     // التحقق المبدئي: هل قام المستخدم بكتابة شيء؟
                     if (string.IsNullOrWhiteSpace(textBox4.Text))
                     {
-                        MessageBox.Show(SystemConstants.Msg_RequiredFields, "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show(SystemConstants.Messages.RequiredFields, "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return true; // إيقاف العملية وإبقاء المؤشر في مكانه
                     }
 
@@ -168,7 +168,7 @@ namespace AlRowad_ERP.Forms
 
             if (string.IsNullOrEmpty(userNumber) || string.IsNullOrEmpty(password))
             {
-                MessageBox.Show(SystemConstants.Msg_RequiredFields, "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(SystemConstants.Messages.RequiredFields, "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -189,7 +189,7 @@ namespace AlRowad_ERP.Forms
                 }
                 else
                 {
-                    MessageBox.Show(SystemConstants.Msg_LoginFailed, "فشل الدخول", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(SystemConstants.Messages.LoginFailed, "فشل الدخول", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     textBox4.Clear();
                     textBox4.Focus();
                 }

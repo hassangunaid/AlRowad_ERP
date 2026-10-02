@@ -1,0 +1,164 @@
+﻿[📁] Core
+   [📁] Constants
+      -- SystemConstants.cs
+      -- ThemeTokens.cs
+   [📁] Engines
+      -- JournalEngine.cs
+      -- ReportEngine.cs
+   [📁] Entities
+      -- ThemeEntity.cs
+      -- UserEntity.cs
+   [📁] Helpers
+      -- ColorHelper.cs
+      -- CurrencyHelper.cs
+      -- GlobalExceptionHandler.cs
+      -- SystemSettingsHelper.cs
+      -- UIHelper.cs
+   [📁] Security
+      -- FormMonitor.cs
+      -- UserSession.cs
+[📁] Data
+   -- AccountRepository.cs
+   -- AuthRepository.cs
+   -- CustomerRepository.cs
+   -- DatabaseHelper.cs
+   -- FinancialPeriodRepository.cs
+   -- InvoiceRepository.cs
+   -- ItemRepository.cs
+   -- JournalRepository.cs
+   -- SystemRepository.cs
+   -- ThemeRepository.cs
+   -- VoucherRepository.cs
+[📁] docs
+   [📁] internals
+[📁] Models
+   -- CustomerCurrencyDto.cs
+   -- InvoiceModel.cs
+   -- JournalHeaderModel.cs
+   -- VoucherModel.cs
+[📁] PHOTO
+   -- MianForm.png
+[📁] Properties
+   -- AssemblyInfo.cs
+   -- Resources.Designer.cs
+   -- Resources.resx
+   -- Settings.Designer.cs
+   -- Settings.settings
+[📁] publish
+   [📁] Application Files
+      [📁] AlRowad_ERP_1_0_0_0
+         [📁] ar
+            -- AlRowad_ERP.resources.dll.deploy
+         -- AlRowad_ERP.application
+         -- AlRowad_ERP.exe.config.deploy
+         -- AlRowad_ERP.exe.deploy
+         -- AlRowad_ERP.exe.manifest
+         -- FontAwesome.Sharp.dll.deploy
+         -- Microsoft.Data.SqlClient.SNI.arm64.dll
+         -- Microsoft.Data.SqlClient.SNI.arm64.dll.deploy
+         -- Microsoft.Data.SqlClient.SNI.x64.dll
+         -- Microsoft.Data.SqlClient.SNI.x64.dll.deploy
+         -- Microsoft.Data.SqlClient.SNI.x86.dll
+         -- Microsoft.Data.SqlClient.SNI.x86.dll.deploy
+         -- System.Buffers.dll.deploy
+         -- System.Configuration.ConfigurationManager.dll.deploy
+         -- System.Memory.dll.deploy
+         -- System.Numerics.Vectors.dll.deploy
+         -- System.Runtime.CompilerServices.Unsafe.dll.deploy
+   -- AlRowad_ERP.application
+   -- setup.exe
+[📁] Services
+   [📁] Accounting
+      -- FinancialPeriodService.cs
+      -- JournalService.cs
+   [📁] Inventory
+      -- StockMovementService.cs
+   [📁] SalesAndPurchases
+      -- InvoiceService.cs
+[📁] UI
+   [📁] Base
+      -- BaseEntryForm.cs
+      -- BaseEntryForm.resx
+      -- BaseForm.cs
+      -- BaseForm.resx
+   [📁] Controls
+      -- AlRowadDateTextBox.cs
+      -- AlRowadDateTextBox.Designer.cs
+      -- AlRowadDateTextBox.resx
+      -- AlRowadNumericTextBox.cs
+      -- AlRowadToolBar.cs
+      -- AlRowadToolBar.Designer.cs
+      -- AlRowadToolBar.resx
+   [📁] Entities
+      -- ThemeManager.cs
+   [📁] Forms
+      -- AccountsForm.cs
+      -- AccountsForm.Designer.cs
+      -- AccountsForm.resx
+      -- AccountsForm1.ar.resx
+      -- AccountsForm1.resx
+      -- Currencies.cs
+      -- Currencies.Designer.cs
+      -- Currencies.resx
+      -- Customers.cs
+      -- Customers.Designer.cs
+      -- Customers.resx
+      -- Doc_Types.cs
+      -- Doc_Types.Designer.cs
+      -- Doc_Types.resx
+      -- Items.cs
+      -- Items.Designer.cs
+      -- Items.resx
+      -- Item_Balances.cs
+      -- Item_Balances.Designer.cs
+      -- Item_Balances.resx
+      -- Journal_Header.cs
+      -- Journal_Header.Designer.cs
+      -- Journal_Header.resx
+      -- LongUesr.cs
+      -- LongUesr.Designer.cs
+      -- LongUesr.resx
+      -- MainForm.cs
+      -- MainForm.Designer.cs
+      -- MainForm.resx
+      -- MainForm.resx~RF103a0c8.TMP
+      -- Payment_Methods.cs
+      -- Payment_Methods.Designer.cs
+      -- Payment_Methods.resx
+      -- ReceiptVoucher.cs
+      -- ReceiptVoucher.Designer.cs
+      -- ReceiptVoucher.resx
+      -- Stores.cs
+      -- Stores.Designer.cs
+      -- Suppliers.cs
+      -- Suppliers.Designer.cs
+      -- Suppliers.resx
+      -- System_Shortcuts.cs
+      -- System_Shortcuts.Designer.cs
+      -- System_Shortcuts.resx
+      -- UnitsForm.cs
+      -- UnitsForm.Designer.cs
+      -- UnitsForm.resx
+      -- VoucherForm.cs'''''.txt
+   [📁] Helpers
+      -- ShortcutManager.cs
+   [📁] HelpForms
+      -- UniversalSearchForm.cs
+   [📁] SystemSettings
+      -- Frm_ThemeManager.cs
+      -- Frm_ThemeManager.Designer.cs
+      -- Frm_ThemeManager.resx
+-- .gitignore
+-- AlRowad_ERP.csproj
+-- AlRowad_ERP.csproj.user
+-- AlRowad_ERP001.slnx
+-- AlRowad_ERPDataSet.Designer.cs
+-- AlRowad_ERPDataSet.xsc
+-- AlRowad_ERPDataSet.xsd
+-- AlRowad_ERPDataSet.xss
+-- App.config
+-- CHANGES_SUMMARY.md
+-- FIXES_COMPLETED.md
+-- packages.config
+-- Program.cs
+-- Project_Structure.txt

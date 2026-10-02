@@ -104,8 +104,8 @@ namespace AlRowad_ERP.Forms
                        ISNULL(UC.Full_Name, UC.Username) AS CreatedByName,
                        ISNULL(UU.Full_Name, UU.Username) AS UpdatedByName
                 FROM Currencies C
-                LEFT JOIN Users UC ON C.{SystemConstants.CreatedBy} = UC.User_ID
-                LEFT JOIN Users UU ON C.{SystemConstants.UpdatedBy} = UU.User_ID
+                LEFT JOIN Users UC ON C.{SystemConstants.AuditFields.CreatedBy} = UC.User_ID
+                LEFT JOIN Users UU ON C.{SystemConstants.AuditFields.UpdatedBy} = UU.User_ID
                 WHERE C.Cur_ID = @CurID";
 
             DataTable dtMaster = await DatabaseHelper.GetTableAsync(sqlMaster, new[] { new SqlParameter("@CurID", curId) });
@@ -136,11 +136,11 @@ namespace AlRowad_ERP.Forms
                     chk_IsLocalCurrency.Checked = Convert.ToBoolean(row["Is_Local_Currency"] != DBNull.Value ? row["Is_Local_Currency"] : false);
 
                 // 🛡️ تعبئة حقول التدقيق والرقابة باستعمال SystemConstants
-                if (txt_CreatedBy != null) txt_CreatedBy.Text = FormatUserInfo(row[SystemConstants.CreatedBy], row["CreatedByName"]);
-                if (txt_CreatedAt != null) txt_CreatedAt.Text = row[SystemConstants.CreatedAt] != DBNull.Value ? Convert.ToDateTime(row[SystemConstants.CreatedAt]).ToString("yyyy/MM/dd  hh:mm tt") : "";
+                if (txt_CreatedBy != null) txt_CreatedBy.Text = FormatUserInfo(row[SystemConstants.AuditFields.CreatedBy], row["CreatedByName"]);
+                if (txt_CreatedAt != null) txt_CreatedAt.Text = row[SystemConstants.AuditFields.CreatedAt] != DBNull.Value ? Convert.ToDateTime(row[SystemConstants.AuditFields.CreatedAt]).ToString("yyyy/MM/dd  hh:mm tt") : "";
 
-                if (txt_UpdatedBy != null) txt_UpdatedBy.Text = FormatUserInfo(row[SystemConstants.UpdatedBy], row["UpdatedByName"]);
-                if (txt_UpdatedAt != null) txt_UpdatedAt.Text = row[SystemConstants.UpdatedAt] != DBNull.Value ? Convert.ToDateTime(row[SystemConstants.UpdatedAt]).ToString("yyyy/MM/dd  hh:mm tt") : "";
+                if (txt_UpdatedBy != null) txt_UpdatedBy.Text = FormatUserInfo(row[SystemConstants.AuditFields.UpdatedBy], row["UpdatedByName"]);
+                if (txt_UpdatedAt != null) txt_UpdatedAt.Text = row[SystemConstants.AuditFields.UpdatedAt] != DBNull.Value ? Convert.ToDateTime(row[SystemConstants.AuditFields.UpdatedAt]).ToString("yyyy/MM/dd  hh:mm tt") : "";
 
                 await LoadCurrencyHistoryAsync(curId);
                 await ApplyDynamicLocksAsync();
@@ -401,7 +401,7 @@ namespace AlRowad_ERP.Forms
                                          SET Cur_Name = @Name, Cur_Symbol = @Symbol, Exchange_Rate = @Rate, 
                                              Min_Exchange_Rate = @MinRate, Max_Exchange_Rate = @MaxRate, 
                                              Is_Active = @IsActive, Is_Base_Currency = @IsBase, Is_Local_Currency = @IsLocal,
-                                             {SystemConstants.UpdatedBy} = @UpdatedBy, {SystemConstants.UpdatedAt} = GETDATE()
+                                             {SystemConstants.AuditFields.UpdatedBy}  = @UpdatedBy,  {SystemConstants.AuditFields.UpdatedAt} = GETDATE()
                                          WHERE Cur_ID = @ID AND RowVersion = @OldRowVersion";
 
                     var pUpdate = new System.Collections.Generic.List<SqlParameter> {
@@ -438,7 +438,7 @@ namespace AlRowad_ERP.Forms
                 else if (CurrentMode == FormMode.New)
                 {
                     string sqlInsert = $@"INSERT INTO Currencies 
-                                         (Cur_ID, Cur_Name, Cur_Symbol, Exchange_Rate, Min_Exchange_Rate, Max_Exchange_Rate, Is_Active, Is_Base_Currency, Is_Local_Currency, {SystemConstants.CreatedBy}, {SystemConstants.CreatedAt}) 
+                                         (Cur_ID, Cur_Name, Cur_Symbol, Exchange_Rate, Min_Exchange_Rate, Max_Exchange_Rate, Is_Active, Is_Base_Currency, Is_Local_Currency, {SystemConstants.AuditFields.CreatedBy} ,  {SystemConstants.AuditFields.CreatedAt}) 
                                          VALUES 
                                          (@ID, @Name, @Symbol, @Rate, @MinRate, @MaxRate, @IsActive, @IsBase, @IsLocal, @CreatedBy, GETDATE())";
 

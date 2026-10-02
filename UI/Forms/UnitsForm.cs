@@ -1,210 +1,224 @@
-﻿using AlRowad_ERP.Core;
+﻿using AlRowad_ERP.Core.Constants;
+using AlRowad_ERP.Data;
+using AlRowad_ERP.UI.Base;
 using System;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using AlRowad_ERP.UI.Base;
-using AlRowad_ERP.Core.Constants;
 
 namespace AlRowad_ERP.Forms
 {
     public partial class UnitsForm : BaseEntryForm
     {
+        private readonly UnitRepository _unitRepo;
 
         public UnitsForm()
         {
             InitializeComponent();
             PrimaryIdFieldName = "unit_IDTextBox";
+            MainTableName = SystemConstants.Tables.Units;
+            _unitRepo = new UnitRepository();
         }
 
-        private void UnitsForm_Load(object sender, EventArgs e)
+        private async void UnitsForm_Load(object sender, EventArgs e)
         {
             try
             {
-                this.unitsTableAdapter.Fill(this.alRowad_ERPDataSet.Units);
-
-                // الانتقال لوضع الاستعراض المحمي فور الفتح
-                ChangeFormMode(FormMode.View);
-
-                if (this.unitsDataGridView != null)
+                if (unitsDataGridView != null)
                 {
-                    this.unitsDataGridView.CellDoubleClick += UnitsDataGridView_CellDoubleClick;
+                    unitsDataGridView.AutoGenerateColumns = false;
+                    unitsDataGridView.AllowUserToAddRows = false;
+                    unitsDataGridView.AllowUserToDeleteRows = false;
+                    unitsDataGridView.ReadOnly = true;
+                    unitsDataGridView.RowHeadersVisible = false;
+                    unitsDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+                    unitsDataGridView.Columns.Clear();
+                    unitsDataGridView.Columns.Add(new DataGridViewTextBoxColumn { Name = "Unit_ID", DataPropertyName = "Unit_ID", HeaderText = "رقم الوحدة", Width = 80 });
+                    unitsDataGridView.Columns.Add(new DataGridViewTextBoxColumn { Name = "Unit_Name", DataPropertyName = "Unit_Name", HeaderText = "اسم الوحدة", Width = 150 });
+                    unitsDataGridView.Columns.Add(new DataGridViewTextBoxColumn { Name = "Conversion_Factor", DataPropertyName = "Conversion_Factor", HeaderText = "معامل التحويل", Width = 100 });
+
+                    // 🌟 استدعاء الحقول المدمجة الجديدة من الـ Repository
+                    unitsDataGridView.Columns.Add(new DataGridViewTextBoxColumn { Name = "CreatedInfo", DataPropertyName = "CreatedInfo", HeaderText = "المضيف وتاريخ الإضافة", Width = 230 });
+
+                    // 🌟 جعل الحقل الأخير يمتد للآخر
+                    unitsDataGridView.Columns.Add(new DataGridViewTextBoxColumn { Name = "UpdatedInfo", DataPropertyName = "UpdatedInfo", HeaderText = "المعدل وتاريخ التعديل", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
+
+                    unitsDataGridView.CellDoubleClick += async (s, ev) => await UnitsDataGridView_CellDoubleClick(s, ev);
+                }
+
+                await LoadAllDataAsync();
+                ChangeFormMode(FormMode.View);
+            }
+            catch (Exception ex)
+            {
+                LogError(ex);
+            }
+        }
+        #region دوال التدقيق (Audit Trail)
+        // دالة مساعدة لتنسيق اسم المستخدم ورقمه
+        private string FormatUserInfo(object userIdObj, object userNameObj)
+        {
+            if (userIdObj == null || userIdObj == DBNull.Value || Convert.ToInt32(userIdObj) == 0) return "";
+            string name = (userNameObj != null && userNameObj != DBNull.Value) ? userNameObj.ToString() : "مجهول";
+            return $"{name} || {userIdObj}";
+        }
+        #endregion
+
+        private async Task LoadAllDataAsync()
+        {
+            DataTable dtUnits = await _unitRepo.GetAllActiveUnitsAsync();
+            unitsDataGridView.DataSource = dtUnits;
+        }
+
+        // 🌟 دالة جلب السجل الواحد مع حقول الرقابة والمضيف/المعدل
+        private async Task LoadSingleUnitDataAsync(int unitId)
+        {
+            DataTable dt = await _unitRepo.GetUnitByIdAsync(unitId);
+            if (dt.Rows.Count > 0)
+            {
+                DataRow row = dt.Rows[0];
+                unit_IDTextBox.Text = row[SystemConstants.Columns.Unit_ID].ToString();
+                unit_NameTextBox.Text = row[SystemConstants.Columns.Unit_Name].ToString();
+                conversion_FactorTextBox.Text = Convert.ToDecimal(row[SystemConstants.Columns.Conversion_Factor]).ToString("F4");
+
+                // تعبئة حقول الرقابة اللحظية (تأكد من وجود هذه الأدوات txt_CreatedBy وما شابهها في التصميم)
+                Control[] cBy = this.Controls.Find("txt_CreatedBy", true);
+                if (cBy.Length > 0) cBy[0].Text = FormatUserInfo(row[SystemConstants.Columns.Created_By], row["CreatedByName"]);
+
+                Control[] cAt = this.Controls.Find("txt_CreatedAt", true);
+                if (cAt.Length > 0) cAt[0].Text = row[SystemConstants.Columns.Created_At] != DBNull.Value ? Convert.ToDateTime(row[SystemConstants.Columns.Created_At]).ToString("yyyy/MM/dd hh:mm tt") : "";
+
+                Control[] uBy = this.Controls.Find("txt_UpdatedBy", true);
+                if (uBy.Length > 0) uBy[0].Text = FormatUserInfo(row[SystemConstants.Columns.Updated_By], row["UpdatedByName"]);
+
+                Control[] uAt = this.Controls.Find("txt_UpdatedAt", true);
+                if (uAt.Length > 0) uAt[0].Text = row[SystemConstants.Columns.Updated_At] != DBNull.Value ? Convert.ToDateTime(row[SystemConstants.Columns.Updated_At]).ToString("yyyy/MM/dd hh:mm tt") : "";
+
+                ChangeFormMode(FormMode.RecordSelected);
+            }
+        }
+
+        // 🌟 التعديل الجذري لحدث النقر لمنع توقفه بعد المرة الأولى
+        private async Task UnitsDataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // السماح بالنقر إذا كانت الشاشة في وضع "الاستعراض" أو "تم اختيار سجل"
+            if (e.RowIndex < 0 || (CurrentMode != FormMode.View && CurrentMode != FormMode.RecordSelected)) return;
+
+            try
+            {
+                int unitId = Convert.ToInt32(unitsDataGridView.Rows[e.RowIndex].Cells["Unit_ID"].Value);
+                await LoadSingleUnitDataAsync(unitId);
+            }
+            catch (Exception ex)
+            {
+                LogError(ex);
+            }
+        }
+        public override async void OnSearch()
+        {
+            try
+            {
+                string query = $"SELECT {SystemConstants.Columns.Unit_ID} AS [رقم الوحدة], {SystemConstants.Columns.Unit_Name} AS [اسم الوحدة] FROM {SystemConstants.Tables.Units} WHERE {SystemConstants.Columns.Is_Deleted} = 0";
+
+                using (var search = new AlRowad_ERP.HelpForms.UniversalSearchForm("بحث في دليل الوحدات (F9)", query))
+                {
+                    if (search.ShowDialog(this) == DialogResult.OK)
+                    {
+                        string selectedId = search.المعرف_المختار;
+                        if (!string.IsNullOrWhiteSpace(selectedId))
+                        {
+                            await LoadSingleUnitDataAsync(Convert.ToInt32(selectedId));
+                        }
+                    }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("خطأ أثناء تحميل بيانات الوحدات: " + ex.Message, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        #region محرك إدارة الحالات (امتداد الأب)
-
-        protected override void LockControls(Control parent, bool isReadOnly)
-        {
-            // استدعاء الأب ليقفل الحقول النصية والكومبو بوكس
-            base.LockControls(parent, isReadOnly);
-
-            // قفل جدول الوحدات أثناء التحرير
-            if (unitsDataGridView != null)
-                unitsDataGridView.Enabled = isReadOnly;
-        }
-
-        #endregion
-
-        private void UnitsDataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex < 0 || CurrentMode != FormMode.View) return;
-
-            try
-            {
-                DataGridViewRow row = unitsDataGridView.Rows[e.RowIndex];
-                unit_IDTextBox.Text = row.Cells["Unit_ID"].Value?.ToString();
-                unit_NameTextBox.Text = row.Cells["Unit_Name"].Value?.ToString();
-
-                // الانتقال لوضع الاستعراض بعد اختيار السجل
-                ChangeFormMode(FormMode.View);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("فشل في تعبئة بيانات الوحدة: " + ex.Message, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("حدث خطأ أثناء فتح نافذة البحث: " + ex.Message, "نظام الرواد", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         public override void OnNew()
         {
-            base.OnNew(); // تفريغ الحقول عبر الأب
+            base.OnNew();
+            unit_IDTextBox.Text = "تلقائي";
+            conversion_FactorTextBox.Text = "1.0000";
 
-            try
-            {
-                unit_NameTextBox.Focus();
+            // تصفير حقول الرقابة
+            Control[] cBy = this.Controls.Find("txt_CreatedBy", true); if (cBy.Length > 0) cBy[0].Text = "";
+            Control[] cAt = this.Controls.Find("txt_CreatedAt", true); if (cAt.Length > 0) cAt[0].Text = "";
+            Control[] uBy = this.Controls.Find("txt_UpdatedBy", true); if (uBy.Length > 0) uBy[0].Text = "";
+            Control[] uAt = this.Controls.Find("txt_UpdatedAt", true); if (uAt.Length > 0) uAt[0].Text = "";
 
-                ChangeFormMode(FormMode.New);
-            }
-            catch { }
+            unit_NameTextBox.Focus();
         }
 
         public override void OnEdit()
         {
-            if (string.IsNullOrWhiteSpace(unit_IDTextBox.Text)) return;
-            ChangeFormMode(FormMode.Edit);
-            unit_NameTextBox.Focus();
-        }
-        /*
-      protected override bool ExecuteSaveToDatabase(SqlTransaction trans)
-      {
-          // 1. التحقق المبدئي من الحقول الإجبارية (يرجى مطابقة أسماء الأدوات مع ما هو موجود في واجهة التصميم)
-          if (string.IsNullOrWhiteSpace(unit_NameTextBox.Text))
-          {
-              MessageBox.Show("يجب إدخال اسم الوحدة.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-              return false;
-          }
-
-          try
-          {
-              // 2. صياغة الاستعلام مع حقول التدقيق (ملاحظة: Unit_ID هو IDENTITY ولا يتم إدراجه يدوياً)
-              string sqlQuery = (CurrentMode == FormMode.Edit)
-                  ? @"UPDATE Units 
-                      SET Unit_Name = @Unit_Name, Conversion_Factor = @Conversion_Factor, 
-                          Updated_By = @Updated_By, Updated_At = @Updated_At 
-                      WHERE Unit_ID = @Unit_ID"
-                  : @"INSERT INTO Units 
-                      (Unit_Name, Conversion_Factor, Created_By, Created_At) 
-                      VALUES (@Unit_Name, @Conversion_Factor, @Created_By, @Created_At)";
-
-              // معالجة القيم الرقمية بأمان
-              decimal.TryParse(conversion_FactorTextBox.Text, out decimal conversionFactor);
-              if (conversionFactor <= 0) conversionFactor = 1; // القيمة الافتراضية لمعامل التحويل هي 1
-
-              // 3. تجهيز البارامترات الأساسية
-              var pHeader = new System.Collections.Generic.List<SqlParameter>
-              {
-                  new SqlParameter("@Unit_Name", unit_NameTextBox.Text.Trim()),
-                  new SqlParameter("@Conversion_Factor", conversionFactor)
-              };
-
-              // إضافة مفتاح السجل في حالة التعديل فقط
-              if (CurrentMode == FormMode.Edit)
-              {
-                  pHeader.Add(new SqlParameter("@Unit_ID", unit_IDTextBox.Text.Trim()));
-              }
-
-              // 4. حقن بيانات المستخدم والوقت أوتوماتيكياً (Audit Trail)
-              if (CurrentMode == FormMode.New)
-              {
-                  pHeader.Add(new SqlParameter("@Created_By", UserSession.UserId));
-                  pHeader.Add(new SqlParameter("@Created_At", DateTime.Now));
-              }
-              else if (CurrentMode == FormMode.Edit)
-              {
-                  pHeader.Add(new SqlParameter("@Updated_By", UserSession.UserId));
-                  pHeader.Add(new SqlParameter("@Updated_At", DateTime.Now));
-              }
-
-              // 5. التنفيذ الآمن تحت مظلة المعاملة المركزية (SqlTransaction)
-              DatabaseHelper.ExecuteNonQuery(sqlQuery, pHeader.ToArray(), trans);
-
-              // 6. تسجيل الحركة في الجدول الرقابي عند التعديل
-              if (CurrentMode == FormMode.Edit)
-              {
-                  string oldValues = "تم الحفظ المسبق"; // مستقبلاً يمكن استخراج النسخة من الذاكرة
-                  string newValues = $"الاسم: {unit_NameTextBox.Text.Trim()} | معامل التحويل: {conversionFactor}";
-                  DatabaseHelper.LogAuditTransaction(trans, "Units", unit_IDTextBox.Text.Trim(), "UPDATE", oldValues, newValues, "تعديل وحدة قياس");
-              }
-
-              return true;
-          }
-          catch (Exception ex)
-          {
-              // رمي الخطأ ليتم التقاطه وتنفيذ Rollback بأمان في الـ BaseEntryForm
-              throw new Exception($"خطأ أثناء حفظ بيانات الوحدة: {ex.Message}");
-          }
-      }        */
-
-        // 7. يمكنك عمل Override لدالة RefreshData من الـ BaseEntryForm لتحديث الشجرة أو الجدول بعد الحفظ الناجح
-        protected override void RefreshData()
-        {
-            try
+            if (string.IsNullOrWhiteSpace(unit_IDTextBox.Text) || unit_IDTextBox.Text == "تلقائي")
             {
-                // تحديث البيانات في الشاشة (مثلاً DataGridView أو غيره) بدلاً من tableAdapter القديم
-                // مثال: dgvUnits.DataSource = DatabaseHelper.GetTable("SELECT * FROM Units");
-            }
-            catch { }
-        }
-
-        public override void OnCancel()
-        {
-            base.OnCancel();
-            try
-            {
-                this.unitsTableAdapter.Fill(this.alRowad_ERPDataSet.Units);
-                ChangeFormMode(FormMode.View);
-            }
-            catch { }
-        }
-
-        public override void OnDelete()
-        {
-            if (CurrentMode != FormMode.View || unitsBindingSource.Current == null)
-            {
-                MessageBox.Show("يرجى اختيار وحدة لاستعراضها أولاً قبل حذفها.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("يرجى اختيار وحدة للتعديل أولاً.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+            base.OnEdit();
+            unit_NameTextBox.Focus();
+        }
 
-            var result = MessageBox.Show("هل أنت متأكد من حذف الوحدة المحددة؟", "تأكيد الحذف", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (result == DialogResult.Yes)
+        protected override void LockControls(Control parent, bool isReadOnly)
+        {
+            base.LockControls(parent, isReadOnly);
+
+            if (unit_IDTextBox != null) unit_IDTextBox.ReadOnly = true;
+            if (unitsDataGridView != null) unitsDataGridView.Enabled = true;
+
+            // حماية حقول الرقابة (إذا كانت موجودة)
+            Control[] cBy = this.Controls.Find("txt_CreatedBy", true); if (cBy.Length > 0) ((TextBox)cBy[0]).ReadOnly = true;
+            Control[] cAt = this.Controls.Find("txt_CreatedAt", true); if (cAt.Length > 0) ((TextBox)cAt[0]).ReadOnly = true;
+            Control[] uBy = this.Controls.Find("txt_UpdatedBy", true); if (uBy.Length > 0) ((TextBox)uBy[0]).ReadOnly = true;
+            Control[] uAt = this.Controls.Find("txt_UpdatedAt", true); if (uAt.Length > 0) ((TextBox)uAt[0]).ReadOnly = true;
+        }
+
+        protected override async Task<bool> ExecuteSaveToDatabaseAsync(SqlTransaction transaction)
+        {
+            if (string.IsNullOrWhiteSpace(unit_NameTextBox.Text))
             {
-                try
-                {
-                    this.unitsBindingSource.RemoveCurrent();
-                    this.tableAdapterManager.UpdateAll(this.alRowad_ERPDataSet);
-                    MessageBox.Show("تم حذف السجل بنجاح.", "تم", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    ChangeFormMode(FormMode.View);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("فشل الحذف: " + ex.Message, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                MessageBox.Show("يجب إدخال اسم الوحدة.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            int.TryParse(unit_IDTextBox.Text, out int unitId);
+            decimal.TryParse(conversion_FactorTextBox.Text, out decimal conversionFactor);
+            if (conversionFactor <= 0) conversionFactor = 1;
+
+            bool isNew = (CurrentMode == FormMode.New);
+
+            int savedId = await _unitRepo.SaveUnitAsync(unitId, unit_NameTextBox.Text.Trim(), conversionFactor, this.CurrentUserId, isNew, transaction);
+
+            if (savedId > 0)
+            {
+                unit_IDTextBox.Text = savedId.ToString();
+                return true;
+            }
+            return false;
+        }
+
+        protected override async Task<bool> ExecuteDeleteFromDatabaseAsync(SqlTransaction transaction)
+        {
+            if (string.IsNullOrWhiteSpace(unit_IDTextBox.Text) || unit_IDTextBox.Text == "تلقائي") return false;
+            int unitId = int.Parse(unit_IDTextBox.Text);
+
+            return await _unitRepo.DeleteUnitAsync(unitId, this.CurrentUserId, transaction);
+        }
+
+        protected override void RefreshData()
+        {
+            _ = LoadAllDataAsync();
+
+            if (int.TryParse(unit_IDTextBox.Text, out int currentId) && currentId > 0)
+            {
+                _ = LoadSingleUnitDataAsync(currentId);
             }
         }
     }

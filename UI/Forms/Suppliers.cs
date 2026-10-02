@@ -206,7 +206,7 @@ namespace AlRowad_ERP.Forms
                 if (CurrentMode == FormMode.New)
                 {
                     string accSql = $@"INSERT INTO Accounts 
-                                    (Acc_ID, Acc_Name, Is_Stopped, Account_Level, Parent_ID, Acc_Type, Acc_Nature, Report_Type, {SystemConstants.CreatedBy}, {SystemConstants.CreatedAt}) 
+                                    (Acc_ID, Acc_Name, Is_Stopped, Account_Level, Parent_ID, Acc_Type, Acc_Nature, Report_Type, {SystemConstants.AuditFields.CreatedBy}, {SystemConstants.AuditFields.CreatedAt}) 
                                     VALUES (@AccID, @AccName, 0, 5, @ParentID, 2, 2, 1, @Created_By, @Created_At)";
 
                     var pAcc = new List<SqlParameter> {
@@ -219,7 +219,7 @@ namespace AlRowad_ERP.Forms
                     await DatabaseHelper.ExecuteNonQueryAsync(accSql, pAcc.ToArray(), trans);
 
                     string suppSql = $@"INSERT INTO Suppliers 
-                                      (Supp_ID, Supp_Name, Supp_Phone, Supp_Address, Acc_ID, {SystemConstants.CreatedBy}, {SystemConstants.CreatedAt}) 
+                                      (Supp_ID, Supp_Name, Supp_Phone, Supp_Address, Acc_ID, {SystemConstants.AuditFields.CreatedBy}, {SystemConstants.AuditFields.CreatedAt}) 
                                       VALUES (@ID, @Name, @Phone, @Address, @AccID, @Created_By, @Created_At)";
 
                     var pSupp = new List<SqlParameter> {
@@ -236,7 +236,7 @@ namespace AlRowad_ERP.Forms
                 else if (CurrentMode == FormMode.Edit)
                 {
                     string updateAcc = $@"UPDATE Accounts 
-                                         SET Acc_Name = @Name, {SystemConstants.UpdatedBy} = @Updated_By, {SystemConstants.UpdatedAt} = @Updated_At 
+                                         SET Acc_Name = @Name, {SystemConstants.AuditFields.UpdatedBy}  = @Updated_By,  {SystemConstants.AuditFields.UpdatedAt} = @Updated_At 
                                          WHERE Acc_ID = @AccID";
 
                     var pUpdAcc = new List<SqlParameter> {
@@ -250,7 +250,7 @@ namespace AlRowad_ERP.Forms
                     // 🚀 تحديث المورد مع شرط التزامن الصارم (RowVersion)
                     string updateSupp = $@"UPDATE Suppliers 
                                           SET Supp_Name = @Name, Supp_Phone = @Phone, Supp_Address = @Address,
-                                              {SystemConstants.UpdatedBy} = @Updated_By, {SystemConstants.UpdatedAt} = @Updated_At 
+                                              {SystemConstants.AuditFields.UpdatedBy}  = @Updated_By,  {SystemConstants.AuditFields.UpdatedAt} = @Updated_At 
                                           WHERE Supp_ID = @ID AND RowVersion = @OldRowVersion";
 
                     var pUpdSupp = new List<SqlParameter> {
@@ -318,14 +318,14 @@ namespace AlRowad_ERP.Forms
         // 🌟 الحذف اللامتزامن المنطقي المزدوج (المورد + الحساب)
         protected override async Task<bool> ExecuteDeleteFromDatabaseAsync(SqlTransaction transaction)
         {
-            string updateSupp = $@"UPDATE Suppliers SET {SystemConstants.IsDeleted} = 1, {SystemConstants.DeletedBy} = @UserId, {SystemConstants.DeletedAt} = GETDATE() WHERE Supp_ID = @SuppID";
+            string updateSupp = $@"UPDATE Suppliers SET {SystemConstants.Columns.Is_Deleted} = 1, {SystemConstants.AuditFields.DeletedBy} = @UserId, {SystemConstants.AuditFields.DeletedAt} = GETDATE() WHERE Supp_ID = @SuppID";
             await DatabaseHelper.ExecuteNonQueryAsync(updateSupp, new[] {
                 new SqlParameter("@SuppID", supp_IDTextBox.Text.Trim()), new SqlParameter("@UserId", UserSession.UserId)
             }, transaction);
 
             if (!string.IsNullOrWhiteSpace(acc_IDTextBox.Text))
             {
-                string updateAcc = $@"UPDATE Accounts SET Is_Stopped = 1, {SystemConstants.UpdatedBy} = @UserId, {SystemConstants.UpdatedAt} = GETDATE() WHERE Acc_ID = @AccID";
+                string updateAcc = $@"UPDATE Accounts SET Is_Stopped = 1, {SystemConstants.AuditFields.UpdatedBy} = @UserId, {SystemConstants.AuditFields.UpdatedAt} = GETDATE() WHERE Acc_ID = @AccID";
                 await DatabaseHelper.ExecuteNonQueryAsync(updateAcc, new[] {
                     new SqlParameter("@AccID", acc_IDTextBox.Text.Trim()), new SqlParameter("@UserId", UserSession.UserId)
                 }, transaction);
@@ -583,12 +583,12 @@ namespace AlRowad_ERP.Forms
             {
                 string query = $@"
                     SELECT s.Supp_ID, s.Supp_Name, s.Supp_Phone, s.Supp_Address, s.Acc_ID, s.RowVersion,
-                           s.{SystemConstants.CreatedBy}, s.{SystemConstants.CreatedAt}, s.{SystemConstants.UpdatedBy}, s.{SystemConstants.UpdatedAt},
+                           s.{SystemConstants.AuditFields.CreatedBy}, s.{SystemConstants.AuditFields.CreatedAt}, s.{SystemConstants.AuditFields.UpdatedBy}, s.{SystemConstants.AuditFields.UpdatedAt},
                            ISNULL(uc.Full_Name, uc.Username) AS CreatedByName,
                            ISNULL(uu.Full_Name, uu.Username) AS UpdatedByName
                     FROM Suppliers s
-                    LEFT JOIN Users uc ON s.{SystemConstants.CreatedBy} = uc.User_ID
-                    LEFT JOIN Users uu ON s.{SystemConstants.UpdatedBy} = uu.User_ID
+                    LEFT JOIN Users uc ON s.{SystemConstants.AuditFields.CreatedBy} = uc.User_ID
+                    LEFT JOIN Users uu ON s.{SystemConstants.AuditFields.UpdatedBy} = uu.User_ID
                     WHERE s.Supp_ID = @Code";
 
                 SqlParameter[] p = { new SqlParameter("@Code", supplierCode.Trim()) };

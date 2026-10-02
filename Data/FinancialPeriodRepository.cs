@@ -11,9 +11,9 @@ public class FinancialPeriodRepository
         // استعلام نظيف يعتمد على الثوابت الدستورية
         string query = $@"
             SELECT COUNT(1) 
-            FROM {SystemConstants.FinancialPeriods} 
+            FROM {SystemConstants.Tables.FinancialPeriods} 
             WHERE @TransDate BETWEEN Start_Date AND End_Date 
-            AND {SystemConstants.Is_Closed} = 0";
+            AND {SystemConstants.Columns.Is_Closed} = 0";
 
         // بناء المعاملات بالشكل الذي يقبله DatabaseHelper الخاص بك
         SqlParameter[] parameters = new SqlParameter[]

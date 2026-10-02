@@ -55,6 +55,12 @@ namespace AlRowad_ERP.Forms
             this.treeAccounts = new System.Windows.Forms.TreeView();
             this.alRowadToolBar = new AlRowad_ERP.Controls.AlRowadToolBar();
             this.GrBox_currencies = new System.Windows.Forms.GroupBox();
+            this.dgv_currencies = new System.Windows.Forms.DataGridView();
+            this.Is_Active = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Cur_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Is_Default = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Is_Frozen = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Cur_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.acc_Nature = new System.Windows.Forms.ComboBox();
             this.btnCollapseAll = new System.Windows.Forms.Button();
             this.btnExpandAll = new System.Windows.Forms.Button();
@@ -65,12 +71,6 @@ namespace AlRowad_ERP.Forms
             this.txt_CreatedBy = new System.Windows.Forms.TextBox();
             this.txt_UpdatedAt = new System.Windows.Forms.TextBox();
             this.txt_UpdatedBy = new System.Windows.Forms.TextBox();
-            this.dgv_currencies = new System.Windows.Forms.DataGridView();
-            this.Is_Active = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.Cur_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Is_Default = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.Is_Frozen = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.Cur_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             acc_IDLabel = new System.Windows.Forms.Label();
             acc_NameLabel = new System.Windows.Forms.Label();
             acc_Name_EnLabel = new System.Windows.Forms.Label();
@@ -387,6 +387,71 @@ namespace AlRowad_ERP.Forms
             this.GrBox_currencies.TabStop = false;
             this.GrBox_currencies.Text = "العملات";
             // 
+            // dgv_currencies
+            // 
+            this.dgv_currencies.AllowUserToAddRows = false;
+            this.dgv_currencies.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_currencies.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Is_Active,
+            this.Cur_Name,
+            this.Is_Default,
+            this.Is_Frozen,
+            this.Cur_ID});
+            this.dgv_currencies.Location = new System.Drawing.Point(69, 29);
+            this.dgv_currencies.Name = "dgv_currencies";
+            this.dgv_currencies.RowHeadersVisible = false;
+            this.dgv_currencies.RowHeadersWidth = 62;
+            this.dgv_currencies.RowTemplate.Height = 29;
+            this.dgv_currencies.Size = new System.Drawing.Size(607, 207);
+            this.dgv_currencies.TabIndex = 2;
+            // 
+            // Is_Active
+            // 
+            this.Is_Active.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.Is_Active.DataPropertyName = "Is_Active";
+            this.Is_Active.HeaderText = "▣";
+            this.Is_Active.MinimumWidth = 8;
+            this.Is_Active.Name = "Is_Active";
+            this.Is_Active.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Is_Active.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.Is_Active.Width = 70;
+            // 
+            // Cur_Name
+            // 
+            this.Cur_Name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Cur_Name.DataPropertyName = "Cur_Name";
+            this.Cur_Name.HeaderText = "اسم العملة";
+            this.Cur_Name.MinimumWidth = 8;
+            this.Cur_Name.Name = "Cur_Name";
+            // 
+            // Is_Default
+            // 
+            this.Is_Default.DataPropertyName = "Is_Default";
+            this.Is_Default.HeaderText = "العملة الافتراضية ";
+            this.Is_Default.MinimumWidth = 8;
+            this.Is_Default.Name = "Is_Default";
+            this.Is_Default.Width = 150;
+            // 
+            // Is_Frozen
+            // 
+            this.Is_Frozen.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.Is_Frozen.DataPropertyName = "Is_Frozen";
+            this.Is_Frozen.HeaderText = "توقيف";
+            this.Is_Frozen.MinimumWidth = 8;
+            this.Is_Frozen.Name = "Is_Frozen";
+            this.Is_Frozen.Width = 70;
+            // 
+            // Cur_ID
+            // 
+            this.Cur_ID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.Cur_ID.DataPropertyName = "Cur_ID";
+            this.Cur_ID.HeaderText = "رقم العملة";
+            this.Cur_ID.MinimumWidth = 8;
+            this.Cur_ID.Name = "Cur_ID";
+            this.Cur_ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Cur_ID.Visible = false;
+            this.Cur_ID.Width = 150;
+            // 
             // acc_Nature
             // 
             this.acc_Nature.FormattingEnabled = true;
@@ -467,71 +532,6 @@ namespace AlRowad_ERP.Forms
             this.txt_UpdatedBy.Size = new System.Drawing.Size(336, 30);
             this.txt_UpdatedBy.TabIndex = 49;
             this.txt_UpdatedBy.Tag = "Updated_By";
-            // 
-            // dgv_currencies
-            // 
-            this.dgv_currencies.AllowUserToAddRows = false;
-            this.dgv_currencies.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgv_currencies.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Is_Active,
-            this.Cur_Name,
-            this.Is_Default,
-            this.Is_Frozen,
-            this.Cur_ID});
-            this.dgv_currencies.Location = new System.Drawing.Point(69, 29);
-            this.dgv_currencies.Name = "dgv_currencies";
-            this.dgv_currencies.RowHeadersVisible = false;
-            this.dgv_currencies.RowHeadersWidth = 62;
-            this.dgv_currencies.RowTemplate.Height = 29;
-            this.dgv_currencies.Size = new System.Drawing.Size(607, 207);
-            this.dgv_currencies.TabIndex = 2;
-            // 
-            // Is_Active
-            // 
-            this.Is_Active.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.Is_Active.DataPropertyName = "Is_Active";
-            this.Is_Active.HeaderText = "▣";
-            this.Is_Active.MinimumWidth = 8;
-            this.Is_Active.Name = "Is_Active";
-            this.Is_Active.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Is_Active.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.Is_Active.Width = 70;
-            // 
-            // Cur_Name
-            // 
-            this.Cur_Name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Cur_Name.DataPropertyName = "Cur_Name";
-            this.Cur_Name.HeaderText = "اسم العملة";
-            this.Cur_Name.MinimumWidth = 8;
-            this.Cur_Name.Name = "Cur_Name";
-            // 
-            // Is_Default
-            // 
-            this.Is_Default.DataPropertyName = "Is_Default";
-            this.Is_Default.HeaderText = "العملة الافتراضية ";
-            this.Is_Default.MinimumWidth = 8;
-            this.Is_Default.Name = "Is_Default";
-            this.Is_Default.Width = 150;
-            // 
-            // Is_Frozen
-            // 
-            this.Is_Frozen.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.Is_Frozen.DataPropertyName = "Is_Frozen";
-            this.Is_Frozen.HeaderText = "توقيف";
-            this.Is_Frozen.MinimumWidth = 8;
-            this.Is_Frozen.Name = "Is_Frozen";
-            this.Is_Frozen.Width = 70;
-            // 
-            // Cur_ID
-            // 
-            this.Cur_ID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.Cur_ID.DataPropertyName = "Cur_ID";
-            this.Cur_ID.HeaderText = "رقم العملة";
-            this.Cur_ID.MinimumWidth = 8;
-            this.Cur_ID.Name = "Cur_ID";
-            this.Cur_ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Cur_ID.Visible = false;
-            this.Cur_ID.Width = 150;
             // 
             // AccountsForm
             // 

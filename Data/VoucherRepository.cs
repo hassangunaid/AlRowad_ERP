@@ -37,7 +37,7 @@ namespace AlRowad_ERP.Data {
                                      SET Voucher_Date = @Date, Box_Acc_ID = @BoxAcc, Amount = @Amount, 
                                          Amount_Foreign = @AmountForeign, Cur_ID = @CurID, 
                                          Exchange_Rate = @ExchRate, Notes = @Notes, Is_Posted = @IsPosted,
-                                         {SystemConstants.UpdatedBy} = @UpdatedBy, {SystemConstants.UpdatedAt} = GETDATE()
+                                         {SystemConstants.AuditFields.UpdatedBy} = @UpdatedBy, {SystemConstants.AuditFields.UpdatedAt} = GETDATE()
                                      WHERE Voucher_ID = @VoucherID AND RowVersion = @OldRowVersion";
 
                 SqlParameter[] pUpd = {

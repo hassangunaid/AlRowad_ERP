@@ -56,14 +56,31 @@ namespace AlRowad_ERP.Forms
             System.Windows.Forms.TreeNode treeNode13 = new System.Windows.Forms.TreeNode("بيانات الاصناف");
             System.Windows.Forms.TreeNode treeNode14 = new System.Windows.Forms.TreeNode("ادارة المخازن", new System.Windows.Forms.TreeNode[] {
             treeNode13});
+            System.Windows.Forms.TreeNode treeNode15 = new System.Windows.Forms.TreeNode("ادارة نظام الوكلاء");
+            System.Windows.Forms.TreeNode treeNode16 = new System.Windows.Forms.TreeNode("فاتورة الحراج الفوري");
+            System.Windows.Forms.TreeNode treeNode17 = new System.Windows.Forms.TreeNode("تجميع الحراجات");
+            System.Windows.Forms.TreeNode treeNode18 = new System.Windows.Forms.TreeNode("ادارةا الوكيل وسيط", new System.Windows.Forms.TreeNode[] {
+            treeNode16,
+            treeNode17});
+            System.Windows.Forms.TreeNode treeNode19 = new System.Windows.Forms.TreeNode("بيانات الحمولة ");
+            System.Windows.Forms.TreeNode treeNode20 = new System.Windows.Forms.TreeNode("تقيم الحمولات");
+            System.Windows.Forms.TreeNode treeNode21 = new System.Windows.Forms.TreeNode("فاتورة شراء ");
+            System.Windows.Forms.TreeNode treeNode22 = new System.Windows.Forms.TreeNode("ادارة الوكيل مسوق", new System.Windows.Forms.TreeNode[] {
+            treeNode19,
+            treeNode20,
+            treeNode21});
+            System.Windows.Forms.TreeNode treeNode23 = new System.Windows.Forms.TreeNode("نـظـام ادارة الـوكـلاء", new System.Windows.Forms.TreeNode[] {
+            treeNode15,
+            treeNode18,
+            treeNode22});
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.treeView = new System.Windows.Forms.TreeView();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.BtnSwitchUser = new System.Windows.Forms.Button();
             this.Uesr_Name = new System.Windows.Forms.TextBox();
             this.butend = new System.Windows.Forms.Button();
             this.data_day = new System.Windows.Forms.Label();
             this.time_day = new System.Windows.Forms.Timer(this.components);
-            this.BtnSwitchUser = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -114,12 +131,38 @@ namespace AlRowad_ERP.Forms
             treeNode13.Text = "بيانات الاصناف";
             treeNode14.Name = "Node0";
             treeNode14.Text = "ادارة المخازن";
+            treeNode15.Name = "AgencySettingsForm";
+            treeNode15.Tag = "AgencySettingsForm";
+            treeNode15.Text = "ادارة نظام الوكلاء";
+            treeNode16.Name = "AuctionReceiptForm";
+            treeNode16.Tag = "AuctionReceiptForm";
+            treeNode16.Text = "فاتورة الحراج الفوري";
+            treeNode17.Name = "Node9";
+            treeNode17.Tag = "AuctionSalesDetails";
+            treeNode17.Text = "تجميع الحراجات";
+            treeNode18.Name = "Node3";
+            treeNode18.Text = "ادارةا الوكيل وسيط";
+            treeNode19.Name = "Node6";
+            treeNode19.Tag = "ShipmentReceiptForm";
+            treeNode19.Text = "بيانات الحمولة ";
+            treeNode20.Name = "Node7";
+            treeNode20.Tag = "ShipmentEvaluationForm";
+            treeNode20.Text = "تقيم الحمولات";
+            treeNode21.Name = "Node8";
+            treeNode21.Tag = "FarmerInvoiceForm";
+            treeNode21.Text = "فاتورة شراء ";
+            treeNode22.Name = "Node5";
+            treeNode22.Text = "ادارة الوكيل مسوق";
+            treeNode23.Name = "AgentsManagemen";
+            treeNode23.Tag = "Node_AgentsManagement";
+            treeNode23.Text = "نـظـام ادارة الـوكـلاء";
             this.treeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode4,
             treeNode8,
             treeNode10,
             treeNode12,
-            treeNode14});
+            treeNode14,
+            treeNode23});
             this.treeView.Scrollable = false;
             this.treeView.Size = new System.Drawing.Size(391, 954);
             this.treeView.TabIndex = 0;
@@ -142,6 +185,23 @@ namespace AlRowad_ERP.Forms
             this.panel1.Size = new System.Drawing.Size(1898, 1024);
             this.panel1.TabIndex = 2;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            // 
+            // BtnSwitchUser
+            // 
+            this.BtnSwitchUser.BackColor = System.Drawing.SystemColors.Info;
+            this.BtnSwitchUser.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.BtnSwitchUser.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.BtnSwitchUser.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnSwitchUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
+            this.BtnSwitchUser.ForeColor = System.Drawing.Color.Black;
+            this.BtnSwitchUser.Location = new System.Drawing.Point(900, 488);
+            this.BtnSwitchUser.Name = "BtnSwitchUser";
+            this.BtnSwitchUser.Size = new System.Drawing.Size(99, 48);
+            this.BtnSwitchUser.TabIndex = 3;
+            this.BtnSwitchUser.Text = "تبديل";
+            this.BtnSwitchUser.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.BtnSwitchUser.UseVisualStyleBackColor = false;
+            this.BtnSwitchUser.Click += new System.EventHandler(this.BtnSwitchUser_Click);
             // 
             // Uesr_Name
             // 
@@ -184,23 +244,6 @@ namespace AlRowad_ERP.Forms
             this.time_day.Enabled = true;
             this.time_day.Interval = 1000;
             this.time_day.Tick += new System.EventHandler(this.time_day_Tick);
-            // 
-            // BtnSwitchUser
-            // 
-            this.BtnSwitchUser.BackColor = System.Drawing.SystemColors.Info;
-            this.BtnSwitchUser.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.BtnSwitchUser.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.BtnSwitchUser.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnSwitchUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.BtnSwitchUser.ForeColor = System.Drawing.Color.Black;
-            this.BtnSwitchUser.Location = new System.Drawing.Point(900, 488);
-            this.BtnSwitchUser.Name = "BtnSwitchUser";
-            this.BtnSwitchUser.Size = new System.Drawing.Size(99, 48);
-            this.BtnSwitchUser.TabIndex = 3;
-            this.BtnSwitchUser.Text = "تبديل";
-            this.BtnSwitchUser.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.BtnSwitchUser.UseVisualStyleBackColor = false;
-            this.BtnSwitchUser.Click += new System.EventHandler(this.BtnSwitchUser_Click);
             // 
             // MainForm
             // 
