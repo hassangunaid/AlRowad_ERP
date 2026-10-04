@@ -38,6 +38,8 @@ namespace AlRowad_ERP.Core.Constants
             public const string Units = "Units";
             public const string Items = "Items";
             public const string Item_Balances = "Item_Balances";
+            public const string Agency_Settings = "Agency_Settings";
+            public const string Accounts = "Accounts";
         }
 
         public static class Columns
@@ -64,8 +66,38 @@ namespace AlRowad_ERP.Core.Constants
             public const string Default_Price = "Default_Price";
             public const string Min_Sale_Price = "Min_Sale_Price";
             public const string Reorder_Level = "Reorder_Level";
-        }
+            // حقول ادارة نظام الوكلاء
+            public const string Agency_ID = "Agency_ID";
+            public const string Agency_Name = "Agency_Name";
+            public const string Default_Farmer_Commission = "Default_Farmer_Commission";
+            public const string Default_Buyer_Commission = "Default_Buyer_Commission";
+            public const string Default_Handling_Fee = "Default_Handling_Fee";
+            public const string Commission_Income_Account_ID = "Commission_Income_Account_ID";
+            public const string Handling_Payable_Account_ID = "Handling_Payable_Account_ID";
+            public const string Acc_ID = "Acc_ID";
+            public const string Acc_Name = "Acc_Name";
 
+            public static bool Is_Stopped { get; internal set; }
+
+            // --- ثوابت إعدادات الوكالة ---
+            public const string Agency_Phone1 = "Agency_Phone1";
+            public const string Agency_Phone2 = "Agency_Phone2";
+            public const string Agency_Address = "Agency_Address";
+            public const string Agency_Notes = "Agency_Notes";
+            public const string Eng_Agency_Name = "Eng_Agency_Name";
+            public const string Eng_Agency_Notes = "Eng_Agency_Notes";
+            public const string Eng_Agency_Address = "Eng_Agency_Address";
+            // السياسات والنسب
+            public const string Farmer_Commission_Percent = "Farmer_Commission_Percent";
+            public const string Buyer_Fee_Per_Package = "Buyer_Fee_Per_Package";
+            public const string Office_Service_Fee = "Office_Service_Fee";
+            public const string Allow_Override_In_Invoice = "Allow_Override_In_Invoice";
+
+            // الربط المحاسبي
+            public const string Acc_Farmer_Commission = "Acc_Farmer_Commission";
+            public const string Acc_Buyer_Fee = "Acc_Buyer_Fee";
+            public const string Acc_Additional_Discount = "Acc_Additional_Discount";
+        }
         public static class Statuses
         {
             public const string PeriodOpen = "Open";

@@ -68,7 +68,7 @@ namespace AlRowad_ERP.Data {
             else if (mode == FormMode.New)
             {
                 string sqlInsert = $@"INSERT INTO Cash_Vouchers 
-                                     (Voucher_No, Voucher_Date, Doc_Type_ID, Box_Acc_ID, Amount, Amount_Foreign, Cur_ID, Exchange_Rate, Notes, Is_Posted, {SystemConstants.CreatedBy}, {SystemConstants.CreatedAt}) 
+                                     (Voucher_No, Voucher_Date, Doc_Type_ID, Box_Acc_ID, Amount, Amount_Foreign, Cur_ID, Exchange_Rate, Notes, Is_Posted, {SystemConstants.AuditFields.CreatedBy}, {SystemConstants.AuditFields.CreatedAt}) 
                                      VALUES 
                                      (@No, @Date, @DocType, @BoxAcc, @Amount, @AmountForeign, @CurID, @ExchRate, @Notes, @IsPosted, @CreatedBy, GETDATE()); 
                                      SELECT SCOPE_IDENTITY();";
@@ -137,8 +137,8 @@ namespace AlRowad_ERP.Data {
                        ISNULL(uc.Full_Name, uc.Username) AS CreatedByName,
                        ISNULL(uu.Full_Name, uu.Username) AS UpdatedByName
                 FROM Cash_Vouchers v
-                LEFT JOIN Users uc ON v.{SystemConstants.CreatedBy} = uc.User_ID
-                LEFT JOIN Users uu ON v.{SystemConstants.UpdatedBy} = uu.User_ID
+                LEFT JOIN Users uc ON v.{SystemConstants.AuditFields.CreatedBy} = uc.User_ID
+                LEFT JOIN Users uu ON v.{SystemConstants.AuditFields.UpdatedBy} = uu.User_ID
                 WHERE v.Voucher_ID = @Vid";
 
             DataTable dtHeader = await DatabaseHelper.GetTableAsync(queryHeader, new[] { new SqlParameter("@Vid", voucherId) });
@@ -161,13 +161,13 @@ namespace AlRowad_ERP.Data {
 
                 RowVersion = (dtHeader.Columns.Contains("RowVersion") && r["RowVersion"] != DBNull.Value) ? (byte[])r["RowVersion"] : null,
 
-                CreatedBy = r[SystemConstants.CreatedBy] != DBNull.Value ? Convert.ToInt32(r[SystemConstants.CreatedBy]) : 0,
+                CreatedBy = r[SystemConstants.AuditFields.CreatedBy] != DBNull.Value ? Convert.ToInt32(r[SystemConstants.AuditFields.CreatedBy]) : 0,
                 CreatedByName = r["CreatedByName"] != DBNull.Value ? r["CreatedByName"].ToString() : "",
-                CreatedAt = r[SystemConstants.CreatedAt] != DBNull.Value ? (DateTime?)Convert.ToDateTime(r[SystemConstants.CreatedAt]) : null,
+                CreatedAt = r[SystemConstants.AuditFields.CreatedAt] != DBNull.Value ? (DateTime?)Convert.ToDateTime(r[SystemConstants.AuditFields.CreatedAt]) : null,
 
-                UpdatedBy = r[SystemConstants.UpdatedBy] != DBNull.Value ? Convert.ToInt32(r[SystemConstants.UpdatedBy]) : 0,
+                UpdatedBy = r[SystemConstants.AuditFields.UpdatedBy] != DBNull.Value ? Convert.ToInt32(r[SystemConstants.AuditFields.UpdatedBy]) : 0,
                 UpdatedByName = r["UpdatedByName"] != DBNull.Value ? r["UpdatedByName"].ToString() : "",
-                UpdatedAt = r[SystemConstants.UpdatedAt] != DBNull.Value ? (DateTime?)Convert.ToDateTime(r[SystemConstants.UpdatedAt]) : null
+                UpdatedAt = r[SystemConstants.AuditFields.UpdatedAt] != DBNull.Value ? (DateTime?)Convert.ToDateTime(r[SystemConstants.AuditFields.UpdatedAt]) : null
             };
 
             DataTable dtDetails = await DatabaseHelper.GetTableAsync("SELECT D.*, A.Acc_Name FROM Cash_Voucher_Details D INNER JOIN Accounts A ON D.Acc_ID = A.Acc_ID WHERE D.Voucher_ID = @Vid", new[] { new SqlParameter("@Vid", voucherId) });

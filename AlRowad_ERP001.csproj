@@ -104,6 +104,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AlRowad_ERPDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Data\AgentModules\AccountRepository.cs" />
     <Compile Include="Data\UnitRepository.cs" />
     <Compile Include="Data\CustomerRepository.cs" />
     <Compile Include="Data\InvoiceRepository.cs" />
@@ -163,68 +164,17 @@
     <Compile Include="UI\Forms\AccountsForm.Designer.cs">
       <DependentUpon>AccountsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Forms\AgentModules\AgencySettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\AgentModules\AgencySettingsForm.Designer.cs">
+      <DependentUpon>AgencySettingsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Forms\Currencies.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Forms\Currencies.Designer.cs">
       <DependentUpon>Currencies.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Forms\Doc_Types.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\Doc_Types.Designer.cs">
-      <DependentUpon>Doc_Types.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Forms\ReceiptVoucher.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\ReceiptVoucher.Designer.cs">
-      <DependentUpon>ReceiptVoucher.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Forms\Payment_Methods.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\Payment_Methods.Designer.cs">
-      <DependentUpon>Payment_Methods.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Forms\Journal_Header.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\Journal_Header.Designer.cs">
-      <DependentUpon>Journal_Header.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Forms\Item_Balances.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\Item_Balances.Designer.cs">
-      <DependentUpon>Item_Balances.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Forms\Items.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\Items.Designer.cs">
-      <DependentUpon>Items.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Forms\LongUesr.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\LongUesr.Designer.cs">
-      <DependentUpon>LongUesr.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Forms\Stores.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\System_Shortcuts.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\System_Shortcuts.Designer.cs">
-      <DependentUpon>System_Shortcuts.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Forms\Suppliers.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Forms\Suppliers.Designer.cs">
-      <DependentUpon>Suppliers.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Forms\Customers.cs">
       <SubType>Form</SubType>
@@ -232,11 +182,71 @@
     <Compile Include="UI\Forms\Customers.Designer.cs">
       <DependentUpon>Customers.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Forms\Doc_Types.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\Doc_Types.Designer.cs">
+      <DependentUpon>Doc_Types.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Forms\Items.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\Items.Designer.cs">
+      <DependentUpon>Items.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Forms\Item_Balances.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\Item_Balances.Designer.cs">
+      <DependentUpon>Item_Balances.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Forms\Journal_Header.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\Journal_Header.Designer.cs">
+      <DependentUpon>Journal_Header.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Forms\LongUesr.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\LongUesr.Designer.cs">
+      <DependentUpon>LongUesr.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Forms\Payment_Methods.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\Payment_Methods.Designer.cs">
+      <DependentUpon>Payment_Methods.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Forms\ReceiptVoucher.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\ReceiptVoucher.Designer.cs">
+      <DependentUpon>ReceiptVoucher.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Forms\Stores.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\Stores.Designer.cs">
+      <DependentUpon>Stores.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Forms\Suppliers.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\Suppliers.Designer.cs">
+      <DependentUpon>Suppliers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Forms\System_Shortcuts.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\System_Shortcuts.Designer.cs">
+      <DependentUpon>System_Shortcuts.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Forms\UnitsForm.cs">
       <SubType>Form</SubType>
@@ -282,16 +292,16 @@
     <None Include="App.config" />
     <None Include="CHANGES_SUMMARY.md" />
     <None Include="FIXES_COMPLETED.md" />
-    <Compile Include="UI\Forms\Stores.Designer.cs">
-      <DependentUpon>Stores.cs</DependentUpon>
-    </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="UI\Forms\MainForm.resx~RF103a0c8.TMP" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="UI\Forms\VoucherForm.cs%27%27%27%27%27.txt" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="UI\Controls\AlRowadDateTextBox.resx">
       <DependentUpon>AlRowadDateTextBox.cs</DependentUpon>
@@ -305,53 +315,57 @@
     <EmbeddedResource Include="UI\Base\BaseForm.resx">
       <DependentUpon>BaseForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\AccountsForm.resx">
       <DependentUpon>AccountsForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\AccountsForm1.ar.resx" />
+    <EmbeddedResource Include="UI\Forms\AccountsForm1.resx" />
+    <EmbeddedResource Include="UI\Forms\AgentModules\AgencySettingsForm.resx">
+      <DependentUpon>AgencySettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\Currencies.resx">
       <DependentUpon>Currencies.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\Customers.resx">
+      <DependentUpon>Customers.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\Doc_Types.resx">
       <DependentUpon>Doc_Types.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Forms\LongUesr.resx">
-      <DependentUpon>LongUesr.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Forms\ReceiptVoucher.resx">
-      <DependentUpon>ReceiptVoucher.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Forms\Payment_Methods.resx">
-      <DependentUpon>Payment_Methods.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Forms\Journal_Header.resx">
-      <DependentUpon>Journal_Header.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Forms\Item_Balances.resx">
-      <DependentUpon>Item_Balances.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\Items.resx">
       <DependentUpon>Items.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Forms\System_Shortcuts.resx">
-      <DependentUpon>System_Shortcuts.cs</DependentUpon>
+    <EmbeddedResource Include="UI\Forms\Item_Balances.resx">
+      <DependentUpon>Item_Balances.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Forms\Suppliers.resx">
-      <DependentUpon>Suppliers.cs</DependentUpon>
+    <EmbeddedResource Include="UI\Forms\Journal_Header.resx">
+      <DependentUpon>Journal_Header.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Forms\Customers.resx">
-      <DependentUpon>Customers.cs</DependentUpon>
+    <EmbeddedResource Include="UI\Forms\LongUesr.resx">
+      <DependentUpon>LongUesr.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\Payment_Methods.resx">
+      <DependentUpon>Payment_Methods.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\ReceiptVoucher.resx">
+      <DependentUpon>ReceiptVoucher.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\Suppliers.resx">
+      <DependentUpon>Suppliers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\System_Shortcuts.resx">
+      <DependentUpon>System_Shortcuts.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\UnitsForm.resx">
       <DependentUpon>UnitsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\SystemSettings\Frm_ThemeManager.resx">
       <DependentUpon>Frm_ThemeManager.cs</DependentUpon>
@@ -372,6 +386,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\Microsoft.Data.SqlClient.SNI.5.1.0\build\net462\Microsoft.Data.SqlClient.SNI.targets" Condition="Exists('packages\Microsoft.Data.SqlClient.SNI.5.1.0\build\net462\Microsoft.Data.SqlClient.SNI.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
