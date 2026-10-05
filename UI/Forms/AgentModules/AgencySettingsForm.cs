@@ -24,34 +24,6 @@ namespace AlRowad_ERP.Forms
             // تم إزالة ربط KeyDown القديم، وسنعتمد على ProcessCmdKey المعمارية (في الأسفل)
         }
 
-        private async void AgencySettingsForm_Load(object sender, EventArgs e)
-        {
-            try
-            {
-                if (dgv_Agencies != null)
-                {
-                    dgv_Agencies.AutoGenerateColumns = false;
-                    dgv_Agencies.AllowUserToAddRows = false;
-                    dgv_Agencies.AllowUserToDeleteRows = false;
-                    dgv_Agencies.ReadOnly = true;
-                    dgv_Agencies.RowHeadersVisible = false;
-                    dgv_Agencies.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-
-                    dgv_Agencies.Columns.Clear();
-                    dgv_Agencies.Columns.Add(new DataGridViewTextBoxColumn { Name = "Agency_ID", DataPropertyName = "Agency_ID", HeaderText = "الرقم", Width = 60 });
-                    dgv_Agencies.Columns.Add(new DataGridViewTextBoxColumn { Name = "Agency_Name", DataPropertyName = "Agency_Name", HeaderText = "اسم الوكالة", Width = 150 });
-                    dgv_Agencies.Columns.Add(new DataGridViewTextBoxColumn { Name = "Farmer_Commission_Percent", DataPropertyName = "Farmer_Commission_Percent", HeaderText = "عمولة المزارع %", Width = 110 });
-                    dgv_Agencies.Columns.Add(new DataGridViewTextBoxColumn { Name = "Buyer_Fee_Per_Package", DataPropertyName = "Buyer_Fee_Per_Package", HeaderText = "رسوم المشتري", Width = 110 });
-                    dgv_Agencies.Columns.Add(new DataGridViewTextBoxColumn { Name = "UpdatedInfo", DataPropertyName = "UpdatedInfo", HeaderText = "المعدل وتاريخ التعديل", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
-
-                    dgv_Agencies.CellDoubleClick += async (s, ev) => await Dgv_Agencies_CellDoubleClick(s, ev);
-                }
-
-                await LoadAllDataAsync();
-                ChangeFormMode(FormMode.View);
-            }
-            catch (Exception ex) { LogError(ex); }
-        }
 
         // دالة مساعدة لتنسيق الرقابة
         private string FormatUserInfo(object userIdObj, object userNameObj)
@@ -61,11 +33,6 @@ namespace AlRowad_ERP.Forms
             return $"{name} || {userIdObj}";
         }
 
-        private async Task LoadAllDataAsync()
-        {
-            DataTable dt = await _agencyRepo.GetAllAgenciesAsync();
-            if (dgv_Agencies != null) dgv_Agencies.DataSource = dt;
-        }
 
         private async Task LoadSingleAgencyAsync(int agencyId)
         {
@@ -114,16 +81,6 @@ namespace AlRowad_ERP.Forms
             }
         }
 
-        private async Task Dgv_Agencies_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex < 0 || (CurrentMode != FormMode.View && CurrentMode != FormMode.RecordSelected)) return;
-            try
-            {
-                int agencyId = Convert.ToInt32(dgv_Agencies.Rows[e.RowIndex].Cells["Agency_ID"].Value);
-                await LoadSingleAgencyAsync(agencyId);
-            }
-            catch (Exception ex) { LogError(ex); }
-        }
 
         // 🌟 تحديث معمارية دالة الإضافة (أصبحت Asynchronous لجلب الرقم بدون تجميد)
         public override async void OnNew()
@@ -190,7 +147,6 @@ namespace AlRowad_ERP.Forms
 
         protected override void RefreshData()
         {
-            _ = LoadAllDataAsync();
             if (int.TryParse(txt_Agency_ID.Text, out int currentId) && currentId > 0)
             {
                 _ = LoadSingleAgencyAsync(currentId);

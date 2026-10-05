@@ -104,6 +104,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AlRowad_ERPDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Data\AgentModules\DriverRepository.cs" />
+    <Compile Include="Data\AgentModules\ShipmentReceiptRepository.cs" />
     <Compile Include="Data\AgentModules\AccountRepository.cs" />
     <Compile Include="Data\UnitRepository.cs" />
     <Compile Include="Data\CustomerRepository.cs" />
@@ -169,6 +171,18 @@
     </Compile>
     <Compile Include="UI\Forms\AgentModules\AgencySettingsForm.Designer.cs">
       <DependentUpon>AgencySettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Forms\AgentModules\DriverForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\AgentModules\DriverForm.Designer.cs">
+      <DependentUpon>DriverForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Forms\AgentModules\ShipmentReceiptForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\AgentModules\ShipmentReceiptForm.Designer.cs">
+      <DependentUpon>ShipmentReceiptForm.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Forms\Currencies.cs">
       <SubType>Form</SubType>
@@ -326,6 +340,12 @@
     <EmbeddedResource Include="UI\Forms\AccountsForm1.resx" />
     <EmbeddedResource Include="UI\Forms\AgentModules\AgencySettingsForm.resx">
       <DependentUpon>AgencySettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\AgentModules\DriverForm.resx">
+      <DependentUpon>DriverForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\AgentModules\ShipmentReceiptForm.resx">
+      <DependentUpon>ShipmentReceiptForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\Currencies.resx">
       <DependentUpon>Currencies.cs</DependentUpon>

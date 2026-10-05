@@ -34,16 +34,21 @@ namespace AlRowad_ERP.Core.Constants
 
         public static class Tables
         {
+            public const string Drivers = "Drivers";
             public const string FinancialPeriods = "Financial_Periods";
             public const string Units = "Units";
             public const string Items = "Items";
             public const string Item_Balances = "Item_Balances";
             public const string Agency_Settings = "Agency_Settings";
             public const string Accounts = "Accounts";
+            public const string Shipment_Receipt_Headers = "Shipment_Receipt_Headers";
+            public const string Shipment_Receipt_Details = "Shipment_Receipt_Details";
         }
 
         public static class Columns
         {
+            // --- الثوابت العامة المشتركة ---
+            public const string Notes = "Notes";
             // الحقول العامة والرقابية
             public const string Is_Closed = "Is_Closed";
             public const string Is_Deleted = "Is_Deleted";
@@ -97,6 +102,35 @@ namespace AlRowad_ERP.Core.Constants
             public const string Acc_Farmer_Commission = "Acc_Farmer_Commission";
             public const string Acc_Buyer_Fee = "Acc_Buyer_Fee";
             public const string Acc_Additional_Discount = "Acc_Additional_Discount";
+            // حقول السائقين
+            public const string Driver_ID = "Driver_ID";
+            public const string License_Number = "License_Number";
+            public const string Vehicle_Type = "Vehicle_Type";
+            public const string Phone_Number = "Phone_Number";
+            // 1. حقول رأس الحمولة (Shipment Headers)
+            public const string Shipment_ID = "Shipment_ID";
+            public const string Shipment_Code = "Shipment_Code";
+            public const string Receipt_Date = "Receipt_Date";
+            public const string Driver_Name = "Driver_Name";
+            public const string Vehicle_Number = "Vehicle_Number";
+            public const string Driver_Phone = "Driver_Phone";
+            public const string Status_Code = "Status_Code";
+            public const string Total_Estimated_Value = "Total_Estimated_Value";
+            public const string Total_Actual_Value = "Total_Actual_Value";
+
+            // 2. حقول تفاصيل الحمولة (Shipment Details)
+            public const string Detail_ID = "Detail_ID";
+            public const string Farmer_ID = "Farmer_ID"; // مرتبط بجدول الموردين (Is_Farmer = 1)
+            public const string Estimated_Price = "Estimated_Price";
+            public const string Estimated_Total = "Estimated_Total";
+            public const string Actual_Price = "Actual_Price";
+            public const string Actual_Total = "Actual_Total";
+            public const string Discount_Numeric = "Discount_Numeric";
+            public const string Extra_Expense = "Extra_Expense";
+            public const string Net_Amount = "Net_Amount";
+            public const string Is_Invoiced_To_Farmer = "Is_Invoiced_To_Farmer";
+            public const string Estimated_Discount = "Estimated_Discount";
+           
         }
         public static class Statuses
         {
