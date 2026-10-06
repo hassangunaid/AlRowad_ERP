@@ -54,30 +54,30 @@
             // 
             // txt_Driver_Name
             // 
-            this.txt_Driver_Name.Location = new System.Drawing.Point(700, 226);
+            this.txt_Driver_Name.Location = new System.Drawing.Point(540, 226);
             this.txt_Driver_Name.Name = "txt_Driver_Name";
-            this.txt_Driver_Name.Size = new System.Drawing.Size(100, 30);
+            this.txt_Driver_Name.Size = new System.Drawing.Size(260, 30);
             this.txt_Driver_Name.TabIndex = 1;
             // 
             // txt_Notes
             // 
-            this.txt_Notes.Location = new System.Drawing.Point(297, 173);
+            this.txt_Notes.Location = new System.Drawing.Point(295, 308);
             this.txt_Notes.Name = "txt_Notes";
-            this.txt_Notes.Size = new System.Drawing.Size(100, 30);
+            this.txt_Notes.Size = new System.Drawing.Size(349, 30);
             this.txt_Notes.TabIndex = 2;
             // 
             // txt_Driver_ID
             // 
-            this.txt_Driver_ID.Location = new System.Drawing.Point(700, 173);
+            this.txt_Driver_ID.Location = new System.Drawing.Point(671, 173);
             this.txt_Driver_ID.Name = "txt_Driver_ID";
-            this.txt_Driver_ID.Size = new System.Drawing.Size(100, 30);
+            this.txt_Driver_ID.Size = new System.Drawing.Size(129, 30);
             this.txt_Driver_ID.TabIndex = 3;
             // 
             // txt_Phone_Number
             // 
-            this.txt_Phone_Number.Location = new System.Drawing.Point(297, 133);
+            this.txt_Phone_Number.Location = new System.Drawing.Point(619, 262);
             this.txt_Phone_Number.Name = "txt_Phone_Number";
-            this.txt_Phone_Number.Size = new System.Drawing.Size(100, 30);
+            this.txt_Phone_Number.Size = new System.Drawing.Size(181, 30);
             this.txt_Phone_Number.TabIndex = 4;
             // 
             // label1
@@ -101,7 +101,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(403, 136);
+            this.label3.Location = new System.Drawing.Point(865, 265);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(80, 25);
             this.label3.TabIndex = 7;
@@ -110,7 +110,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(403, 173);
+            this.label4.Location = new System.Drawing.Point(649, 309);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(74, 25);
             this.label4.TabIndex = 8;
@@ -118,15 +118,15 @@
             // 
             // txt_License_Number
             // 
-            this.txt_License_Number.Location = new System.Drawing.Point(459, 210);
+            this.txt_License_Number.Location = new System.Drawing.Point(189, 226);
             this.txt_License_Number.Name = "txt_License_Number";
-            this.txt_License_Number.Size = new System.Drawing.Size(100, 30);
+            this.txt_License_Number.Size = new System.Drawing.Size(144, 30);
             this.txt_License_Number.TabIndex = 9;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(565, 213);
+            this.label5.Location = new System.Drawing.Point(339, 229);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(93, 25);
             this.label5.TabIndex = 10;
@@ -135,7 +135,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(292, 229);
+            this.label6.Location = new System.Drawing.Point(339, 173);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(88, 25);
             this.label6.TabIndex = 12;
@@ -143,7 +143,7 @@
             // 
             // txt_Vehicle_Type
             // 
-            this.txt_Vehicle_Type.Location = new System.Drawing.Point(186, 226);
+            this.txt_Vehicle_Type.Location = new System.Drawing.Point(233, 170);
             this.txt_Vehicle_Type.Name = "txt_Vehicle_Type";
             this.txt_Vehicle_Type.Size = new System.Drawing.Size(100, 30);
             this.txt_Vehicle_Type.TabIndex = 11;

@@ -34,6 +34,7 @@ namespace AlRowad_ERP.Core.Constants
 
         public static class Tables
         {
+            public const string Suppliers = "Suppliers";
             public const string Drivers = "Drivers";
             public const string FinancialPeriods = "Financial_Periods";
             public const string Units = "Units";
@@ -46,7 +47,9 @@ namespace AlRowad_ERP.Core.Constants
         }
 
         public static class Columns
+
         {
+            public const string Is_Farmer = "Is_Farmer";
             // --- الثوابت العامة المشتركة ---
             public const string Notes = "Notes";
             // الحقول العامة والرقابية
@@ -83,6 +86,11 @@ namespace AlRowad_ERP.Core.Constants
             public const string Acc_Name = "Acc_Name";
 
             public static bool Is_Stopped { get; internal set; }
+            //     حقول بيانات الموردين والمزارعين
+            public const string Supp_ID = "Supp_ID";
+            public const string Supp_Name = "Supp_Name";
+            public const string Supp_Phone = "Supp_Phone";
+            public const string Supp_Address = "Supp_Address";
 
             // --- ثوابت إعدادات الوكالة ---
             public const string Agency_Phone1 = "Agency_Phone1";

@@ -5,6 +5,7 @@ using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using System.Windows.Forms; // تمت الإضافة للسماح بإظهار رسالة التنبيه البسيطة
 
 namespace AlRowad_ERP.Data
 {
@@ -12,13 +13,34 @@ namespace AlRowad_ERP.Data
     {
         public async Task<string> GenerateNextShipmentCodeAsync()
         {
-            string query = $"SELECT ISNULL(MAX(CAST(REPLACE({SystemConstants.Columns.Shipment_Code}, 'SHP-', '') AS INT)), 0) + 1 FROM {SystemConstants.Tables.Shipment_Receipt_Headers}";
+            // استعلام SQL يعتمد على الدالة TRY_CAST لتجنب أخطاء التحويل 
+            // وجلب أعلى رقم تسلسلي، ثم إضافة 1. إذا كان الجدول فارغاً سيبدأ من 1.
+            string query = @"
+        SELECT ISNULL(MAX(TRY_CAST(Shipment_Code AS INT)), 0) + 1 
+        FROM Shipment_Receipt_Headers 
+        WHERE TRY_CAST(Shipment_Code AS INT) IS NOT NULL";
+
             try
             {
+                // استخدام DatabaseHelper حسب دستور النظام المعماري
                 object result = await DatabaseHelper.ExecuteScalarAsync(query, null);
-                return "SHP-" + Convert.ToInt32(result).ToString("D6");
+
+                if (result != null && result != DBNull.Value)
+                {
+                    return result.ToString();
+                }
+                return "1";
             }
-            catch { return "SHP-000001"; }
+            catch (Exception ex)
+            {
+                // 1. تسجيل الخطأ بصمت في قاعدة البيانات عبر المسجل المركزي (للمطورين)
+                GlobalExceptionHandler.LogError(ex, "ShipmentReceiptRepository.GenerateNextShipmentCode");
+
+                // 2. إظهار رسالة تنبيه بسيطة لا تعيق عمل المستخدم (كما طلبت)
+                MessageBox.Show("حدث خطأ طفيف أثناء جلب التسلسل التلقائي للمستند. سيتم استخدام رقم افتراضي مؤقتاً.", "تنبيه نظام الرواد", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                return "1"; // رقم افتراضي في حالة الفشل لضمان استمرار العمل
+            }
         }
 
         public async Task<int> SaveShipmentReceiptAsync(
@@ -112,6 +134,16 @@ namespace AlRowad_ERP.Data
                 }
             }
             return currentShipmentId;
+        }
+        public DataTable GetUnitsDataTable()
+        {
+            string query = "SELECT Unit_ID, Unit_Name FROM Units WHERE Is_Deleted = 0";
+            return DatabaseHelper.ExecuteQuery(query, null);
+        }
+        public async Task<DataTable> GetUnitsDataTableAsync()
+        {
+            string query = "SELECT Unit_ID, Unit_Name FROM Units WHERE Is_Deleted = 0";
+            return await DatabaseHelper.GetTableAsync(query);
         }
     }
 }

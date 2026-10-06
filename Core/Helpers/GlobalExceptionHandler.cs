@@ -82,5 +82,13 @@ namespace AlRowad_ERP.Core.Helpers
                 }
             }
         }
+        /// <summary>
+        /// دالة عامة مخصصة لطبقات النظام المختلفة لتسجيل الأخطاء بصمت
+        /// </summary>
+        public static void LogError(Exception ex, string threadType = "Backend")
+        {
+            // استدعاء الدالة الداخلية لحفظ الخطأ عبر DatabaseHelper أو خطة الطوارئ النصية
+            LogErrorToDatabase(ex, threadType);
+        }
     }
 }

@@ -107,6 +107,7 @@
     <Compile Include="Data\AgentModules\DriverRepository.cs" />
     <Compile Include="Data\AgentModules\ShipmentReceiptRepository.cs" />
     <Compile Include="Data\AgentModules\AccountRepository.cs" />
+    <Compile Include="Data\SupplierRepository.cs" />
     <Compile Include="Data\UnitRepository.cs" />
     <Compile Include="Data\CustomerRepository.cs" />
     <Compile Include="Data\InvoiceRepository.cs" />

@@ -1,5 +1,6 @@
 ﻿using AlRowad_ERP.Core;
 using AlRowad_ERP.Core.Constants;
+using AlRowad_ERP.Core.Helpers;
 using AlRowad_ERP.Data;
 using AlRowad_ERP.UI.Base;
 using System;
@@ -24,21 +25,52 @@ namespace AlRowad_ERP.Forms
             _shipmentRepo = new ShipmentReceiptRepository();
         }
 
-        private void ShipmentReceiptForm_Load(object sender, EventArgs e)
+        private async void ShipmentReceiptForm_Load(object sender, EventArgs e)
         {
             try
             {
                 dgv_Details.DataError += DataGridView_DataError;
                 dgv_Details.CellDoubleClick += dgv_Details_CellDoubleClick;
-                dgv_Details.RowsRemoved += dgv_Details_RowsRemoved;
+                dgv_Details.RowsRemoved += (s, ev) => CalculateGridTotals();
                 dgv_Details.EditingControlShowing += dgv_Details_EditingControlShowing;
                 dgv_Details.CellValueChanged += dgv_Details_CellValueChanged;
-                dgv_Details.RowPostPaint += dgv_Details_RowPostPaint; // للترقيم التلقائي
+                dgv_Details.CurrentCellDirtyStateChanged += dgv_Details_CurrentCellDirtyStateChanged;
+                dgv_Details.RowPostPaint += dgv_Details_RowPostPaint;
+                dgv_Details.KeyDown += dgv_Details_KeyDown;
+
+                if (txt_Driver_Name != null)
+                {
+                    txt_Driver_Name.DoubleClick += txt_Driver_Name_DoubleClick;
+                    txt_Driver_Name.ReadOnly = true;
+                }
 
                 dgv_Details.AutoGenerateColumns = false;
+                await SetupUnitsComboBoxAsync(); // 👈 ربط الوحدات بالـ ComboBox للجريد
+
                 ChangeFormMode(FormMode.View);
             }
-            catch (Exception ex) { LogError(ex); }
+            catch (Exception ex)
+            {
+                GlobalExceptionHandler.LogError(ex, "ShipmentReceiptForm_Load");
+            }
+        }
+
+        private async Task SetupUnitsComboBoxAsync()
+        {
+            try
+            {
+                if (dgv_Details.Columns["Col_Unit_ID"] is DataGridViewComboBoxColumn comboCol)
+                {
+                    DataTable dtUnits = await _shipmentRepo.GetUnitsDataTableAsync();
+                    comboCol.DataSource = dtUnits;
+                    comboCol.DisplayMember = "Unit_Name";
+                    comboCol.ValueMember = "Unit_ID";
+                }
+            }
+            catch (Exception ex)
+            {
+                GlobalExceptionHandler.LogError(ex, "SetupUnitsComboBoxAsync");
+            }
         }
 
         protected override void LockControls(Control parent, bool isReadOnly)
@@ -135,12 +167,74 @@ namespace AlRowad_ERP.Forms
             return dt;
         }
 
+        // 👈 سياسة التنقل الاحترافية عبر Enter (تصرف كالـ Tab والانتقال المرن بين الأعمدة المرئية)
+        private void dgv_Details_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (CurrentMode == FormMode.View) return;
+
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+
+                if (dgv_Details.CurrentCell != null)
+                {
+                    int colIdx = dgv_Details.CurrentCell.ColumnIndex;
+                    int rowIdx = dgv_Details.CurrentCell.RowIndex;
+                    string colName = dgv_Details.Columns[colIdx].Name;
+
+                    if (colName == "Col_Farmer_Name" || colName == "Col_Farmer_ID")
+                    {
+                        OpenFarmerSearch(rowIdx);
+                        return;
+                    }
+                    else if (colName == "Col_Item_Name" || colName == "Col_Item_ID")
+                    {
+                        OpenItemSearch(rowIdx);
+                        return;
+                    }
+
+                    // البحث عن العمود المرئي التالي أفقياً لتجاوز الحقول المخفية
+                    int nextColIdx = colIdx + 1;
+                    while (nextColIdx < dgv_Details.Columns.Count && !dgv_Details.Columns[nextColIdx].Visible)
+                    {
+                        nextColIdx++;
+                    }
+
+                    if (nextColIdx < dgv_Details.Columns.Count)
+                    {
+                        dgv_Details.CurrentCell = dgv_Details.Rows[rowIdx].Cells[nextColIdx];
+                    }
+                    else
+                    {
+                        if (rowIdx < dgv_Details.Rows.Count - 1)
+                        {
+                            dgv_Details.CurrentCell = dgv_Details.Rows[rowIdx + 1].Cells["Col_Farmer_Name"];
+                        }
+                        else
+                        {
+                            dgv_Details.AllowUserToAddRows = true;
+                            dgv_Details.CurrentCell = dgv_Details.Rows[rowIdx + 1].Cells["Col_Farmer_Name"];
+                        }
+                    }
+                }
+            }
+        }
+
+        private void dgv_Details_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            if (dgv_Details.IsCurrentCellDirty)
+            {
+                dgv_Details.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+        }
+
         private void dgv_Details_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0 || CurrentMode == FormMode.View || isHandlingGridCalculation) return;
 
             string colName = dgv_Details.Columns[e.ColumnIndex].Name;
 
+            // 👈 الحساب اللحظي الفوري للمعادلة: (الكمية - الخصم) * السعر
             if (colName == "Col_Quantity" || colName == "Col_Estimated_Price" || colName == "Col_Estimated_Discount")
             {
                 var row = dgv_Details.Rows[e.RowIndex];
@@ -150,10 +244,13 @@ namespace AlRowad_ERP.Forms
                 decimal.TryParse(row.Cells["Col_Estimated_Price"].Value?.ToString(), out decimal estPrice);
 
                 isHandlingGridCalculation = true;
+
                 decimal netQuantity = qty - qtyDiscount;
                 if (netQuantity < 0) netQuantity = 0;
 
-                row.Cells["Col_Estimated_Total"].Value = (netQuantity * estPrice).ToString("F2");
+                decimal lineTotal = netQuantity * estPrice;
+                row.Cells["Col_Estimated_Total"].Value = lineTotal.ToString("F2");
+
                 isHandlingGridCalculation = false;
 
                 CalculateGridTotals();
@@ -162,18 +259,20 @@ namespace AlRowad_ERP.Forms
 
         private void CalculateGridTotals()
         {
+            if (isHandlingGridCalculation) return;
+
             decimal total = 0;
             foreach (DataGridViewRow row in dgv_Details.Rows)
             {
                 if (row.IsNewRow) continue;
-                total += Convert.ToDecimal(row.Cells["Col_Estimated_Total"].Value ?? 0);
+                decimal.TryParse(row.Cells["Col_Estimated_Total"].Value?.ToString(), out decimal lineTotal);
+                total += lineTotal;
             }
             if (txt_Total_Estimated != null) txt_Total_Estimated.Text = total.ToString("N2");
         }
 
         private void dgv_Details_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
-            // الترقيم التسلسلي الديناميكي
             if (dgv_Details.Columns.Contains("Col_Serial"))
             {
                 string serialNumber = (e.RowIndex + 1).ToString();
@@ -187,12 +286,47 @@ namespace AlRowad_ERP.Forms
 
         internal override void OnF9Pressed()
         {
-            if (dgv_Details.CurrentCell != null && CurrentMode != FormMode.View)
+            if (CurrentMode == FormMode.View) return;
+
+            if (txt_Driver_Name != null && txt_Driver_Name.Focused)
+            {
+                OpenDriverSearch();
+                return;
+            }
+
+            if (dgv_Details.CurrentCell != null)
             {
                 string colName = dgv_Details.Columns[dgv_Details.CurrentCell.ColumnIndex].Name;
-                if (colName == "Col_Farmer_ID" || colName == "Col_Farmer_Name") OpenFarmerSearch(dgv_Details.CurrentCell.RowIndex);
-                else if (colName == "Col_Item_ID" || colName == "Col_Item_Name") OpenItemSearch(dgv_Details.CurrentCell.RowIndex);
+                if (colName == "Col_Farmer_ID" || colName == "Col_Farmer_Name")
+                    OpenFarmerSearch(dgv_Details.CurrentCell.RowIndex);
+                else if (colName == "Col_Item_ID" || colName == "Col_Item_Name")
+                    OpenItemSearch(dgv_Details.CurrentCell.RowIndex);
             }
+        }
+
+        private void OpenDriverSearch()
+        {
+            if (CurrentMode == FormMode.View) return;
+
+            string query = "SELECT Driver_ID AS [رقم السائق], Driver_Name AS [اسم السائق] FROM Drivers WHERE Is_Deleted = 0";
+
+            using (var search = new AlRowad_ERP.HelpForms.UniversalSearchForm("دليل السائقين (F9)", query))
+            {
+                if (search.ShowDialog() == DialogResult.OK)
+                {
+                    txt_Driver_Name.Text = search.الاسم_المختار;
+                    if (txt_Driver_Phone != null)
+                    {
+                        txt_Driver_Phone.Clear();
+                        txt_Driver_Phone.Focus();
+                    }
+                }
+            }
+        }
+
+        private void txt_Driver_Name_DoubleClick(object sender, EventArgs e)
+        {
+            if (CurrentMode != FormMode.View) OpenDriverSearch();
         }
 
         private void dgv_Details_CellDoubleClick(object sender, DataGridViewCellEventArgs e)

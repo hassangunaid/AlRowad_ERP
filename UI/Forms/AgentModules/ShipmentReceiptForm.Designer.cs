@@ -32,6 +32,7 @@
             System.Windows.Forms.Label label3;
             System.Windows.Forms.Label label2;
             System.Windows.Forms.Label label5;
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dtp_Receipt_Date = new AlRowad_ERP.Controls.AlRowadDateTextBox();
             this.alRowadToolBar1 = new AlRowad_ERP.Controls.AlRowadToolBar();
             this.txt_Shipment_ID = new System.Windows.Forms.TextBox();
@@ -61,7 +62,8 @@
             this.Col_Farmer_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col_Farmer_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col_Item_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Unit_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Item_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Unit_ID = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Col_Quantity = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col_Estimated_Discount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col_Estimated_Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -158,17 +160,17 @@
             // 
             // txt_Shipment_ID
             // 
-            this.txt_Shipment_ID.Location = new System.Drawing.Point(84, 80);
+            this.txt_Shipment_ID.Location = new System.Drawing.Point(189, 82);
             this.txt_Shipment_ID.Margin = new System.Windows.Forms.Padding(4);
             this.txt_Shipment_ID.Name = "txt_Shipment_ID";
-            this.txt_Shipment_ID.Size = new System.Drawing.Size(132, 30);
+            this.txt_Shipment_ID.Size = new System.Drawing.Size(99, 30);
             this.txt_Shipment_ID.TabIndex = 2;
             this.txt_Shipment_ID.Visible = false;
             // 
             // رقم_المستند
             // 
             this.رقم_المستند.AutoSize = true;
-            this.رقم_المستند.Location = new System.Drawing.Point(117, 119);
+            this.رقم_المستند.Location = new System.Drawing.Point(98, 83);
             this.رقم_المستند.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.رقم_المستند.Name = "رقم_المستند";
             this.رقم_المستند.Size = new System.Drawing.Size(83, 25);
@@ -197,7 +199,7 @@
             // التاريخ
             // 
             this.التاريخ.AutoSize = true;
-            this.التاريخ.Location = new System.Drawing.Point(1024, 160);
+            this.التاريخ.Location = new System.Drawing.Point(973, 159);
             this.التاريخ.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.التاريخ.Name = "التاريخ";
             this.التاريخ.Size = new System.Drawing.Size(56, 25);
@@ -207,7 +209,7 @@
             // حالة_المستند
             // 
             this.حالة_المستند.AutoSize = true;
-            this.حالة_المستند.Location = new System.Drawing.Point(1216, 117);
+            this.حالة_المستند.Location = new System.Drawing.Point(1262, 116);
             this.حالة_المستند.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.حالة_المستند.Name = "حالة_المستند";
             this.حالة_المستند.Size = new System.Drawing.Size(89, 25);
@@ -216,16 +218,16 @@
             // 
             // txt_Shipment_Code
             // 
-            this.txt_Shipment_Code.Location = new System.Drawing.Point(206, 118);
+            this.txt_Shipment_Code.Location = new System.Drawing.Point(189, 83);
             this.txt_Shipment_Code.Margin = new System.Windows.Forms.Padding(4);
             this.txt_Shipment_Code.Name = "txt_Shipment_Code";
-            this.txt_Shipment_Code.Size = new System.Drawing.Size(55, 30);
+            this.txt_Shipment_Code.Size = new System.Drawing.Size(99, 30);
             this.txt_Shipment_Code.TabIndex = 8;
             // 
             // رقم_لوحة_المركبة
             // 
             this.رقم_لوحة_المركبة.AutoSize = true;
-            this.رقم_لوحة_المركبة.Location = new System.Drawing.Point(942, 119);
+            this.رقم_لوحة_المركبة.Location = new System.Drawing.Point(973, 117);
             this.رقم_لوحة_المركبة.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.رقم_لوحة_المركبة.Name = "رقم_لوحة_المركبة";
             this.رقم_لوحة_المركبة.Size = new System.Drawing.Size(122, 25);
@@ -234,7 +236,7 @@
             // 
             // txt_Vehicle_Number
             // 
-            this.txt_Vehicle_Number.Location = new System.Drawing.Point(1067, 116);
+            this.txt_Vehicle_Number.Location = new System.Drawing.Point(1098, 114);
             this.txt_Vehicle_Number.Margin = new System.Windows.Forms.Padding(4);
             this.txt_Vehicle_Number.Name = "txt_Vehicle_Number";
             this.txt_Vehicle_Number.Size = new System.Drawing.Size(132, 30);
@@ -242,10 +244,10 @@
             // 
             // txt_Notes
             // 
-            this.txt_Notes.Location = new System.Drawing.Point(306, 156);
+            this.txt_Notes.Location = new System.Drawing.Point(351, 156);
             this.txt_Notes.Margin = new System.Windows.Forms.Padding(4);
             this.txt_Notes.Name = "txt_Notes";
-            this.txt_Notes.Size = new System.Drawing.Size(628, 30);
+            this.txt_Notes.Size = new System.Drawing.Size(592, 30);
             this.txt_Notes.TabIndex = 12;
             // 
             // ملاحظات
@@ -304,7 +306,7 @@
             // 
             // txt_Total_Estimated
             // 
-            this.txt_Total_Estimated.Location = new System.Drawing.Point(1347, 156);
+            this.txt_Total_Estimated.Location = new System.Drawing.Point(1328, 197);
             this.txt_Total_Estimated.Margin = new System.Windows.Forms.Padding(4);
             this.txt_Total_Estimated.Name = "txt_Total_Estimated";
             this.txt_Total_Estimated.Size = new System.Drawing.Size(253, 30);
@@ -312,12 +314,24 @@
             // 
             // dgv_Details
             // 
-            this.dgv_Details.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_Details.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.dgv_Details.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Sunken;
+            this.dgv_Details.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgv_Details.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dgv_Details.ColumnHeadersHeight = 34;
             this.dgv_Details.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Col_Serial,
             this.Col_Farmer_Name,
             this.Col_Farmer_ID,
             this.Col_Item_Name,
+            this.Col_Item_ID,
             this.Col_Unit_ID,
             this.Col_Quantity,
             this.Col_Estimated_Discount,
@@ -376,17 +390,18 @@
             // 
             // Col_Serial
             // 
-            this.Col_Serial.HeaderText = "تسلسلي";
+            this.Col_Serial.FillWeight = 1F;
+            this.Col_Serial.HeaderText = "▣";
             this.Col_Serial.MinimumWidth = 8;
             this.Col_Serial.Name = "Col_Serial";
-            this.Col_Serial.Width = 150;
+            this.Col_Serial.Width = 30;
             // 
             // Col_Farmer_Name
             // 
             this.Col_Farmer_Name.HeaderText = "اسم المزارع";
             this.Col_Farmer_Name.MinimumWidth = 8;
             this.Col_Farmer_Name.Name = "Col_Farmer_Name";
-            this.Col_Farmer_Name.Width = 150;
+            this.Col_Farmer_Name.Width = 171;
             // 
             // Col_Farmer_ID
             // 
@@ -401,49 +416,59 @@
             this.Col_Item_Name.HeaderText = "الصنف";
             this.Col_Item_Name.MinimumWidth = 8;
             this.Col_Item_Name.Name = "Col_Item_Name";
-            this.Col_Item_Name.Width = 150;
+            this.Col_Item_Name.Width = 170;
+            // 
+            // Col_Item_ID
+            // 
+            this.Col_Item_ID.HeaderText = "رقم الصنف";
+            this.Col_Item_ID.MinimumWidth = 8;
+            this.Col_Item_ID.Name = "Col_Item_ID";
+            this.Col_Item_ID.Visible = false;
+            this.Col_Item_ID.Width = 150;
             // 
             // Col_Unit_ID
             // 
             this.Col_Unit_ID.HeaderText = "الوحدة";
             this.Col_Unit_ID.MinimumWidth = 8;
             this.Col_Unit_ID.Name = "Col_Unit_ID";
-            this.Col_Unit_ID.Width = 150;
+            this.Col_Unit_ID.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Col_Unit_ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.Col_Unit_ID.Width = 171;
             // 
             // Col_Quantity
             // 
             this.Col_Quantity.HeaderText = "الكمية";
             this.Col_Quantity.MinimumWidth = 8;
             this.Col_Quantity.Name = "Col_Quantity";
-            this.Col_Quantity.Width = 150;
+            this.Col_Quantity.Width = 170;
             // 
             // Col_Estimated_Discount
             // 
             this.Col_Estimated_Discount.HeaderText = "الخصم";
             this.Col_Estimated_Discount.MinimumWidth = 8;
             this.Col_Estimated_Discount.Name = "Col_Estimated_Discount";
-            this.Col_Estimated_Discount.Width = 150;
+            this.Col_Estimated_Discount.Width = 171;
             // 
             // Col_Estimated_Price
             // 
             this.Col_Estimated_Price.HeaderText = "السعر[تقديري]";
             this.Col_Estimated_Price.MinimumWidth = 8;
             this.Col_Estimated_Price.Name = "Col_Estimated_Price";
-            this.Col_Estimated_Price.Width = 150;
+            this.Col_Estimated_Price.Width = 170;
             // 
             // Col_Estimated_Total
             // 
             this.Col_Estimated_Total.HeaderText = "الاجمالي[تقديري]";
             this.Col_Estimated_Total.MinimumWidth = 8;
             this.Col_Estimated_Total.Name = "Col_Estimated_Total";
-            this.Col_Estimated_Total.Width = 150;
+            this.Col_Estimated_Total.Width = 171;
             // 
             // Col_Notes
             // 
             this.Col_Notes.HeaderText = "ملاحظات";
             this.Col_Notes.MinimumWidth = 8;
             this.Col_Notes.Name = "Col_Notes";
-            this.Col_Notes.Width = 150;
+            this.Col_Notes.Width = 170;
             // 
             // ShipmentReceiptForm
             // 
@@ -508,16 +533,17 @@
         private System.Windows.Forms.TextBox txt_Driver_Name;
         private System.Windows.Forms.TextBox txt_Driver_Phone;
         private System.Windows.Forms.TextBox txt_Total_Estimated;
-        private System.Windows.Forms.DataGridView dgv_Details;
         private Controls.AlRowadToolBar AlRowadToolBar;
         private Controls.AlRowadToolBar object_5ff8d5d3_0f9b_4a07_9152_ce98e5e1eeef;
         private System.Windows.Forms.Form object_79d06daa_3f67_4754_a428_0417b4b6f866;
         private System.Windows.Forms.Form object_d3fe5650_dbbe_4f64_9731_6cb4a05ac45d;
+        private System.Windows.Forms.DataGridView dgv_Details;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_Serial;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_Farmer_Name;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_Farmer_ID;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_Item_Name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Col_Unit_ID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Col_Item_ID;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Col_Unit_ID;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_Quantity;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_Estimated_Discount;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_Estimated_Price;

@@ -47,15 +47,15 @@
             this.cmb_parent_ID = new System.Windows.Forms.ComboBox();
             this.GrBox_currencies = new System.Windows.Forms.GroupBox();
             this.dgv_currencies = new System.Windows.Forms.DataGridView();
-            this.txt_UpdatedAt = new System.Windows.Forms.TextBox();
-            this.txt_UpdatedBy = new System.Windows.Forms.TextBox();
-            this.txt_CreatedBy = new System.Windows.Forms.TextBox();
-            this.txt_CreatedAt = new System.Windows.Forms.TextBox();
             this.Is_Active = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Cur_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Is_Default = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Is_Frozen = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Cur_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.txt_UpdatedAt = new System.Windows.Forms.TextBox();
+            this.txt_UpdatedBy = new System.Windows.Forms.TextBox();
+            this.txt_CreatedBy = new System.Windows.Forms.TextBox();
+            this.txt_CreatedAt = new System.Windows.Forms.TextBox();
             acc_IDLabel = new System.Windows.Forms.Label();
             cust_AddressLabel = new System.Windows.Forms.Label();
             cust_PhoneLabel = new System.Windows.Forms.Label();
@@ -74,7 +74,7 @@
             // 
             acc_IDLabel.AutoSize = true;
             acc_IDLabel.ForeColor = System.Drawing.Color.Linen;
-            acc_IDLabel.Location = new System.Drawing.Point(202, 299);
+            acc_IDLabel.Location = new System.Drawing.Point(603, 148);
             acc_IDLabel.Name = "acc_IDLabel";
             acc_IDLabel.Size = new System.Drawing.Size(124, 25);
             acc_IDLabel.TabIndex = 10;
@@ -84,7 +84,7 @@
             // 
             cust_AddressLabel.AutoSize = true;
             cust_AddressLabel.ForeColor = System.Drawing.Color.Linen;
-            cust_AddressLabel.Location = new System.Drawing.Point(202, 263);
+            cust_AddressLabel.Location = new System.Drawing.Point(202, 294);
             cust_AddressLabel.Name = "cust_AddressLabel";
             cust_AddressLabel.Size = new System.Drawing.Size(100, 25);
             cust_AddressLabel.TabIndex = 8;
@@ -94,7 +94,7 @@
             // 
             cust_PhoneLabel.AutoSize = true;
             cust_PhoneLabel.ForeColor = System.Drawing.Color.Linen;
-            cust_PhoneLabel.Location = new System.Drawing.Point(202, 227);
+            cust_PhoneLabel.Location = new System.Drawing.Point(202, 258);
             cust_PhoneLabel.Name = "cust_PhoneLabel";
             cust_PhoneLabel.Size = new System.Drawing.Size(72, 25);
             cust_PhoneLabel.TabIndex = 6;
@@ -104,7 +104,7 @@
             // 
             cust_NameLabel.AutoSize = true;
             cust_NameLabel.ForeColor = System.Drawing.Color.Linen;
-            cust_NameLabel.Location = new System.Drawing.Point(202, 191);
+            cust_NameLabel.Location = new System.Drawing.Point(202, 222);
             cust_NameLabel.Name = "cust_NameLabel";
             cust_NameLabel.Size = new System.Drawing.Size(78, 25);
             cust_NameLabel.TabIndex = 4;
@@ -114,7 +114,7 @@
             // 
             cust_IDLabel.AutoSize = true;
             cust_IDLabel.ForeColor = System.Drawing.Color.Linen;
-            cust_IDLabel.Location = new System.Drawing.Point(202, 155);
+            cust_IDLabel.Location = new System.Drawing.Point(202, 186);
             cust_IDLabel.Name = "cust_IDLabel";
             cust_IDLabel.Size = new System.Drawing.Size(78, 25);
             cust_IDLabel.TabIndex = 2;
@@ -124,11 +124,11 @@
             // 
             parent_IDLabel.AutoSize = true;
             parent_IDLabel.ForeColor = System.Drawing.Color.Linen;
-            parent_IDLabel.Location = new System.Drawing.Point(202, 117);
+            parent_IDLabel.Location = new System.Drawing.Point(202, 148);
             parent_IDLabel.Name = "parent_IDLabel";
-            parent_IDLabel.Size = new System.Drawing.Size(99, 25);
+            parent_IDLabel.Size = new System.Drawing.Size(87, 25);
             parent_IDLabel.TabIndex = 21;
-            parent_IDLabel.Text = "Parent ID:";
+            parent_IDLabel.Text = "حساب الاب";
             // 
             // label4
             // 
@@ -192,42 +192,42 @@
             // 
             // acc_ID
             // 
-            this.acc_ID.Location = new System.Drawing.Point(360, 296);
+            this.acc_ID.Location = new System.Drawing.Point(733, 143);
             this.acc_ID.Name = "acc_ID";
-            this.acc_ID.Size = new System.Drawing.Size(406, 30);
+            this.acc_ID.Size = new System.Drawing.Size(174, 30);
             this.acc_ID.TabIndex = 11;
             this.acc_ID.Tag = "Acc_ID";
             // 
             // cust_Address
             // 
-            this.cust_Address.Location = new System.Drawing.Point(360, 260);
+            this.cust_Address.Location = new System.Drawing.Point(360, 291);
             this.cust_Address.Name = "cust_Address";
-            this.cust_Address.Size = new System.Drawing.Size(406, 30);
+            this.cust_Address.Size = new System.Drawing.Size(266, 30);
             this.cust_Address.TabIndex = 9;
             this.cust_Address.Tag = "Cust_Address";
             // 
             // cust_Phone
             // 
-            this.cust_Phone.Location = new System.Drawing.Point(360, 224);
+            this.cust_Phone.Location = new System.Drawing.Point(360, 255);
             this.cust_Phone.Name = "cust_Phone";
-            this.cust_Phone.Size = new System.Drawing.Size(406, 30);
+            this.cust_Phone.Size = new System.Drawing.Size(216, 30);
             this.cust_Phone.TabIndex = 7;
             this.cust_Phone.Tag = "Cust_Phone";
             // 
             // cust_Name
             // 
-            this.cust_Name.Location = new System.Drawing.Point(360, 188);
+            this.cust_Name.Location = new System.Drawing.Point(360, 219);
             this.cust_Name.Name = "cust_Name";
-            this.cust_Name.Size = new System.Drawing.Size(406, 30);
+            this.cust_Name.Size = new System.Drawing.Size(303, 30);
             this.cust_Name.TabIndex = 5;
             this.cust_Name.Tag = "Cust_Name";
             // 
             // cust_ID
             // 
-            this.cust_ID.Location = new System.Drawing.Point(360, 152);
+            this.cust_ID.Location = new System.Drawing.Point(360, 183);
             this.cust_ID.MaxLength = 20;
             this.cust_ID.Name = "cust_ID";
-            this.cust_ID.Size = new System.Drawing.Size(406, 30);
+            this.cust_ID.Size = new System.Drawing.Size(94, 30);
             this.cust_ID.TabIndex = 3;
             this.cust_ID.Tag = "Cust_ID";
             // 
@@ -245,9 +245,9 @@
             // cmb_parent_ID
             // 
             this.cmb_parent_ID.FormattingEnabled = true;
-            this.cmb_parent_ID.Location = new System.Drawing.Point(360, 113);
+            this.cmb_parent_ID.Location = new System.Drawing.Point(360, 144);
             this.cmb_parent_ID.Name = "cmb_parent_ID";
-            this.cmb_parent_ID.Size = new System.Drawing.Size(244, 33);
+            this.cmb_parent_ID.Size = new System.Drawing.Size(188, 33);
             this.cmb_parent_ID.TabIndex = 22;
             this.cmb_parent_ID.SelectedIndexChanged += new System.EventHandler(this.cmb_parent_ID_SelectedIndexChanged);
             // 
@@ -279,38 +279,6 @@
             this.dgv_currencies.RowTemplate.Height = 29;
             this.dgv_currencies.Size = new System.Drawing.Size(607, 207);
             this.dgv_currencies.TabIndex = 1;
-            // 
-            // txt_UpdatedAt
-            // 
-            this.txt_UpdatedAt.Location = new System.Drawing.Point(195, 680);
-            this.txt_UpdatedAt.Name = "txt_UpdatedAt";
-            this.txt_UpdatedAt.Size = new System.Drawing.Size(336, 30);
-            this.txt_UpdatedAt.TabIndex = 58;
-            this.txt_UpdatedAt.Tag = "Updated_At";
-            // 
-            // txt_UpdatedBy
-            // 
-            this.txt_UpdatedBy.Location = new System.Drawing.Point(673, 680);
-            this.txt_UpdatedBy.Name = "txt_UpdatedBy";
-            this.txt_UpdatedBy.Size = new System.Drawing.Size(336, 30);
-            this.txt_UpdatedBy.TabIndex = 57;
-            this.txt_UpdatedBy.Tag = "Updated_By";
-            // 
-            // txt_CreatedBy
-            // 
-            this.txt_CreatedBy.Location = new System.Drawing.Point(673, 636);
-            this.txt_CreatedBy.Name = "txt_CreatedBy";
-            this.txt_CreatedBy.Size = new System.Drawing.Size(336, 30);
-            this.txt_CreatedBy.TabIndex = 56;
-            this.txt_CreatedBy.Tag = "Created_By";
-            // 
-            // txt_CreatedAt
-            // 
-            this.txt_CreatedAt.Location = new System.Drawing.Point(195, 636);
-            this.txt_CreatedAt.Name = "txt_CreatedAt";
-            this.txt_CreatedAt.Size = new System.Drawing.Size(336, 30);
-            this.txt_CreatedAt.TabIndex = 55;
-            this.txt_CreatedAt.Tag = "Created_At";
             // 
             // Is_Active
             // 
@@ -358,6 +326,38 @@
             this.Cur_ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.Cur_ID.Visible = false;
             this.Cur_ID.Width = 150;
+            // 
+            // txt_UpdatedAt
+            // 
+            this.txt_UpdatedAt.Location = new System.Drawing.Point(195, 680);
+            this.txt_UpdatedAt.Name = "txt_UpdatedAt";
+            this.txt_UpdatedAt.Size = new System.Drawing.Size(336, 30);
+            this.txt_UpdatedAt.TabIndex = 58;
+            this.txt_UpdatedAt.Tag = "Updated_At";
+            // 
+            // txt_UpdatedBy
+            // 
+            this.txt_UpdatedBy.Location = new System.Drawing.Point(673, 680);
+            this.txt_UpdatedBy.Name = "txt_UpdatedBy";
+            this.txt_UpdatedBy.Size = new System.Drawing.Size(336, 30);
+            this.txt_UpdatedBy.TabIndex = 57;
+            this.txt_UpdatedBy.Tag = "Updated_By";
+            // 
+            // txt_CreatedBy
+            // 
+            this.txt_CreatedBy.Location = new System.Drawing.Point(673, 636);
+            this.txt_CreatedBy.Name = "txt_CreatedBy";
+            this.txt_CreatedBy.Size = new System.Drawing.Size(336, 30);
+            this.txt_CreatedBy.TabIndex = 56;
+            this.txt_CreatedBy.Tag = "Created_By";
+            // 
+            // txt_CreatedAt
+            // 
+            this.txt_CreatedAt.Location = new System.Drawing.Point(195, 636);
+            this.txt_CreatedAt.Name = "txt_CreatedAt";
+            this.txt_CreatedAt.Size = new System.Drawing.Size(336, 30);
+            this.txt_CreatedAt.TabIndex = 55;
+            this.txt_CreatedAt.Tag = "Created_At";
             // 
             // Customers
             // 
