@@ -241,6 +241,27 @@ namespace AlRowad_ERP.Core
 
             return connection;
         }
+        public static async Task<DataTable> ExecuteQueryAsync(string query, SqlParameter[] parameters = null)
+        {
+            using (var connection = new SqlConnection(GetConnectionString())) // تأكد من اسم دالة جلب نص الاتصال لديك
+            {
+                using (var command = new SqlCommand(query, connection))
+                {
+                    if (parameters != null)
+                    {
+                        command.Parameters.AddRange(parameters);
+                    }
+
+                    await connection.OpenAsync();
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        var dt = new DataTable();
+                        dt.Load(reader);
+                        return dt;
+                    }
+                }
+            }
+        }
         public static async Task<bool> ExecuteTransactionAsync(Func<SqlTransaction, Task> action)
         {
             using (var connection = await GetConnectionAsync()) // بافتراض أن لديك دالة GetConnectionAsync

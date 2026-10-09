@@ -33,6 +33,7 @@
             System.Windows.Forms.Label label2;
             System.Windows.Forms.Label label5;
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dtp_Receipt_Date = new AlRowad_ERP.Controls.AlRowadDateTextBox();
             this.alRowadToolBar1 = new AlRowad_ERP.Controls.AlRowadToolBar();
             this.txt_Shipment_ID = new System.Windows.Forms.TextBox();
@@ -53,22 +54,20 @@
             this.txt_Driver_Name = new System.Windows.Forms.TextBox();
             this.txt_Driver_Phone = new System.Windows.Forms.TextBox();
             this.txt_Total_Estimated = new System.Windows.Forms.TextBox();
-            this.dgv_Details = new System.Windows.Forms.DataGridView();
             this.AlRowadToolBar = new AlRowad_ERP.Controls.AlRowadToolBar();
             this.object_5ff8d5d3_0f9b_4a07_9152_ce98e5e1eeef = new AlRowad_ERP.Controls.AlRowadToolBar();
-            this.object_79d06daa_3f67_4754_a428_0417b4b6f866 = new System.Windows.Forms.Form();
-            this.object_d3fe5650_dbbe_4f64_9731_6cb4a05ac45d = new System.Windows.Forms.Form();
-            this.Col_Serial = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Farmer_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Farmer_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Item_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Item_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Unit_ID = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Col_Quantity = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Estimated_Discount = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Estimated_Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Estimated_Total = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col_Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Estimated_Total = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Estimated_Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Estimated_Discount = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Quantity = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Unit_ID = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Col_Item_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Item_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Farmer_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Farmer_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Serial = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgv_Details = new AlRowad_ERP.UI.Controls.AlRowadDataGridView();
             label4 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
@@ -312,6 +311,107 @@
             this.txt_Total_Estimated.Size = new System.Drawing.Size(253, 30);
             this.txt_Total_Estimated.TabIndex = 82;
             // 
+            // AlRowadToolBar
+            // 
+            this.AlRowadToolBar.BackColor = System.Drawing.Color.Transparent;
+            this.AlRowadToolBar.Cursor = System.Windows.Forms.Cursors.PanNW;
+            this.AlRowadToolBar.Location = new System.Drawing.Point(272, 12);
+            this.AlRowadToolBar.Name = "AlRowadToolBar";
+            this.AlRowadToolBar.Size = new System.Drawing.Size(984, 53);
+            this.AlRowadToolBar.TabIndex = 0;
+            // 
+            // object_5ff8d5d3_0f9b_4a07_9152_ce98e5e1eeef
+            // 
+            this.object_5ff8d5d3_0f9b_4a07_9152_ce98e5e1eeef.BackColor = System.Drawing.Color.Transparent;
+            this.object_5ff8d5d3_0f9b_4a07_9152_ce98e5e1eeef.Cursor = System.Windows.Forms.Cursors.PanNW;
+            this.object_5ff8d5d3_0f9b_4a07_9152_ce98e5e1eeef.Location = new System.Drawing.Point(272, 12);
+            this.object_5ff8d5d3_0f9b_4a07_9152_ce98e5e1eeef.Name = "object_5ff8d5d3_0f9b_4a07_9152_ce98e5e1eeef";
+            this.object_5ff8d5d3_0f9b_4a07_9152_ce98e5e1eeef.Size = new System.Drawing.Size(984, 53);
+            this.object_5ff8d5d3_0f9b_4a07_9152_ce98e5e1eeef.TabIndex = 1;
+            this.object_5ff8d5d3_0f9b_4a07_9152_ce98e5e1eeef.Visible = false;
+            // 
+            // Col_Notes
+            // 
+            this.Col_Notes.HeaderText = "ملاحظات";
+            this.Col_Notes.MinimumWidth = 8;
+            this.Col_Notes.Name = "Col_Notes";
+            this.Col_Notes.Width = 170;
+            // 
+            // Col_Estimated_Total
+            // 
+            this.Col_Estimated_Total.HeaderText = "الاجمالي[تقديري]";
+            this.Col_Estimated_Total.MinimumWidth = 8;
+            this.Col_Estimated_Total.Name = "Col_Estimated_Total";
+            this.Col_Estimated_Total.Width = 171;
+            // 
+            // Col_Estimated_Price
+            // 
+            this.Col_Estimated_Price.HeaderText = "السعر[تقديري]";
+            this.Col_Estimated_Price.MinimumWidth = 8;
+            this.Col_Estimated_Price.Name = "Col_Estimated_Price";
+            this.Col_Estimated_Price.Width = 170;
+            // 
+            // Col_Estimated_Discount
+            // 
+            this.Col_Estimated_Discount.HeaderText = "الخصم";
+            this.Col_Estimated_Discount.MinimumWidth = 8;
+            this.Col_Estimated_Discount.Name = "Col_Estimated_Discount";
+            this.Col_Estimated_Discount.Width = 171;
+            // 
+            // Col_Quantity
+            // 
+            this.Col_Quantity.HeaderText = "الكمية";
+            this.Col_Quantity.MinimumWidth = 8;
+            this.Col_Quantity.Name = "Col_Quantity";
+            this.Col_Quantity.Width = 170;
+            // 
+            // Col_Unit_ID
+            // 
+            this.Col_Unit_ID.HeaderText = "الوحدة";
+            this.Col_Unit_ID.MinimumWidth = 8;
+            this.Col_Unit_ID.Name = "Col_Unit_ID";
+            this.Col_Unit_ID.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Col_Unit_ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.Col_Unit_ID.Width = 171;
+            // 
+            // Col_Item_ID
+            // 
+            this.Col_Item_ID.HeaderText = "رقم الصنف";
+            this.Col_Item_ID.MinimumWidth = 8;
+            this.Col_Item_ID.Name = "Col_Item_ID";
+            this.Col_Item_ID.Visible = false;
+            this.Col_Item_ID.Width = 150;
+            // 
+            // Col_Item_Name
+            // 
+            this.Col_Item_Name.HeaderText = "الصنف";
+            this.Col_Item_Name.MinimumWidth = 8;
+            this.Col_Item_Name.Name = "Col_Item_Name";
+            this.Col_Item_Name.Width = 170;
+            // 
+            // Col_Farmer_ID
+            // 
+            this.Col_Farmer_ID.HeaderText = "رقم حساب المزارع";
+            this.Col_Farmer_ID.MinimumWidth = 8;
+            this.Col_Farmer_ID.Name = "Col_Farmer_ID";
+            this.Col_Farmer_ID.Visible = false;
+            this.Col_Farmer_ID.Width = 150;
+            // 
+            // Col_Farmer_Name
+            // 
+            this.Col_Farmer_Name.HeaderText = "اسم المزارع";
+            this.Col_Farmer_Name.MinimumWidth = 8;
+            this.Col_Farmer_Name.Name = "Col_Farmer_Name";
+            this.Col_Farmer_Name.Width = 171;
+            // 
+            // Col_Serial
+            // 
+            this.Col_Serial.FillWeight = 1F;
+            this.Col_Serial.HeaderText = "▣";
+            this.Col_Serial.MinimumWidth = 8;
+            this.Col_Serial.Name = "Col_Serial";
+            this.Col_Serial.Width = 30;
+            // 
             // dgv_Details
             // 
             this.dgv_Details.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -346,129 +446,6 @@
             this.dgv_Details.RowTemplate.Height = 29;
             this.dgv_Details.Size = new System.Drawing.Size(1536, 602);
             this.dgv_Details.TabIndex = 83;
-            // 
-            // AlRowadToolBar
-            // 
-            this.AlRowadToolBar.BackColor = System.Drawing.Color.Transparent;
-            this.AlRowadToolBar.Cursor = System.Windows.Forms.Cursors.PanNW;
-            this.AlRowadToolBar.Location = new System.Drawing.Point(272, 12);
-            this.AlRowadToolBar.Name = "AlRowadToolBar";
-            this.AlRowadToolBar.Size = new System.Drawing.Size(984, 53);
-            this.AlRowadToolBar.TabIndex = 0;
-            // 
-            // object_5ff8d5d3_0f9b_4a07_9152_ce98e5e1eeef
-            // 
-            this.object_5ff8d5d3_0f9b_4a07_9152_ce98e5e1eeef.BackColor = System.Drawing.Color.Transparent;
-            this.object_5ff8d5d3_0f9b_4a07_9152_ce98e5e1eeef.Cursor = System.Windows.Forms.Cursors.PanNW;
-            this.object_5ff8d5d3_0f9b_4a07_9152_ce98e5e1eeef.Location = new System.Drawing.Point(272, 12);
-            this.object_5ff8d5d3_0f9b_4a07_9152_ce98e5e1eeef.Name = "object_5ff8d5d3_0f9b_4a07_9152_ce98e5e1eeef";
-            this.object_5ff8d5d3_0f9b_4a07_9152_ce98e5e1eeef.Size = new System.Drawing.Size(984, 53);
-            this.object_5ff8d5d3_0f9b_4a07_9152_ce98e5e1eeef.TabIndex = 1;
-            this.object_5ff8d5d3_0f9b_4a07_9152_ce98e5e1eeef.Visible = false;
-            // 
-            // object_79d06daa_3f67_4754_a428_0417b4b6f866
-            // 
-            this.object_79d06daa_3f67_4754_a428_0417b4b6f866.BackColor = System.Drawing.SystemColors.Control;
-            this.object_79d06daa_3f67_4754_a428_0417b4b6f866.ClientSize = new System.Drawing.Size(800, 450);
-            this.object_79d06daa_3f67_4754_a428_0417b4b6f866.Location = new System.Drawing.Point(22, 22);
-            this.object_79d06daa_3f67_4754_a428_0417b4b6f866.Name = "object_79d06daa_3f67_4754_a428_0417b4b6f866";
-            this.object_79d06daa_3f67_4754_a428_0417b4b6f866.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.object_79d06daa_3f67_4754_a428_0417b4b6f866.RightToLeftLayout = true;
-            this.object_79d06daa_3f67_4754_a428_0417b4b6f866.Tag = "ShipmentReceiptForm";
-            this.object_79d06daa_3f67_4754_a428_0417b4b6f866.Visible = false;
-            // 
-            // object_d3fe5650_dbbe_4f64_9731_6cb4a05ac45d
-            // 
-            this.object_d3fe5650_dbbe_4f64_9731_6cb4a05ac45d.BackColor = System.Drawing.SystemColors.Control;
-            this.object_d3fe5650_dbbe_4f64_9731_6cb4a05ac45d.ClientSize = new System.Drawing.Size(800, 450);
-            this.object_d3fe5650_dbbe_4f64_9731_6cb4a05ac45d.Location = new System.Drawing.Point(22, 22);
-            this.object_d3fe5650_dbbe_4f64_9731_6cb4a05ac45d.Name = "object_d3fe5650_dbbe_4f64_9731_6cb4a05ac45d";
-            this.object_d3fe5650_dbbe_4f64_9731_6cb4a05ac45d.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.object_d3fe5650_dbbe_4f64_9731_6cb4a05ac45d.RightToLeftLayout = true;
-            this.object_d3fe5650_dbbe_4f64_9731_6cb4a05ac45d.Tag = "ShipmentReceiptForm";
-            this.object_d3fe5650_dbbe_4f64_9731_6cb4a05ac45d.Visible = false;
-            // 
-            // Col_Serial
-            // 
-            this.Col_Serial.FillWeight = 1F;
-            this.Col_Serial.HeaderText = "▣";
-            this.Col_Serial.MinimumWidth = 8;
-            this.Col_Serial.Name = "Col_Serial";
-            this.Col_Serial.Width = 30;
-            // 
-            // Col_Farmer_Name
-            // 
-            this.Col_Farmer_Name.HeaderText = "اسم المزارع";
-            this.Col_Farmer_Name.MinimumWidth = 8;
-            this.Col_Farmer_Name.Name = "Col_Farmer_Name";
-            this.Col_Farmer_Name.Width = 171;
-            // 
-            // Col_Farmer_ID
-            // 
-            this.Col_Farmer_ID.HeaderText = "رقم حساب المزارع";
-            this.Col_Farmer_ID.MinimumWidth = 8;
-            this.Col_Farmer_ID.Name = "Col_Farmer_ID";
-            this.Col_Farmer_ID.Visible = false;
-            this.Col_Farmer_ID.Width = 150;
-            // 
-            // Col_Item_Name
-            // 
-            this.Col_Item_Name.HeaderText = "الصنف";
-            this.Col_Item_Name.MinimumWidth = 8;
-            this.Col_Item_Name.Name = "Col_Item_Name";
-            this.Col_Item_Name.Width = 170;
-            // 
-            // Col_Item_ID
-            // 
-            this.Col_Item_ID.HeaderText = "رقم الصنف";
-            this.Col_Item_ID.MinimumWidth = 8;
-            this.Col_Item_ID.Name = "Col_Item_ID";
-            this.Col_Item_ID.Visible = false;
-            this.Col_Item_ID.Width = 150;
-            // 
-            // Col_Unit_ID
-            // 
-            this.Col_Unit_ID.HeaderText = "الوحدة";
-            this.Col_Unit_ID.MinimumWidth = 8;
-            this.Col_Unit_ID.Name = "Col_Unit_ID";
-            this.Col_Unit_ID.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Col_Unit_ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.Col_Unit_ID.Width = 171;
-            // 
-            // Col_Quantity
-            // 
-            this.Col_Quantity.HeaderText = "الكمية";
-            this.Col_Quantity.MinimumWidth = 8;
-            this.Col_Quantity.Name = "Col_Quantity";
-            this.Col_Quantity.Width = 170;
-            // 
-            // Col_Estimated_Discount
-            // 
-            this.Col_Estimated_Discount.HeaderText = "الخصم";
-            this.Col_Estimated_Discount.MinimumWidth = 8;
-            this.Col_Estimated_Discount.Name = "Col_Estimated_Discount";
-            this.Col_Estimated_Discount.Width = 171;
-            // 
-            // Col_Estimated_Price
-            // 
-            this.Col_Estimated_Price.HeaderText = "السعر[تقديري]";
-            this.Col_Estimated_Price.MinimumWidth = 8;
-            this.Col_Estimated_Price.Name = "Col_Estimated_Price";
-            this.Col_Estimated_Price.Width = 170;
-            // 
-            // Col_Estimated_Total
-            // 
-            this.Col_Estimated_Total.HeaderText = "الاجمالي[تقديري]";
-            this.Col_Estimated_Total.MinimumWidth = 8;
-            this.Col_Estimated_Total.Name = "Col_Estimated_Total";
-            this.Col_Estimated_Total.Width = 171;
-            // 
-            // Col_Notes
-            // 
-            this.Col_Notes.HeaderText = "ملاحظات";
-            this.Col_Notes.MinimumWidth = 8;
-            this.Col_Notes.Name = "Col_Notes";
-            this.Col_Notes.Width = 170;
             // 
             // ShipmentReceiptForm
             // 
@@ -535,19 +512,17 @@
         private System.Windows.Forms.TextBox txt_Total_Estimated;
         private Controls.AlRowadToolBar AlRowadToolBar;
         private Controls.AlRowadToolBar object_5ff8d5d3_0f9b_4a07_9152_ce98e5e1eeef;
-        private System.Windows.Forms.Form object_79d06daa_3f67_4754_a428_0417b4b6f866;
-        private System.Windows.Forms.Form object_d3fe5650_dbbe_4f64_9731_6cb4a05ac45d;
-        private System.Windows.Forms.DataGridView dgv_Details;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Col_Serial;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Col_Farmer_Name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Col_Farmer_ID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Col_Item_Name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Col_Item_ID;
-        private System.Windows.Forms.DataGridViewComboBoxColumn Col_Unit_ID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Col_Quantity;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Col_Estimated_Discount;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Col_Estimated_Price;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Col_Estimated_Total;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_Notes;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Col_Estimated_Total;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Col_Estimated_Price;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Col_Estimated_Discount;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Col_Quantity;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Col_Unit_ID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Col_Item_ID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Col_Item_Name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Col_Farmer_ID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Col_Farmer_Name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Col_Serial;
+        private UI.Controls.AlRowadDataGridView dgv_Details;
     }
 }

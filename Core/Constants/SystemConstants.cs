@@ -45,6 +45,12 @@ namespace AlRowad_ERP.Core.Constants
             public const string Shipment_Receipt_Headers = "Shipment_Receipt_Headers";
             public const string Shipment_Receipt_Details = "Shipment_Receipt_Details";
         }
+        public static class StoredProcedures
+        {
+            public const string GetAccountStatement = "GetAccountStatement";
+            public const string GetUnpostedAccountStatement = "GetUnpostedAccountStatement";
+        }
+
 
         public static class Columns
 

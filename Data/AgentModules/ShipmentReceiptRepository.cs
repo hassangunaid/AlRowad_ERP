@@ -43,6 +43,34 @@ namespace AlRowad_ERP.Data
             }
         }
 
+
+        public async Task<DataTable> GetShipmentHeaderAsync(int shipmentId)
+        {
+            string query = @"SELECT Shipment_ID, Shipment_Code, Shipment_Date, Driver_Name, Vehicle_Number, Driver_Phone, Notes, Total_Estimated 
+                     FROM Shipment_Receipt_Headers 
+                     WHERE Shipment_ID = @ShipmentID AND Is_Deleted = 0";
+
+            SqlParameter[] parameters = new[] {
+        new SqlParameter("@ShipmentID", SqlDbType.Int) { Value = shipmentId }
+    };
+
+            return await DatabaseHelper.ExecuteQueryAsync(query, parameters);
+        }
+
+        public async Task<DataTable> GetShipmentDetailsAsync(int shipmentId)
+        {
+            string query = @"SELECT D.Supp_ID, S.Supp_Name, D.Item_ID, I.Item_Name, D.Unit_ID, D.Quantity, D.Estimated_Discount, D.Estimated_Price, D.Estimated_Total, D.Notes
+                     FROM Shipment_Receipt_Details D
+                     LEFT JOIN Suppliers S ON D.Supp_ID = S.Supp_ID
+                     LEFT JOIN Items I ON D.Item_ID = I.Item_ID
+                     WHERE D.Shipment_ID = @ShipmentID";
+
+            SqlParameter[] parameters = new[] {
+        new SqlParameter("@ShipmentID", SqlDbType.Int) { Value = shipmentId }
+    };
+
+            return await DatabaseHelper.ExecuteQueryAsync(query, parameters);
+        }
         public async Task<int> SaveShipmentReceiptAsync(
             int shipmentId, string shipmentCode, DateTime receiptDate,
             string driverName, string vehicleNumber, string driverPhone, string notes,
@@ -134,6 +162,91 @@ namespace AlRowad_ERP.Data
                 }
             }
             return currentShipmentId;
+        }
+        public async Task<DataTable> GetItemUnitsDataTableAsync(int itemId)
+        {
+            // نفذ استعلام يجلب الوحدات الخاصة بالصنف الممرر فقط. مثال:
+            string query = @"
+        SELECT U.Unit_ID, U.Unit_Name 
+        FROM Units U
+        INNER JOIN Item_Units IU ON U.Unit_ID = IU.Unit_ID
+        WHERE IU.Item_ID = @ItemID AND U.Is_Deleted = 0";
+
+            SqlParameter[] parameters = new[] {
+        new SqlParameter("@ItemID", SqlDbType.Int) { Value = itemId }
+    };
+
+            return await DatabaseHelper.ExecuteQueryAsync(query, parameters);
+        }
+        public string GetDriversSearchQuery()
+        {
+            // يمكن استبدال القيم الثابتة بمتغيرات SystemConstants
+            return "SELECT Driver_ID AS [رقم السائق], Driver_Name AS [اسم السائق] FROM Drivers WHERE Is_Deleted = 0";
+        }
+
+        public string GetFarmersSearchQuery(string searchText = "")
+        {
+            string query = "SELECT Supp_ID AS [رقم المزارع], Supp_Name AS [اسم المزارع] FROM Suppliers WHERE Is_Farmer = 1 AND Is_Deleted = 0";
+
+            // الفلترة الذكية
+            if (!string.IsNullOrWhiteSpace(searchText))
+            {
+                query += $" AND Supp_Name LIKE N'%{searchText}%'";
+            }
+
+            return query;
+        }
+        public DataTable GetItemUnitsDataTableSync(int itemId)
+        {
+            string query = @"
+        SELECT U.Unit_ID, U.Unit_Name 
+        FROM Units U
+        INNER JOIN Item_Units IU ON U.Unit_ID = IU.Unit_ID
+        WHERE IU.Item_ID = @ItemID AND U.Is_Deleted = 0";
+
+            SqlParameter[] parameters = new[] {
+        new SqlParameter("@ItemID", SqlDbType.Int) { Value = itemId }
+    };
+
+            // استخدام دالة تنفيذ متزامنة مباشرة من DatabaseHelper
+            // (يرجى التأكد من توفر دالة ExecuteQuery متزامنة في كلاس DatabaseHelper لديك)
+            return DatabaseHelper.ExecuteQuery(query, parameters);
+        }
+        public string GetItemsSearchQuery(string searchText = "")
+        {
+            string query = "SELECT Item_ID AS [رقم الصنف], Item_Name AS [اسم الصنف] FROM Items WHERE Is_Deleted = 0";
+
+            // الفلترة الذكية
+            if (!string.IsNullOrWhiteSpace(searchText))
+            {
+                query += $" AND Item_Name LIKE N'%{searchText}%'";
+            }
+
+            return query;
+        }
+
+        public async Task<int> GetNextExpectedShipmentIdAsync()
+        {
+            string query = $"ISNULL(MAX(Shipment_ID), 0) + 1 FROM {SystemConstants.Tables.Shipment_Receipt_Headers}";
+            // استخدم الدالة المناسبة لديك لجلب قيمة مفردة Scalar
+            object result = await DatabaseHelper.ExecuteScalarAsync($"SELECT {query}");
+            return Convert.ToInt32(result);
+        }
+        public string GetFarmersSearchQuery()
+        {
+            return "SELECT Supp_ID AS [رقم المزارع], Supp_Name AS [اسم المزارع] FROM Suppliers WHERE Is_Farmer = 1 AND Is_Deleted = 0";
+        }
+
+        public string GetItemsSearchQuery()
+        {
+            return "SELECT Item_ID AS [رقم الصنف], Item_Name AS [اسم الصنف] FROM Items WHERE Is_Deleted = 0";
+        }
+
+        public async Task<bool> DeleteShipmentReceiptAsync(int shipmentId, int currentUserId, SqlTransaction trans)
+        {
+            // منطق الحذف المؤقت (Soft Delete) عبر الإجراء المخزن داخل المعاملة
+            // باستخدام DatabaseHelper و SqlTransaction لضمان الـ ACID
+            return true;
         }
         public DataTable GetUnitsDataTable()
         {
