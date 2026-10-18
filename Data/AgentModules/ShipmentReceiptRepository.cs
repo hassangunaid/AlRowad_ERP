@@ -11,12 +11,24 @@ namespace AlRowad_ERP.Data
 {
     public class ShipmentReceiptRepository
     {
+        public string GetShipmentsSearchQuery()
+        {
+            return @"SELECT Shipment_ID AS [رقم الحمولة], 
+            Shipment_Code AS [رقم المستند], 
+            Receipt_Date AS [التاريخ], 
+            Driver_Name AS [اسم السائق] 
+     FROM Shipment_Receipt_Headers 
+     WHERE Is_Deleted = 0";
+        }
         public async Task<string> GenerateNextShipmentCodeAsync()
         {
             // استعلام SQL يعتمد على الدالة TRY_CAST لتجنب أخطاء التحويل 
             // وجلب أعلى رقم تسلسلي، ثم إضافة 1. إذا كان الجدول فارغاً سيبدأ من 1.
             string query = @"
-        SELECT ISNULL(MAX(TRY_CAST(Shipment_Code AS INT)), 0) + 1 
+        SELECT ISNULL(MAX(TRY_CAST(Shipment_Code AS INT)), 0) + 1 Install-Package CrystalReports.Engine -Version 13.0.4003
+Install-Package CrystalReports.Windows.Forms -Version 13.0.4003
+Install-Package CrystalReports.Shared -Version 13.0.4003
+
         FROM Shipment_Receipt_Headers 
         WHERE TRY_CAST(Shipment_Code AS INT) IS NOT NULL";
 

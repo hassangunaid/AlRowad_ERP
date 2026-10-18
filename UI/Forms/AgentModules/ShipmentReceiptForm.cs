@@ -34,7 +34,7 @@ namespace AlRowad_ERP.Forms
 
             try
             {
-                // 1. ربط الأحداث السيادية
+                // 1. ربط الأحداث السيادية للجريد والحقول
                 dgv_Details.OnF9Pressed -= Dgv_Details_OnF9Pressed;
                 dgv_Details.OnF9Pressed += Dgv_Details_OnF9Pressed;
 
@@ -49,6 +49,13 @@ namespace AlRowad_ERP.Forms
                     txt_Driver_Name.DoubleClick -= txt_Driver_Name_DoubleClick;
                     txt_Driver_Name.DoubleClick += txt_Driver_Name_DoubleClick;
                     txt_Driver_Name.ReadOnly = true;
+                }
+
+                // 2. ربط زر البحث في شريط الأدوات العلوي لضمان استجابته الفورية
+                if (AlRowadToolBar != null)
+                {
+                    // نفترض أن شريط الأدوات يوفر حدثاً للبحث، أو نقوم بتفعيله عبر ميكانيزم الأب
+                    // سنعتمد على دالة OnSearch الافتراضية التي يستدعيها شريط الأدوات تلقائياً في BaseForm
                 }
 
                 dgv_Details.AutoGenerateColumns = false;
@@ -135,10 +142,14 @@ namespace AlRowad_ERP.Forms
 
             DataTable dtDetails = GetDetailsFromGrid();
 
+            string vehicleNumber = string.IsNullOrWhiteSpace(txt_Vehicle_Number.Text)
+                ? string.Empty
+                : txt_Vehicle_Number.Text.Trim();
+
             // إرسال الرأس والتفاصيل ككتلة واحدة (TVP) للمستودع وتمرير المعاملة trans لضمان الـ ACID
             int savedId = await _shipmentRepo.SaveShipmentReceiptAsync(
                 shipmentId, txt_Shipment_Code.Text, dtp_Receipt_Date.DateValue,
-                txt_Driver_Name.Text.Trim(), txt_Vehicle_Number.Text.Trim(), txt_Driver_Phone.Text.Trim(), txt_Notes.Text?.Trim(),
+                txt_Driver_Name.Text.Trim(), vehicleNumber, txt_Driver_Phone.Text.Trim(), txt_Notes.Text?.Trim(),
                 totalEst, dtDetails, this.CurrentUserId, CurrentMode == FormMode.New, trans);
 
             if (savedId > 0)
@@ -154,6 +165,7 @@ namespace AlRowad_ERP.Forms
             if (string.IsNullOrWhiteSpace(txt_Driver_Name.Text))
             {
                 MessageBox.Show("يجب إدخال اسم السائق.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txt_Driver_Name.Focus();
                 return false;
             }
             return true;
@@ -211,7 +223,7 @@ namespace AlRowad_ERP.Forms
                     decimal netQuantity = Math.Max(0, qty - qtyDiscount);
                     decimal lineTotal = netQuantity * estPrice;
 
-                    // تم التعديل: تمرير الرقم كـ decimal ليتم تطبيق التنسيق N2 عليه
+                    // تمرير الرقم كـ decimal ليتم تطبيق التنسيق N2 عليه
                     row.Cells["Col_Estimated_Total"].Value = lineTotal;
                 }
                 finally
@@ -241,7 +253,6 @@ namespace AlRowad_ERP.Forms
         // أدلة البحث (Search Forms & F9) والبحث الذكي
         // ==========================================
 
-        // التقاط F9 من الشاشة (للرأس)
         internal override void OnF9Pressed()
         {
             if (CurrentMode == FormMode.View) return;
@@ -252,18 +263,16 @@ namespace AlRowad_ERP.Forms
             }
         }
 
-        // التقاط F9 الموجه من أداة الجريد المخصصة الخاصة بنا
         private void Dgv_Details_OnF9Pressed(object sender, DataGridViewCellEventArgs e)
         {
             if (CurrentMode == FormMode.View || e.RowIndex < 0) return;
             string colName = dgv_Details.Columns[e.ColumnIndex].Name;
 
-            // استخراج النص الذي كتبه المستخدم كجزء من الاسم للبحث الذكي
             string searchText = "";
             if (dgv_Details.IsCurrentCellInEditMode && dgv_Details.EditingControl != null)
             {
                 searchText = dgv_Details.EditingControl.Text.Trim();
-                dgv_Details.EndEdit(); // إنهاء وضع التعديل برمجياً لفتح الشاشة بنجاح
+                dgv_Details.EndEdit();
             }
             else if (dgv_Details.CurrentCell.Value != null)
             {
@@ -271,9 +280,9 @@ namespace AlRowad_ERP.Forms
             }
 
             if (colName == "Col_Farmer_ID" || colName == "Col_Farmer_Name")
-                OpenFarmerSearch(e.RowIndex, searchText); // تمرير النص للفلترة
+                OpenFarmerSearch(e.RowIndex, searchText);
             else if (colName == "Col_Item_ID" || colName == "Col_Item_Name")
-                _ = OpenItemSearchAsync(e.RowIndex, searchText); // تمرير النص للفلترة
+                _ = OpenItemSearchAsync(e.RowIndex, searchText);
         }
 
         private void OpenDriverSearch()
@@ -300,7 +309,6 @@ namespace AlRowad_ERP.Forms
 
         private void dgv_Details_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            // محاكاة لضغط F9 عند النقر المزدوج على الخلايا
             Dgv_Details_OnF9Pressed(sender, e);
         }
 
@@ -346,16 +354,13 @@ namespace AlRowad_ERP.Forms
                 {
                     DataTable dtItemUnits = await _shipmentRepo.GetItemUnitsDataTableAsync(itemId);
 
-                    // السر المعماري: فك ارتباط الخلية بالعمود العام وتفريغها أولاً لضمان عدم ظهور כל الوحدات
                     comboCell.DataSource = null;
                     comboCell.Items.Clear();
 
-                    // ربط الخلية بوحدات هذا الصنف حصراً
                     comboCell.DataSource = dtItemUnits;
                     comboCell.DisplayMember = SystemConstants.Columns.Unit_Name;
                     comboCell.ValueMember = SystemConstants.Columns.Unit_ID;
 
-                    // اختيار الوحدة الافتراضية الأولى
                     if (dtItemUnits.Rows.Count > 0)
                     {
                         comboCell.Value = dtItemUnits.Rows[0][SystemConstants.Columns.Unit_ID];
@@ -374,7 +379,6 @@ namespace AlRowad_ERP.Forms
             {
                 if (dgv_Details.Columns["Col_Unit_ID"] is DataGridViewComboBoxColumn comboCol)
                 {
-                    // تحميل القاموس الشامل على مستوى العمود لكي يحتفظ الجريد بالأسماء بعد الخروج من الخلية
                     DataTable dtUnits = await _shipmentRepo.GetUnitsDataTableAsync();
                     comboCol.DataSource = dtUnits;
                     comboCol.DisplayMember = SystemConstants.Columns.Unit_Name;
@@ -386,36 +390,53 @@ namespace AlRowad_ERP.Forms
                 GlobalExceptionHandler.LogError(ex, "SetupUnitsComboBoxAsync");
             }
         }
+
         // ==========================================
-        // تفعيل زر البحث السيادي في شريط الأدوات
+        // تفعيل زر البحث السيادي (OnSearch) في شريط الأدوات
         // ==========================================
+        // ==========================================
+        // تفعيل زر البحث السيادي (OnSearch) في شريط الأدوات دون تداخل مع الأب
+        // ==========================================
+        private bool isSearching = false;
+
         public override void OnSearch()
         {
-            base.OnSearch();
+            if (isSearching) return;
 
-            // استدعاء نافذة البحث العامة الخاصة بسجلات حمولات الصادر/الوارِد
-            string query = "SELECT Shipment_ID AS [رقم الحمولة], Shipment_Code AS [رقم المستند], Shipment_Date AS [التاريخ], Driver_Name AS [اسم السائق] FROM Shipment_Receipt_Headers WHERE Is_Deleted = 0";
-
-            using (var search = new AlRowad_ERP.HelpForms.UniversalSearchForm("بحث في بيانات الحمولات (F9)", query))
+            try
             {
-                if (search.ShowDialog() == DialogResult.OK)
+                isSearching = true;
+
+                // تم إلغاء استدعاء base.OnSearch() منعاً لتكرار التنفيذ أو اصطدامه بالبحث الافتراضي للأب
+
+                // جلب الاستعلام من طبقة الـ Repository منعاً للنصوص المتناثرة (Clean Architecture)
+                string query = _shipmentRepo.GetShipmentsSearchQuery();
+
+                using (var search = new AlRowad_ERP.HelpForms.UniversalSearchForm("بحث في بيانات الحمولات", query))
                 {
-                    string selectedId = search.المعرف_المختار;
-                    if (!string.IsNullOrEmpty(selectedId))
+                    if (search.ShowDialog() == DialogResult.OK)
                     {
-                        // استدعاء دالة جلب السجل وتعبئته في الشاشة (RecordSelected Mode)
-                        _ = LoadShipmentDataAsync(Convert.ToInt32(selectedId));
+                        string selectedId = search.المعرف_المختار;
+                        if (!string.IsNullOrEmpty(selectedId))
+                        {
+                            _ = LoadShipmentDataAsync(Convert.ToInt32(selectedId));
+                        }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                GlobalExceptionHandler.LogError(ex, "ShipmentReceiptForm_OnSearch");
+            }
+            finally
+            {
+                isSearching = false;
+            }
         }
-
-        // دالة مساعدة لجلب بيانات الحمولة المحددة وعرضها في الشاشة
         private async Task LoadShipmentDataAsync(int shipmentId)
         {
             try
             {
-                // جلب بيانات الرأس وتعبئتها عبر محرك الربط وتغيير وضع الشاشة إلى View
                 DataTable dtHeader = await _shipmentRepo.GetShipmentHeaderAsync(shipmentId);
                 if (dtHeader != null && dtHeader.Rows.Count > 0)
                 {
@@ -429,7 +450,6 @@ namespace AlRowad_ERP.Forms
                     txt_Notes.Text = row["Notes"]?.ToString() ?? "";
                     txt_Total_Estimated.Text = Convert.ToDecimal(row["Total_Estimated"]).ToString("N2");
 
-                    // جلب تفاصيل الحمولة وتعبئتها في الشبكة
                     DataTable dtDetails = await _shipmentRepo.GetShipmentDetailsAsync(shipmentId);
                     dgv_Details.Rows.Clear();
                     foreach (DataRow dr in dtDetails.Rows)
