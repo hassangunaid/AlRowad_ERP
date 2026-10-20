@@ -6,7 +6,6 @@ using Microsoft.Reporting.WinForms;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -25,12 +24,8 @@ namespace AlRowad_ERP.Reports.Form
             this.RightToLeftLayout = true;
         }
 
-        /// <summary>
-        /// 🌟 مكتشف المسارات الذكي: يحل مشكلة مسارات التقارير نهائياً في بيئة التطوير وبيئة النشر
-        /// </summary>
         public static string ResolveReportPath(string reportFileName)
         {
-            // إذا تم تمرير مسار كامل وموجود بالفعل، أعده فوراً
             if (File.Exists(reportFileName))
                 return reportFileName;
 
@@ -38,13 +33,10 @@ namespace AlRowad_ERP.Reports.Form
             string baseDir = AppDomain.CurrentDomain.BaseDirectory;
             string projectDir = Path.GetFullPath(Path.Combine(baseDir, @"..\..\"));
 
-            // قائمة المسارات المحتملة مرتبة حسب الأولوية
             string[] candidatePaths = new[]
             {
-                // 1. مجلد السورس الأساسي (أثناء التطوير ليرى المبرمج التعديلات فوراً دون الحاجة لـ Copy Always)
                 Path.Combine(projectDir, "Reports", "Templates", fileNameOnly),
                 Path.Combine(projectDir, "Reports", fileNameOnly),
-                // 2. مجلد التشغيل التنفيذي (عند النشر للعميل)
                 Path.Combine(baseDir, "Reports", "Templates", fileNameOnly),
                 Path.Combine(baseDir, "Reports", fileNameOnly),
                 Path.Combine(baseDir, fileNameOnly)
@@ -59,9 +51,6 @@ namespace AlRowad_ERP.Reports.Form
             throw new FileNotFoundException($"لم يتم العثور على ملف التقرير ({fileNameOnly}) في أي من المسارات المعتمدة للنظام.");
         }
 
-        /// <summary>
-        /// 🌟 دالة العرض المركزية غير المتزامنة مع فحص آمن للبارامترات ودعم البارامترات المخصصة
-        /// </summary>
         public async Task LoadReportAsync(
             string reportFileOrPath,
             string dataSetName,
@@ -71,25 +60,23 @@ namespace AlRowad_ERP.Reports.Form
         {
             try
             {
-                // 1. تحديد المسار الصحيح للملف
                 string resolvedPath = ResolveReportPath(reportFileOrPath);
 
                 reportViewer1.LocalReport.DataSources.Clear();
                 reportViewer1.LocalReport.ReportPath = resolvedPath;
 
-                // 2. ربط مصدر البيانات (إذا تم تمريره)
                 if (!string.IsNullOrWhiteSpace(dataSetName) && dataSource != null)
                 {
                     ReportDataSource rds = new ReportDataSource(dataSetName, dataSource);
                     reportViewer1.LocalReport.DataSources.Add(rds);
                 }
 
-                // 3. جلب معلومات الشركة من قاعدة البيانات
                 var companyInfo = await _companyRepo.GetCompanyInfoAsync();
 
-                // تجميع كافة البارامترات القياسية
+                // تجميع كافة البارامترات القياسية وتوريث السياسة الموحدة للأرقام
                 var allParams = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
                 {
+                    ["NumberFormat"] = SystemConstants.Formatting.DefaultCurrencyFormat,
                     ["CompanyNameAr"] = companyInfo?.Company_Name_Ar ?? string.Empty,
                     ["CompanyNameEn"] = companyInfo?.Company_Name_En ?? string.Empty,
                     ["CompanyActivityDesc"] = companyInfo?.Company_Activity_Desc ?? string.Empty,
@@ -102,7 +89,6 @@ namespace AlRowad_ERP.Reports.Form
                     ["PrintDate"] = $"تاريخ الطباعة: {DateTime.Now:yyyy/MM/dd HH:mm} | المستخدم: {SystemConstants.CurrentUser?.Username ?? "System"}"
                 };
 
-                // دمج البارامترات الإضافية الخاصة بالتقرير (مثل من تاريخ، إلى تاريخ، اسم الحساب)
                 if (extraParameters != null)
                 {
                     foreach (var kvp in extraParameters)
@@ -111,7 +97,6 @@ namespace AlRowad_ERP.Reports.Form
                     }
                 }
 
-                // 4. 🌟 حماية ذكية: إرسال البارامترات المعرفة فعلياً داخل ملف RDLC فقط لمنع انهيار التقرير
                 var definedParamInfo = reportViewer1.LocalReport.GetParameters();
                 var validParametersToSet = new List<ReportParameter>();
 
@@ -128,16 +113,15 @@ namespace AlRowad_ERP.Reports.Form
                     reportViewer1.LocalReport.SetParameters(validParametersToSet);
                 }
 
-                // 5. ضبط إعدادات العرض والطباعة
                 reportViewer1.SetDisplayMode(DisplayMode.PrintLayout);
                 reportViewer1.ZoomMode = ZoomMode.PageWidth;
                 reportViewer1.RefreshReport();
             }
             catch (Exception ex)
             {
-                string detailedError = ex.InnerException != null
-                    ? $"{ex.Message}\nالتفاصيل: {ex.InnerException.Message}"
-                    : ex.Message;
+                string detailedError = ex.InnerException?.InnerException?.Message
+                    ?? ex.InnerException?.Message
+                    ?? ex.Message;
 
                 DatabaseHelper.LogSystemError(detailedError, ex.StackTrace, "Frm_ReportViewer_LoadReportAsync");
                 MessageBox.Show($"خطأ تقني في تشغيل التقرير:\n{detailedError}", "خطأ محرك التقارير", MessageBoxButtons.OK, MessageBoxIcon.Error);

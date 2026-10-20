@@ -497,6 +497,15 @@
 	</Page>
 	<AutoRefresh>0</AutoRefresh>
 	<ReportParameters>
+		<ReportParameter Name="NumberFormat">
+			<DataType>String</DataType>
+			<DefaultValue>
+				<Values>
+					<Value>#,##0.00</Value>
+				</Values>
+			</DefaultValue>
+			<Prompt>NumberFormat</Prompt>
+		</ReportParameter>
 		<ReportParameter Name="CompanyNameAr">
 			<DataType>String</DataType>
 			<Nullable>true</Nullable>

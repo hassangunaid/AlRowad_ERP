@@ -36,11 +36,11 @@
             System.Windows.Forms.Label cur_IDLabel;
             System.Windows.Forms.Label notesLabel;
             System.Windows.Forms.Label is_PostedLabel;
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.Label label4;
             System.Windows.Forms.Label label3;
             System.Windows.Forms.Label label2;
             System.Windows.Forms.Label label5;
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.split_RV = new System.Windows.Forms.SplitContainer();
             this.rbtnCash = new System.Windows.Forms.CheckBox();
             this.rbtnBank = new System.Windows.Forms.CheckBox();
@@ -162,6 +162,66 @@
             is_PostedLabel.TabIndex = 20;
             is_PostedLabel.Text = "مرحل";
             // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Cursor = System.Windows.Forms.Cursors.Default;
+            label4.ForeColor = System.Drawing.Color.Black;
+            label4.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            label4.Location = new System.Drawing.Point(198, 849);
+            label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label4.Name = "label4";
+            label4.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            label4.Size = new System.Drawing.Size(107, 25);
+            label4.TabIndex = 70;
+            label4.Text = "تاريخ التعديل :";
+            label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Cursor = System.Windows.Forms.Cursors.Default;
+            label3.ForeColor = System.Drawing.Color.Black;
+            label3.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            label3.Location = new System.Drawing.Point(705, 805);
+            label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label3.Name = "label3";
+            label3.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            label3.Size = new System.Drawing.Size(105, 25);
+            label3.TabIndex = 69;
+            label3.Text = "المستـــخــدم : ";
+            label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Cursor = System.Windows.Forms.Cursors.Default;
+            label2.ForeColor = System.Drawing.Color.Black;
+            label2.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            label2.Location = new System.Drawing.Point(705, 849);
+            label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label2.Name = "label2";
+            label2.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            label2.Size = new System.Drawing.Size(105, 25);
+            label2.TabIndex = 68;
+            label2.Text = "المستـــخــدم : ";
+            label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Cursor = System.Windows.Forms.Cursors.Default;
+            label5.ForeColor = System.Drawing.Color.Black;
+            label5.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            label5.Location = new System.Drawing.Point(198, 805);
+            label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label5.Name = "label5";
+            label5.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            label5.Size = new System.Drawing.Size(108, 25);
+            label5.TabIndex = 67;
+            label5.Text = "تاريخ الانشاء :";
+            label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // split_RV
             // 
             this.split_RV.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -174,6 +234,7 @@
             // split_RV.Panel1
             // 
             this.split_RV.Panel1.AutoScroll = true;
+            this.split_RV.Panel1.BackColor = System.Drawing.Color.CornflowerBlue;
             this.split_RV.Panel1.Controls.Add(this.rbtnCash);
             this.split_RV.Panel1.Controls.Add(this.rbtnBank);
             this.split_RV.Panel1.Controls.Add(this.voucher_DateDateTimePicker);
@@ -438,66 +499,6 @@
             this.txt_Difference.Size = new System.Drawing.Size(205, 32);
             this.txt_Difference.TabIndex = 4;
             // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Cursor = System.Windows.Forms.Cursors.Default;
-            label4.ForeColor = System.Drawing.Color.BlanchedAlmond;
-            label4.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            label4.Location = new System.Drawing.Point(198, 849);
-            label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            label4.Name = "label4";
-            label4.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            label4.Size = new System.Drawing.Size(107, 25);
-            label4.TabIndex = 70;
-            label4.Text = "تاريخ التعديل :";
-            label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Cursor = System.Windows.Forms.Cursors.Default;
-            label3.ForeColor = System.Drawing.Color.BlanchedAlmond;
-            label3.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            label3.Location = new System.Drawing.Point(705, 805);
-            label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            label3.Name = "label3";
-            label3.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            label3.Size = new System.Drawing.Size(105, 25);
-            label3.TabIndex = 69;
-            label3.Text = "المستـــخــدم : ";
-            label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Cursor = System.Windows.Forms.Cursors.Default;
-            label2.ForeColor = System.Drawing.Color.BlanchedAlmond;
-            label2.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            label2.Location = new System.Drawing.Point(705, 849);
-            label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            label2.Name = "label2";
-            label2.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            label2.Size = new System.Drawing.Size(105, 25);
-            label2.TabIndex = 68;
-            label2.Text = "المستـــخــدم : ";
-            label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Cursor = System.Windows.Forms.Cursors.Default;
-            label5.ForeColor = System.Drawing.Color.BlanchedAlmond;
-            label5.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            label5.Location = new System.Drawing.Point(198, 805);
-            label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            label5.Name = "label5";
-            label5.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            label5.Size = new System.Drawing.Size(108, 25);
-            label5.TabIndex = 67;
-            label5.Text = "تاريخ الانشاء :";
-            label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // txt_UpdatedAt
             // 
             this.txt_UpdatedAt.Location = new System.Drawing.Point(342, 846);
@@ -530,7 +531,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.MediumBlue;
+            this.BackColor = System.Drawing.Color.MintCream;
             this.ClientSize = new System.Drawing.Size(1278, 994);
             this.Controls.Add(label4);
             this.Controls.Add(label3);

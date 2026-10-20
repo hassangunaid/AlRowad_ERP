@@ -17,21 +17,37 @@
    [📁] Security
       -- FormMonitor.cs
       -- UserSession.cs
+   -- CurrencyTafqeetHelper.cs
+   -- DatabaseHelper.cs
 [📁] Data
+   [📁] AgentModules
+      -- AccountRepository.cs
+      -- DriverRepository.cs
+      -- ShipmentReceiptRepository.cs
    -- AccountRepository.cs
    -- AuthRepository.cs
+   -- CompanyRepository.cs
    -- CustomerRepository.cs
-   -- DatabaseHelper.cs
    -- FinancialPeriodRepository.cs
    -- InvoiceRepository.cs
    -- ItemRepository.cs
    -- JournalRepository.cs
+   -- SupplierRepository.cs
    -- SystemRepository.cs
    -- ThemeRepository.cs
+   -- UnitRepository.cs
    -- VoucherRepository.cs
 [📁] docs
    [📁] internals
+[📁] Infrastructure
+   [📁] Database
+      -- DatabasePatcher.cs
+   [📁] Services
+      -- BackupEngine.cs
 [📁] Models
+   [📁] Reports
+      -- AccountStatementDto.cs
+   -- CompanyInfoDto.cs
    -- CustomerCurrencyDto.cs
    -- InvoiceModel.cs
    -- JournalHeaderModel.cs
@@ -39,6 +55,253 @@
 [📁] PHOTO
    -- MianForm.png
 [📁] Properties
+   [📁] DataSources
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.AccountsTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.Account_Allowed_CurrenciesTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.Account_NaturesTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.Account_ReportsTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.Account_TypesTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.Cash_VouchersTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.Cash_Voucher_DetailsTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.Cost_CentersTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.CurrenciesTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.Currency_Rates_HistoryTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.CustomersTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.Doc_TypesTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.GetAccountStatementTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.GetAllowedCurrenciesTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.GetUnpostedAccountStatementTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.Invoice_DetailsTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.Invoice_HeaderTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.ItemsTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.Item_BalancesTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.Journal_DetailsTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.Journal_EntriesTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.Journal_HeaderTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.Manual_Journal_VouchersTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.Manual_Journal_Voucher_DetailsTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.Payment_MethodsTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.Posting_ErrorsTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.StoresTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.SuppliersTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.System_Audit_LogTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.System_LedgerTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.System_ShortcutsTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.TableAdapterManager+UpdateOrderOption.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.TableAdapterManager.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.UnitsTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.UsersTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.Vw_Account_Active_CurrenciesTableAdapter.datasource
+      -- AlRowad_ERP.AlRowad_ERPDataSetTableAdapters.Vw_Full_Accounts_Directory_With_CurrenciesTableAdapter.datasource
+      -- AlRowad_ERP.Controls.AlRowadDateTextBox.datasource
+      -- AlRowad_ERP.Controls.AlRowadNumericTextBox.datasource
+      -- AlRowad_ERP.Controls.AlRowadToolBar.datasource
+      -- AlRowad_ERP.Core.BaseForm.datasource
+      -- AlRowad_ERP.Core.Constants.SystemConstants+Accounts.datasource
+      -- AlRowad_ERP.Core.Constants.SystemConstants+AuditFields.datasource
+      -- AlRowad_ERP.Core.Constants.SystemConstants+Columns.datasource
+      -- AlRowad_ERP.Core.Constants.SystemConstants+Descriptions.datasource
+      -- AlRowad_ERP.Core.Constants.SystemConstants+Messages.datasource
+      -- AlRowad_ERP.Core.Constants.SystemConstants+Statuses.datasource
+      -- AlRowad_ERP.Core.Constants.SystemConstants+StoredProcedures.datasource
+      -- AlRowad_ERP.Core.Constants.SystemConstants+Tables.datasource
+      -- AlRowad_ERP.Core.Constants.SystemConstants.datasource
+      -- AlRowad_ERP.Core.Constants.ThemeTokens.datasource
+      -- AlRowad_ERP.Core.CurrencyHelper.datasource
+      -- AlRowad_ERP.Core.DatabaseHelper.datasource
+      -- AlRowad_ERP.Core.Entities.ThemeEntity.datasource
+      -- AlRowad_ERP.Core.Entities.ThemeTokenEntity.datasource
+      -- AlRowad_ERP.Core.Entities.UserEntity.datasource
+      -- AlRowad_ERP.Core.FormMonitor.datasource
+      -- AlRowad_ERP.Core.Helpers.ColorHelper.datasource
+      -- AlRowad_ERP.Core.Helpers.GlobalExceptionHandler.datasource
+      -- AlRowad_ERP.Core.JournalEngine.datasource
+      -- AlRowad_ERP.Core.Models.CustomerCurrencyDto.datasource
+      -- AlRowad_ERP.Core.Program.datasource
+      -- AlRowad_ERP.Core.ReportEngine.datasource
+      -- AlRowad_ERP.Core.SystemSettingsHelper.datasource
+      -- AlRowad_ERP.Core.UIHelper.datasource
+      -- AlRowad_ERP.Core.UserSession.datasource
+      -- AlRowad_ERP.Data.AccountRepository.datasource
+      -- AlRowad_ERP.Data.AgencySettingsRepository.datasource
+      -- AlRowad_ERP.Data.AuthRepository.datasource
+      -- AlRowad_ERP.Data.CustomerRepository.datasource
+      -- AlRowad_ERP.Data.DriverRepository.datasource
+      -- AlRowad_ERP.Data.InvoiceRepository.datasource
+      -- AlRowad_ERP.Data.ItemRepository.datasource
+      -- AlRowad_ERP.Data.JournalRepository.datasource
+      -- AlRowad_ERP.Data.Reports.ReportAccountRepository.datasource
+      -- AlRowad_ERP.Data.ShipmentReceiptRepository.datasource
+      -- AlRowad_ERP.Data.SupplierRepository.datasource
+      -- AlRowad_ERP.Data.SystemRepository.datasource
+      -- AlRowad_ERP.Data.ThemeRepository.datasource
+      -- AlRowad_ERP.Data.UnitRepository.datasource
+      -- AlRowad_ERP.Data.VoucherRepository.datasource
+      -- AlRowad_ERP.Forms.AccountsForm.datasource
+      -- AlRowad_ERP.Forms.AgencySettingsForm.datasource
+      -- AlRowad_ERP.Forms.Currencies.datasource
+      -- AlRowad_ERP.Forms.Customers.datasource
+      -- AlRowad_ERP.Forms.Doc_Types.datasource
+      -- AlRowad_ERP.Forms.DriverForm.datasource
+      -- AlRowad_ERP.Forms.Items.datasource
+      -- AlRowad_ERP.Forms.Item_Balances.datasource
+      -- AlRowad_ERP.Forms.Journal_Header.datasource
+      -- AlRowad_ERP.Forms.LongUesr.datasource
+      -- AlRowad_ERP.Forms.MainForm.datasource
+      -- AlRowad_ERP.Forms.Payment_Methods.datasource
+      -- AlRowad_ERP.Forms.ReceiptVoucher.datasource
+      -- AlRowad_ERP.Forms.ShipmentReceiptForm.datasource
+      -- AlRowad_ERP.Forms.Stores.datasource
+      -- AlRowad_ERP.Forms.Suppliers.datasource
+      -- AlRowad_ERP.Forms.System_Shortcuts.datasource
+      -- AlRowad_ERP.Forms.UnitsForm.datasource
+      -- AlRowad_ERP.HelpForms.UniversalSearchForm.datasource
+      -- AlRowad_ERP.Models.CashVoucherDetail.datasource
+      -- AlRowad_ERP.Models.CashVoucherHeader.datasource
+      -- AlRowad_ERP.Models.InvoiceDetailModel.datasource
+      -- AlRowad_ERP.Models.InvoiceModel.datasource
+      -- AlRowad_ERPDataSet.AccountsDataTable.datasource
+      -- AlRowad_ERPDataSet.AccountsRow.datasource
+      -- AlRowad_ERPDataSet.AccountsRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.AccountsRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.Account_Allowed_CurrenciesDataTable.datasource
+      -- AlRowad_ERPDataSet.Account_Allowed_CurrenciesRow.datasource
+      -- AlRowad_ERPDataSet.Account_Allowed_CurrenciesRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.Account_Allowed_CurrenciesRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.Account_NaturesDataTable.datasource
+      -- AlRowad_ERPDataSet.Account_NaturesRow.datasource
+      -- AlRowad_ERPDataSet.Account_NaturesRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.Account_NaturesRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.Account_ReportsDataTable.datasource
+      -- AlRowad_ERPDataSet.Account_ReportsRow.datasource
+      -- AlRowad_ERPDataSet.Account_ReportsRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.Account_ReportsRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.Account_TypesDataTable.datasource
+      -- AlRowad_ERPDataSet.Account_TypesRow.datasource
+      -- AlRowad_ERPDataSet.Account_TypesRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.Account_TypesRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.Cash_VouchersDataTable.datasource
+      -- AlRowad_ERPDataSet.Cash_VouchersRow.datasource
+      -- AlRowad_ERPDataSet.Cash_VouchersRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.Cash_VouchersRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.Cash_Voucher_DetailsDataTable.datasource
+      -- AlRowad_ERPDataSet.Cash_Voucher_DetailsRow.datasource
+      -- AlRowad_ERPDataSet.Cash_Voucher_DetailsRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.Cash_Voucher_DetailsRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.Cost_CentersDataTable.datasource
+      -- AlRowad_ERPDataSet.Cost_CentersRow.datasource
+      -- AlRowad_ERPDataSet.Cost_CentersRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.Cost_CentersRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.CurrenciesDataTable.datasource
+      -- AlRowad_ERPDataSet.CurrenciesRow.datasource
+      -- AlRowad_ERPDataSet.CurrenciesRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.CurrenciesRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.Currency_Rates_HistoryDataTable.datasource
+      -- AlRowad_ERPDataSet.Currency_Rates_HistoryRow.datasource
+      -- AlRowad_ERPDataSet.Currency_Rates_HistoryRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.Currency_Rates_HistoryRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.CustomersDataTable.datasource
+      -- AlRowad_ERPDataSet.CustomersRow.datasource
+      -- AlRowad_ERPDataSet.CustomersRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.CustomersRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.datasource
+      -- AlRowad_ERPDataSet.Doc_TypesDataTable.datasource
+      -- AlRowad_ERPDataSet.Doc_TypesRow.datasource
+      -- AlRowad_ERPDataSet.Doc_TypesRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.Doc_TypesRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.GetAccountStatementDataTable.datasource
+      -- AlRowad_ERPDataSet.GetAccountStatementRow.datasource
+      -- AlRowad_ERPDataSet.GetAccountStatementRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.GetAccountStatementRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.GetAllowedCurrenciesDataTable.datasource
+      -- AlRowad_ERPDataSet.GetAllowedCurrenciesRow.datasource
+      -- AlRowad_ERPDataSet.GetAllowedCurrenciesRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.GetAllowedCurrenciesRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.GetUnpostedAccountStatementDataTable.datasource
+      -- AlRowad_ERPDataSet.GetUnpostedAccountStatementRow.datasource
+      -- AlRowad_ERPDataSet.GetUnpostedAccountStatementRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.GetUnpostedAccountStatementRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.Invoice_DetailsDataTable.datasource
+      -- AlRowad_ERPDataSet.Invoice_DetailsRow.datasource
+      -- AlRowad_ERPDataSet.Invoice_DetailsRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.Invoice_DetailsRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.Invoice_HeaderDataTable.datasource
+      -- AlRowad_ERPDataSet.Invoice_HeaderRow.datasource
+      -- AlRowad_ERPDataSet.Invoice_HeaderRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.Invoice_HeaderRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.ItemsDataTable.datasource
+      -- AlRowad_ERPDataSet.ItemsRow.datasource
+      -- AlRowad_ERPDataSet.ItemsRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.ItemsRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.Item_BalancesDataTable.datasource
+      -- AlRowad_ERPDataSet.Item_BalancesRow.datasource
+      -- AlRowad_ERPDataSet.Item_BalancesRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.Item_BalancesRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.Journal_DetailsDataTable.datasource
+      -- AlRowad_ERPDataSet.Journal_DetailsRow.datasource
+      -- AlRowad_ERPDataSet.Journal_DetailsRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.Journal_DetailsRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.Journal_EntriesDataTable.datasource
+      -- AlRowad_ERPDataSet.Journal_EntriesRow.datasource
+      -- AlRowad_ERPDataSet.Journal_EntriesRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.Journal_EntriesRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.Journal_HeaderDataTable.datasource
+      -- AlRowad_ERPDataSet.Journal_HeaderRow.datasource
+      -- AlRowad_ERPDataSet.Journal_HeaderRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.Journal_HeaderRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.Manual_Journal_VouchersDataTable.datasource
+      -- AlRowad_ERPDataSet.Manual_Journal_VouchersRow.datasource
+      -- AlRowad_ERPDataSet.Manual_Journal_VouchersRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.Manual_Journal_VouchersRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.Manual_Journal_Voucher_DetailsDataTable.datasource
+      -- AlRowad_ERPDataSet.Manual_Journal_Voucher_DetailsRow.datasource
+      -- AlRowad_ERPDataSet.Manual_Journal_Voucher_DetailsRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.Manual_Journal_Voucher_DetailsRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.Payment_MethodsDataTable.datasource
+      -- AlRowad_ERPDataSet.Payment_MethodsRow.datasource
+      -- AlRowad_ERPDataSet.Payment_MethodsRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.Payment_MethodsRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.Posting_ErrorsDataTable.datasource
+      -- AlRowad_ERPDataSet.Posting_ErrorsRow.datasource
+      -- AlRowad_ERPDataSet.Posting_ErrorsRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.Posting_ErrorsRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.StoresDataTable.datasource
+      -- AlRowad_ERPDataSet.StoresRow.datasource
+      -- AlRowad_ERPDataSet.StoresRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.StoresRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.SuppliersDataTable.datasource
+      -- AlRowad_ERPDataSet.SuppliersRow.datasource
+      -- AlRowad_ERPDataSet.SuppliersRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.SuppliersRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.System_Audit_LogDataTable.datasource
+      -- AlRowad_ERPDataSet.System_Audit_LogRow.datasource
+      -- AlRowad_ERPDataSet.System_Audit_LogRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.System_Audit_LogRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.System_LedgerDataTable.datasource
+      -- AlRowad_ERPDataSet.System_LedgerRow.datasource
+      -- AlRowad_ERPDataSet.System_LedgerRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.System_LedgerRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.System_ShortcutsDataTable.datasource
+      -- AlRowad_ERPDataSet.System_ShortcutsRow.datasource
+      -- AlRowad_ERPDataSet.System_ShortcutsRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.System_ShortcutsRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.UnitsDataTable.datasource
+      -- AlRowad_ERPDataSet.UnitsRow.datasource
+      -- AlRowad_ERPDataSet.UnitsRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.UnitsRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.UsersDataTable.datasource
+      -- AlRowad_ERPDataSet.UsersRow.datasource
+      -- AlRowad_ERPDataSet.UsersRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.UsersRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.Vw_Account_Active_CurrenciesDataTable.datasource
+      -- AlRowad_ERPDataSet.Vw_Account_Active_CurrenciesRow.datasource
+      -- AlRowad_ERPDataSet.Vw_Account_Active_CurrenciesRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.Vw_Account_Active_CurrenciesRowChangeEventHandler.datasource
+      -- AlRowad_ERPDataSet.Vw_Full_Accounts_Directory_With_CurrenciesDataTable.datasource
+      -- AlRowad_ERPDataSet.Vw_Full_Accounts_Directory_With_CurrenciesRow.datasource
+      -- AlRowad_ERPDataSet.Vw_Full_Accounts_Directory_With_CurrenciesRowChangeEvent.datasource
+      -- AlRowad_ERPDataSet.Vw_Full_Accounts_Directory_With_CurrenciesRowChangeEventHandler.datasource
+      -- FinancialPeriodRepository.datasource
    -- AssemblyInfo.cs
    -- Resources.Designer.cs
    -- Resources.resx
@@ -67,6 +330,24 @@
          -- System.Runtime.CompilerServices.Unsafe.dll.deploy
    -- AlRowad_ERP.application
    -- setup.exe
+[📁] Reports
+   [📁] Data
+      -- ReportAccountRepository.cs
+   [📁] Form
+      -- Frm_ReportViewer.cs
+      -- Frm_ReportViewer.Designer.cs
+      -- Frm_ReportViewer.resx
+   [📁] Repositories
+      -- ReportRepository.cs
+   [📁] Templates
+      -- 1212.rdlc
+      -- 121213.rdlc
+      -- Master Report Template.rdlc
+      -- Rpt_AccountStatement.rdlc
+   [📁] Views
+      -- Frm_AccountStatement.cs
+      -- Frm_AccountStatement.Designer.cs
+      -- Frm_AccountStatement.resx
 [📁] Services
    [📁] Accounting
       -- FinancialPeriodService.cs
@@ -75,13 +356,24 @@
       -- StockMovementService.cs
    [📁] SalesAndPurchases
       -- InvoiceService.cs
+[📁] SqlServerTypes
+   [📁] x64
+      -- msvcr120.dll
+      -- SqlServerSpatial140.dll
+   [📁] x86
+      -- msvcr120.dll
+      -- SqlServerSpatial140.dll
+   -- Loader.cs
+   -- readme.htm
 [📁] UI
    [📁] Base
       -- BaseEntryForm.cs
       -- BaseEntryForm.resx
       -- BaseForm.cs
       -- BaseForm.resx
+      -- BaseMasterDetailForm.cs
    [📁] Controls
+      -- AlRowadDataGridView.cs
       -- AlRowadDateTextBox.cs
       -- AlRowadDateTextBox.Designer.cs
       -- AlRowadDateTextBox.resx
@@ -92,6 +384,16 @@
    [📁] Entities
       -- ThemeManager.cs
    [📁] Forms
+      [📁] AgentModules
+         -- AgencySettingsForm.cs
+         -- AgencySettingsForm.Designer.cs
+         -- AgencySettingsForm.resx
+         -- DriverForm.cs
+         -- DriverForm.Designer.cs
+         -- DriverForm.resx
+         -- ShipmentReceiptForm.cs
+         -- ShipmentReceiptForm.Designer.cs
+         -- ShipmentReceiptForm.resx
       -- AccountsForm.cs
       -- AccountsForm.Designer.cs
       -- AccountsForm.resx
@@ -106,6 +408,9 @@
       -- Doc_Types.cs
       -- Doc_Types.Designer.cs
       -- Doc_Types.resx
+      -- Frm_CompanyInfo.cs
+      -- Frm_CompanyInfo.Designer.cs
+      -- Frm_CompanyInfo.resx
       -- Items.cs
       -- Items.Designer.cs
       -- Items.resx
@@ -121,7 +426,9 @@
       -- MainForm.cs
       -- MainForm.Designer.cs
       -- MainForm.resx
-      -- MainForm.resx~RF103a0c8.TMP
+      -- Paymentvoucher.cs
+      -- Paymentvoucher.Designer.cs
+      -- PaymentVoucher.resx
       -- Payment_Methods.cs
       -- Payment_Methods.Designer.cs
       -- Payment_Methods.resx
@@ -144,13 +451,20 @@
       -- ShortcutManager.cs
    [📁] HelpForms
       -- UniversalSearchForm.cs
+   [📁] Reports
+   [📁] Settings
+      -- FrmBackupSettings.cs
+      -- FrmBackupSettings.Designer.cs
    [📁] SystemSettings
       -- Frm_ThemeManager.cs
       -- Frm_ThemeManager.Designer.cs
       -- Frm_ThemeManager.resx
 -- .gitignore
--- AlRowad_ERP.csproj
--- AlRowad_ERP.csproj.user
+-- AlRowad_ERP.Models.Reports.AccountStatementDto.datasource
+-- AlRowad_ERP.Repositories.ReportRepository.datasource
+-- AlRowad_ERP.UI.Reports.Frm_AccountStatement.datasource
+-- AlRowad_ERP001.csproj
+-- AlRowad_ERP001.csproj.user
 -- AlRowad_ERP001.slnx
 -- AlRowad_ERPDataSet.Designer.cs
 -- AlRowad_ERPDataSet.xsc
@@ -162,3 +476,6 @@
 -- packages.config
 -- Program.cs
 -- Project_Structure.txt
+-- project_tree.txt
+-- project_tree_clean.txt
+-- محادثة تطوير 1.pdf

@@ -20,7 +20,9 @@ namespace AlRowad_ERP.UI.Base
 
     public class BaseEntryForm : BaseForm
     {
+        // 🌟 دعم الشريطين معاً كخصائص سيادية محمية
         protected AlRowadToolBar MainToolBar { get; private set; }
+        protected AlRowadSettingsToolBar SettingsToolBar { get; private set; }
 
         public FormMode CurrentMode { get; private set; } = FormMode.View;
         public DocumentStatus CurrentDocumentStatus { get; set; } = DocumentStatus.Draft;
@@ -52,7 +54,7 @@ namespace AlRowad_ERP.UI.Base
         {
             foreach (Control ctrl in parent.Controls)
             {
-                if (ctrl == MainToolBar) continue;
+                if (ctrl == MainToolBar || ctrl == SettingsToolBar) continue;
 
                 if (ctrl is TextBox || ctrl is ComboBox || ctrl is CheckBox || ctrl is DateTimePicker)
                 {
@@ -142,7 +144,7 @@ namespace AlRowad_ERP.UI.Base
         }
         #endregion
 
-            #region العقود السيادية (Async Contracts)
+        #region العقود السيادية (Async Contracts)
         // تم توحيد عقد الحفظ ليصبح الدستوري (الذي يمرر SqlTransaction) كمعيار رئيسي
         protected virtual async Task<bool> ExecuteSaveToDatabaseAsync(SqlTransaction transaction)
         {
@@ -170,7 +172,8 @@ namespace AlRowad_ERP.UI.Base
         {
             if (!ValidateFields(this)) return;
 
-            MainToolBar.Enabled = false;
+            // تحصين معماري: قفل الشريطين النشطين بأمان
+            SetToolbarsEnabled(false);
 
             using (SqlConnection conn = await DatabaseHelper.GetConnectionAsync())
             {
@@ -200,7 +203,8 @@ namespace AlRowad_ERP.UI.Base
                     }
                     finally
                     {
-                        MainToolBar.Enabled = true;
+                        // تحصين معماري: إعادة تفعيل الأشرطة بأمان
+                        SetToolbarsEnabled(true);
                     }
                 }
             }
@@ -218,7 +222,7 @@ namespace AlRowad_ERP.UI.Base
 
             if (MessageBox.Show(SystemConstants.Messages.ConfirmDelete, "تأكيد الحذف", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes) return;
 
-            MainToolBar.Enabled = false;
+            SetToolbarsEnabled(false);
 
             using (SqlConnection conn = await DatabaseHelper.GetConnectionAsync())
             {
@@ -240,7 +244,10 @@ namespace AlRowad_ERP.UI.Base
                         DatabaseHelper.LogSystemError(ex.Message, ex.StackTrace, "UI_Delete");
                         MessageBox.Show($"{SystemConstants.Messages.DeleteFailed}\n{ex.Message}", "حماية النظام", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                    finally { MainToolBar.Enabled = true; }
+                    finally
+                    {
+                        SetToolbarsEnabled(true);
+                    }
                 }
             }
         }
@@ -249,7 +256,10 @@ namespace AlRowad_ERP.UI.Base
         #region إدارة الحالة والواجهة
         private void BaseEntryForm_Load(object sender, EventArgs e)
         {
-            MainToolBar = this.Controls.OfType<AlRowadToolBar>().FirstOrDefault();
+            // 🌟 اكتشاف ذكي عميق للشريطين حتى لو كانا داخل حاويات (Panels/GroupBoxes)
+            MainToolBar = FindControlRecursive<AlRowadToolBar>(this);
+            SettingsToolBar = FindControlRecursive<AlRowadSettingsToolBar>(this);
+
             if (MainToolBar != null)
             {
                 MainToolBar.btn_New.Click += (s, ev) => OnNew();
@@ -260,6 +270,14 @@ namespace AlRowad_ERP.UI.Base
                 MainToolBar.btn_Search.Click += (s, ev) => OnSearch();
                 MainToolBar.btn_Close.Click += (s, ev) => OnClose();
                 MainToolBar.btn_AddFrom.Click += (s, ev) => OnAddFrom();
+            }
+
+            if (SettingsToolBar != null)
+            {
+                SettingsToolBar.btn_Edit.Click += (s, ev) => OnEdit();
+                SettingsToolBar.btn_Save.Click += (s, ev) => OnSave();
+                SettingsToolBar.btn_Cancel.Click += (s, ev) => OnCancel();
+                SettingsToolBar.btn_Close.Click += (s, ev) => OnClose();
             }
 
             BuildControlsCache(this);
@@ -312,7 +330,32 @@ namespace AlRowad_ERP.UI.Base
                 }
             }
 
+            if (SettingsToolBar != null)
+            {
+                SettingsToolBar.UpdateButtonsState(mode);
+            }
+
             LockControls(this, isFieldsReadOnly);
+        }
+
+        private void SetToolbarsEnabled(bool enabled)
+        {
+            if (MainToolBar != null) MainToolBar.Enabled = enabled;
+            if (SettingsToolBar != null) SettingsToolBar.Enabled = enabled;
+        }
+
+        private T FindControlRecursive<T>(Control parent) where T : Control
+        {
+            foreach (Control c in parent.Controls)
+            {
+                if (c is T match) return match;
+                if (c.HasChildren)
+                {
+                    var found = FindControlRecursive<T>(c);
+                    if (found != null) return found;
+                }
+            }
+            return null;
         }
 
         protected virtual void LockControls(Control parent, bool isReadOnly)
@@ -322,7 +365,7 @@ namespace AlRowad_ERP.UI.Base
 
             foreach (Control c in parent.Controls)
             {
-                if (c == MainToolBar) continue;
+                if (c == MainToolBar || c == SettingsToolBar) continue;
                 if (c is TextBox txt)
                 {
                     txt.ReadOnly = finalReadOnlyStatus;
@@ -419,14 +462,12 @@ namespace AlRowad_ERP.UI.Base
             return true;
         }
 
-        // تم نقل دالة ClearForm إلى الأب BaseForm لتجنب التكرار (ClearFormFields)
-
         protected virtual void CaptureOriginalValues(Control parent)
         {
             if (parent == this) _originalValues.Clear();
             foreach (Control c in parent.Controls)
             {
-                if (c == MainToolBar) continue;
+                if (c == MainToolBar || c == SettingsToolBar) continue;
                 if (c is TextBox txt) _originalValues[c.Name] = txt.Text;
                 else if (c is CheckBox chk) _originalValues[c.Name] = chk.Checked;
                 else if (c is ComboBox cmb) _originalValues[c.Name] = cmb.SelectedIndex;
@@ -439,7 +480,7 @@ namespace AlRowad_ERP.UI.Base
         {
             foreach (Control c in parent.Controls)
             {
-                if (c == MainToolBar) continue;
+                if (c == MainToolBar || c == SettingsToolBar) continue;
                 if (_originalValues.ContainsKey(c.Name))
                 {
                     if (c is TextBox txt) txt.Text = _originalValues[c.Name]?.ToString();
@@ -467,46 +508,30 @@ namespace AlRowad_ERP.UI.Base
         #region إدارة الاختصارات المركزية
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            // الدستور: الفصل المعماري - تفويض إدارة الاختصارات للمحرك المستقل
             if (AlRowad_ERP.UI.Helpers.ShortcutManager.HandleCommandKey(this, MainToolBar, ref msg, keyData))
             {
-                return true; // تم تنفيذ الاختصار بنجاح
+                return true;
             }
 
-            return base.ProcessCmdKey(ref msg, keyData); // تمرير المفتاح لنظام الويندوز الافتراضي
+            return base.ProcessCmdKey(ref msg, keyData);
         }
         #endregion
 
         #endregion
-        #region التغذية الراجعة المرئية (Async UI Feedback)
 
-        /// <summary>
-        /// تفعيل وضع التحميل لمنع التداخل البصري وإعلام المستخدم بوجود معالجة في الخلفية
-        /// </summary>
+        #region التغذية الراجعة المرئية (Async UI Feedback)
         protected virtual void ShowLoading()
         {
-            // تحويل مؤشر الماوس إلى وضع الانتظار
             this.UseWaitCursor = true;
-
-            // يمكن لاحقاً ربط هذه الدالة بشريط تقدم (ProgressBar) في شريط الحالة السفلي (StatusBar) إن وجد
-
-            // إجبار الواجهة على التحديث اللحظي لضمان ظهور التغيير فوراً
             Application.DoEvents();
         }
 
-        /// <summary>
-        /// إنهاء وضع التحميل وإعادة الشاشة لحالتها الطبيعية
-        /// </summary>
         protected virtual void HideLoading()
         {
-            // إعادة مؤشر الماوس للحالة الطبيعية
             this.UseWaitCursor = false;
         }
-
         #endregion
 
-
-        // 2. دالة تسجيل الأخطاء المركزية
         protected void LogError(Exception ex)
         {
             MessageBox.Show(ex.Message, "خطأ في النظام", MessageBoxButtons.OK, MessageBoxIcon.Error);

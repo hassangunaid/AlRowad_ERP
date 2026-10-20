@@ -201,10 +201,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AlRowad_ERPDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Core\CurrencyTafqeetHelper.cs" />
     <Compile Include="Data\AgentModules\DriverRepository.cs" />
     <Compile Include="Data\AgentModules\ShipmentReceiptRepository.cs" />
     <Compile Include="Data\AgentModules\AccountRepository.cs" />
     <Compile Include="Data\CompanyRepository.cs" />
+    <Compile Include="Infrastructure\Database\DatabasePatcher.cs" />
+    <Compile Include="Infrastructure\Services\AutoBackupScheduler.cs" />
+    <Compile Include="Infrastructure\Services\BackupEngine.cs" />
     <Compile Include="Models\CompanyInfoDto.cs" />
     <Compile Include="Reports\Data\ReportAccountRepository.cs" />
     <Compile Include="Data\SupplierRepository.cs" />
@@ -218,6 +222,12 @@
     <Compile Include="Models\JournalHeaderModel.cs" />
     <Compile Include="Models\CustomerCurrencyDto.cs" />
     <Compile Include="Models\Reports\AccountStatementDto.cs" />
+    <Compile Include="UI\Controls\AlRowadSettingsToolBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\AlRowadSettingsToolBar.Designer.cs">
+      <DependentUpon>AlRowadSettingsToolBar.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Forms\Frm_CompanyInfo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -354,6 +364,12 @@
     <Compile Include="UI\Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Forms\paymentvoucher.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\Paymentvoucher.Designer.cs">
+      <DependentUpon>paymentvoucher.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Forms\Payment_Methods.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -414,6 +430,12 @@
     <Compile Include="Reports\Views\Frm_AccountStatement.Designer.cs">
       <DependentUpon>Frm_AccountStatement.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Settings\FrmBackupSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Settings\FrmBackupSettings.Designer.cs">
+      <DependentUpon>FrmBackupSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\SystemSettings\Frm_ThemeManager.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -465,6 +487,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Templates\Rpt_AccountStatement.rdlc" />
     <EmbeddedResource Include="Reports\Templates\Master Report Template.rdlc" />
+    <EmbeddedResource Include="UI\Controls\AlRowadSettingsToolBar.resx">
+      <DependentUpon>AlRowadSettingsToolBar.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\Frm_CompanyInfo.resx">
       <DependentUpon>Frm_CompanyInfo.cs</DependentUpon>
     </EmbeddedResource>
@@ -529,6 +554,9 @@
       <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\PaymentVoucher.resx">
+      <DependentUpon>paymentvoucher.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\Payment_Methods.resx">
       <DependentUpon>Payment_Methods.cs</DependentUpon>
     </EmbeddedResource>
@@ -546,6 +574,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Views\Frm_AccountStatement.resx">
       <DependentUpon>Frm_AccountStatement.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Settings\FrmBackupSettings.resx">
+      <DependentUpon>FrmBackupSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\SystemSettings\Frm_ThemeManager.resx">
       <DependentUpon>Frm_ThemeManager.cs</DependentUpon>

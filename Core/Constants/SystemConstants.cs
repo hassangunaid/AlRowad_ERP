@@ -45,19 +45,43 @@ namespace AlRowad_ERP.Core.Constants
             public const string Shipment_Receipt_Headers = "Shipment_Receipt_Headers";
             public const string Shipment_Receipt_Details = "Shipment_Receipt_Details";
         }
+
         public static class StoredProcedures
         {
             public const string GetAccountStatement = "GetAccountStatement";
             public const string GetUnpostedAccountStatement = "GetUnpostedAccountStatement";
         }
 
+        public static class AuditFields
+        {
+            public const string CreatedBy = "Created_By";
+            public const string CreatedAt = "Created_At";
+            public const string UpdatedBy = "Updated_By";
+            public const string UpdatedAt = "Updated_At";
+            public const string DeletedBy = "Deleted_By";
+            public const string DeletedAt = "Deleted_At";
+            public const string IsDeleted = "Is_Deleted";
+            public const string IsActive = "Is_Active";
+            public const string IsPosted = "Is_Posted";
+            public const string PostedBy = "Posted_By";
+            public const string PostedAt = "Posted_At";
+            public const string RowVersion = "Row_Version";
+        }
+
+        public static class Formatting
+        {
+            public const string DefaultCurrencyFormat = "#,##0.00";
+            public const string DefaultDateFormat = "yyyy/MM/dd";
+        }
 
         public static class Columns
-
         {
+            public const string Id = "ID";
+            public const string Name = "Name";
+            public const string Code = "Code";
             public const string Is_Farmer = "Is_Farmer";
-            // --- الثوابت العامة المشتركة ---
             public const string Notes = "Notes";
+
             // الحقول العامة والرقابية
             public const string Is_Closed = "Is_Closed";
             public const string Is_Deleted = "Is_Deleted";
@@ -80,6 +104,7 @@ namespace AlRowad_ERP.Core.Constants
             public const string Default_Price = "Default_Price";
             public const string Min_Sale_Price = "Min_Sale_Price";
             public const string Reorder_Level = "Reorder_Level";
+
             // حقول ادارة نظام الوكلاء
             public const string Agency_ID = "Agency_ID";
             public const string Agency_Name = "Agency_Name";
@@ -90,15 +115,15 @@ namespace AlRowad_ERP.Core.Constants
             public const string Handling_Payable_Account_ID = "Handling_Payable_Account_ID";
             public const string Acc_ID = "Acc_ID";
             public const string Acc_Name = "Acc_Name";
+            public const bool Is_Stopped = false;
 
-            public static bool Is_Stopped { get; internal set; }
-            //     حقول بيانات الموردين والمزارعين
+            // حقول بيانات الموردين والمزارعين
             public const string Supp_ID = "Supp_ID";
             public const string Supp_Name = "Supp_Name";
             public const string Supp_Phone = "Supp_Phone";
             public const string Supp_Address = "Supp_Address";
 
-            // --- ثوابت إعدادات الوكالة ---
+            // ثوابت إعدادات الوكالة
             public const string Agency_Phone1 = "Agency_Phone1";
             public const string Agency_Phone2 = "Agency_Phone2";
             public const string Agency_Address = "Agency_Address";
@@ -106,6 +131,7 @@ namespace AlRowad_ERP.Core.Constants
             public const string Eng_Agency_Name = "Eng_Agency_Name";
             public const string Eng_Agency_Notes = "Eng_Agency_Notes";
             public const string Eng_Agency_Address = "Eng_Agency_Address";
+
             // السياسات والنسب
             public const string Farmer_Commission_Percent = "Farmer_Commission_Percent";
             public const string Buyer_Fee_Per_Package = "Buyer_Fee_Per_Package";
@@ -116,11 +142,13 @@ namespace AlRowad_ERP.Core.Constants
             public const string Acc_Farmer_Commission = "Acc_Farmer_Commission";
             public const string Acc_Buyer_Fee = "Acc_Buyer_Fee";
             public const string Acc_Additional_Discount = "Acc_Additional_Discount";
+
             // حقول السائقين
             public const string Driver_ID = "Driver_ID";
             public const string License_Number = "License_Number";
             public const string Vehicle_Type = "Vehicle_Type";
             public const string Phone_Number = "Phone_Number";
+
             // 1. حقول رأس الحمولة (Shipment Headers)
             public const string Shipment_ID = "Shipment_ID";
             public const string Shipment_Code = "Shipment_Code";
@@ -134,7 +162,7 @@ namespace AlRowad_ERP.Core.Constants
 
             // 2. حقول تفاصيل الحمولة (Shipment Details)
             public const string Detail_ID = "Detail_ID";
-            public const string Farmer_ID = "Farmer_ID"; // مرتبط بجدول الموردين (Is_Farmer = 1)
+            public const string Farmer_ID = "Farmer_ID";
             public const string Estimated_Price = "Estimated_Price";
             public const string Estimated_Total = "Estimated_Total";
             public const string Actual_Price = "Actual_Price";
@@ -144,23 +172,12 @@ namespace AlRowad_ERP.Core.Constants
             public const string Net_Amount = "Net_Amount";
             public const string Is_Invoiced_To_Farmer = "Is_Invoiced_To_Farmer";
             public const string Estimated_Discount = "Estimated_Discount";
-           
         }
+
         public static class Statuses
         {
             public const string PeriodOpen = "Open";
             public const string PeriodClosed = "Closed";
-        }
-
-        public static class AuditFields
-        {
-            public const string CreatedBy = "Created_By";
-            public const string CreatedAt = "Created_At";
-            public const string UpdatedBy = "Updated_By";
-            public const string UpdatedAt = "Updated_At";
-            public const string IsDeleted = "Is_Deleted";
-            public const string DeletedBy = "Deleted_By";
-            public const string DeletedAt = "Deleted_At";
         }
 
         public static class Descriptions
@@ -171,6 +188,7 @@ namespace AlRowad_ERP.Core.Constants
         public static class Accounts
         {
             public const int SalesRevenue = 4101;
+            public const string GeneralLedger = "GL";
         }
     }
 }

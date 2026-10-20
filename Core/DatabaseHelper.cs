@@ -15,6 +15,7 @@ namespace AlRowad_ERP.Core
             return @"Server=DESKTOP-U2PUV95\SQLEXPRESS;Database=AlRowad_ERP;Trusted_Connection=True;Connect Timeout=60;Pooling=True;Max Pool Size=200;";
         }
 
+
         public static SqlConnection GetConnection()
         {
             return new SqlConnection(GetConnectionString());

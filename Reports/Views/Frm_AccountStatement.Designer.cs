@@ -42,6 +42,8 @@
             this.dgvStatement = new AlRowad_ERP.UI.Controls.AlRowadDataGridView();
             this.btnPrintOfficial = new System.Windows.Forms.Button();
             this.btnPrintGrid = new System.Windows.Forms.Button();
+            this.cmbCurrency = new System.Windows.Forms.ComboBox();
+            this.العملة = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvStatement)).BeginInit();
             this.SuspendLayout();
             // 
@@ -175,11 +177,30 @@
             this.btnPrintGrid.Text = "طباعة الشبكة";
             this.btnPrintGrid.UseVisualStyleBackColor = true;
             // 
+            // cmbCurrency
+            // 
+            this.cmbCurrency.FormattingEnabled = true;
+            this.cmbCurrency.Location = new System.Drawing.Point(170, 126);
+            this.cmbCurrency.Name = "cmbCurrency";
+            this.cmbCurrency.Size = new System.Drawing.Size(196, 33);
+            this.cmbCurrency.TabIndex = 12;
+            // 
+            // العملة
+            // 
+            this.العملة.AutoSize = true;
+            this.العملة.Location = new System.Drawing.Point(372, 129);
+            this.العملة.Name = "العملة";
+            this.العملة.Size = new System.Drawing.Size(48, 25);
+            this.العملة.TabIndex = 13;
+            this.العملة.Text = "العملة";
+            // 
             // Frm_AccountStatement
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1578, 1050);
+            this.Controls.Add(this.العملة);
+            this.Controls.Add(this.cmbCurrency);
             this.Controls.Add(this.btnPrintGrid);
             this.Controls.Add(this.btnPrintOfficial);
             this.Controls.Add(this.dgvStatement);
@@ -216,5 +237,7 @@
         private Controls.AlRowadDataGridView dgvStatement;
         private System.Windows.Forms.Button btnPrintOfficial;
         private System.Windows.Forms.Button btnPrintGrid;
+        private System.Windows.Forms.ComboBox cmbCurrency;
+        private System.Windows.Forms.Label العملة;
     }
 }

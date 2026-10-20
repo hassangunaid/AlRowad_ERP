@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Windows.Forms;
+using AlRowad_ERP.Core;
+using AlRowad_ERP.Core.Constants; // الدستور: استدعاء الثوابت المركزية لمنع النصوص الثابتة
 using AlRowad_ERP.Core.Helpers;
 using AlRowad_ERP.Forms;
-using AlRowad_ERP.Core.Constants; // الدستور: استدعاء الثوابت المركزية لمنع النصوص الثابتة
+using AlRowad_ERP.Infrastructure.Database;
+using AlRowad_ERP.Infrastructure.Services;
 
 namespace AlRowad_ERP.Core
 {
@@ -38,28 +41,54 @@ namespace AlRowad_ERP.Core
             }
 
             // =========================================================
-            // 3. بوابة المصادقة (Security Gate)
+            // 3. فحص ومطابقة سلامة قاعدة البيانات تلقائياً (Schema Integrity Check)
+            // =========================================================
+            try
+            {
+                // فحص وإنشاء الجداول والحقول الرقابية النواقص بصمت قبل إقلاع المنظومة
+                DatabasePatcher.EnsureSchemaIntegrityAsync().GetAwaiter().GetResult();
+            }
+            catch (Exception ex)
+            {
+                DatabaseHelper.LogSystemError(ex.Message, ex.StackTrace, "Schema_Patcher_Startup");
+                MessageBox.Show(
+                    $"تعذر إتمام عملية الفحص التلقائي لسلامة قاعدة البيانات:\n{ex.Message}",
+                    SystemConstants.Messages.SystemProtectionTitle,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return;
+            }
+
+            // =========================================================
+            // 4. بوابة المصادقة (Security Gate)
             // =========================================================
             using (var loginForm = new LongUesr())
             {
                 if (loginForm.ShowDialog() == DialogResult.OK)
                 {
-                    // 4. بناء الشاشة الرئيسية وإدارتها داخل بيئة آمنة
+                    // =========================================================
+                    // 5. إطلاق مجدول النسخ الاحتياطي التلقائي في الخلفية
+                    // =========================================================
+                    AutoBackupScheduler.Start();
+
+                    // 6. بناء الشاشة الرئيسية وإدارتها داخل بيئة آمنة
                     MainForm frmMain = new MainForm();
                     try
                     {
-                        // 5. تفعيل الرادار العائم (FormMonitor)
+                        // 7. تفعيل الرادار العائم (FormMonitor)
                         FormMonitor.راقب_الشاشة(frmMain);
 
-                        // 6. عرض الشاشة الرئيسية بشكل منفصل
+                        // 8. عرض الشاشة الرئيسية بشكل منفصل
                         frmMain.Show();
 
-                        // 7. تشغيل التطبيق في الذاكرة الحرة ليعمل محرك الترصيد بحرية
+                        // 9. تشغيل التطبيق في الذاكرة الحرة ليعمل محرك الترصيد بحرية
                         Application.Run();
                     }
                     finally
                     {
-                        // هندسة الذاكرة: ضمان تفريغ موارد الشاشة بالكامل عند الخروج
+                        // هندسة الذاكرة: إيقاف مجدول الخلفية وتفريغ الموارد بنظافة تامة
+                        AutoBackupScheduler.Stop();
+
                         if (frmMain != null && !frmMain.IsDisposed)
                         {
                             frmMain.Dispose();

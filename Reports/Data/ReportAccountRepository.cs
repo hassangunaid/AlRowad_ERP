@@ -12,15 +12,17 @@ using System.Threading.Tasks;
 
 namespace AlRowad_ERP.Data.Reports
 {
-    /// <summary>
-    /// طبقة بيانات تقارير الحسابات - متوافقة تماماً مع دستور الرواد ERP
-    /// </summary>
     public class ReportAccountRepository
     {
         /// <summary>
-        /// جلب كشف الحساب غير المتزامن مع تضمين ترويسة الحساب (رقم واسم الحساب) لكل سجل
+        /// جلب كشف الحساب بدعم تعدد العملات (عملة محددة أو كافة العملات) مع تفقيط كل عملة باسمها
         /// </summary>
-        public async Task<List<AccountStatementDto>> GetStatementAsync(string accountId, DateTime fromDate, DateTime toDate, bool includeUnposted)
+        public async Task<List<AccountStatementDto>> GetStatementAsync(
+            string accountId,
+            DateTime fromDate,
+            DateTime toDate,
+            bool includeUnposted,
+            int? currencyId = null)
         {
             var statementList = new List<AccountStatementDto>();
 
@@ -29,7 +31,7 @@ namespace AlRowad_ERP.Data.Reports
                 if (connection.State != ConnectionState.Open)
                     connection.Open();
 
-                // 1. جلب اسم ورقم الحساب أولاً لضمان توفرها في الترويسة (Clean Architecture)
+                // 1. جلب بيانات ترويسة الحساب
                 string accountInfoQuery = "SELECT Acc_ID, Acc_Name FROM Accounts WHERE Acc_ID = @AccID";
                 var accountInfo = await connection.QueryFirstOrDefaultAsync<dynamic>(
                     accountInfoQuery,
@@ -38,7 +40,7 @@ namespace AlRowad_ERP.Data.Reports
                 string accIdVal = accountInfo?.Acc_ID ?? accountId;
                 string accNameVal = accountInfo?.Acc_Name ?? string.Empty;
 
-                // 2. تحديد الإجراء المخزن بمنع الـ Magic Strings عبر SystemConstants
+                // 2. تحديد الإجراء المخزن عبر SystemConstants (منع Magic Strings)
                 string spName = includeUnposted
                     ? SystemConstants.StoredProcedures.GetUnpostedAccountStatement
                     : SystemConstants.StoredProcedures.GetAccountStatement;
@@ -48,7 +50,10 @@ namespace AlRowad_ERP.Data.Reports
                 parameters.Add("@FromDate", fromDate, DbType.DateTime);
                 parameters.Add("@ToDate", toDate, DbType.DateTime);
 
-                // 3. جلب الحركات المحاسبية غير المتزامن للحفاظ على سلاسة واجهة المستخدم (المادة 3 من الدستور)
+                // تمرير رقم العملة (NULL يجلب كافة العملات في الإجراء المخزن)
+                parameters.Add("@CurrencyID", (currencyId.HasValue && currencyId.Value > 0) ? currencyId.Value : (int?)null, DbType.Int32);
+
+                // 3. تنفيذ الاستعلام غير المتزامن
                 var result = await connection.QueryAsync<AccountStatementDto>(
                     spName,
                     parameters,
@@ -58,11 +63,47 @@ namespace AlRowad_ERP.Data.Reports
                 {
                     statementList = result.ToList();
 
-                    // حقن رقم واسم الحساب في كل سطر ليتطابق مع حقول التقرير (RDLC Fields)
-                    foreach (var item in statementList)
+                    // 4. التجميع المحاسبي حسب العملة (يمنع خلط عملات مختلفة في إجمالي واحد)
+                    var currencyGroups = statementList.GroupBy(x => new { x.Currency_ID, x.Currency_Name });
+
+                    foreach (var group in currencyGroups)
                     {
-                        item.AccountId = accIdVal;
-                        item.AccountName = accNameVal;
+                        string mainCurrName = !string.IsNullOrWhiteSpace(group.Key.Currency_Name)
+                            ? group.Key.Currency_Name
+                            : "ريال";
+
+                        string subCurrName = group.FirstOrDefault()?.Sub_Currency_Name;
+                        if (string.IsNullOrWhiteSpace(subCurrName))
+                            subCurrName = GetDefaultSubCurrency(mainCurrName);
+
+                        decimal grpDebit = group.Sum(x => x.Debit);
+                        decimal grpCredit = group.Sum(x => x.Credit);
+                        decimal netBalance = grpDebit - grpCredit;
+                        decimal absBalance = Math.Abs(netBalance);
+
+                        string balanceTypeText = netBalance > 0
+                            ? "مدين - عليكم"
+                            : (netBalance < 0 ? "دائن - لكم" : "متزن");
+
+                        // 🌟 تفقيط المبلغ مدمجاً باسم العملة الخاصة بهذه المجموعة
+                        string amountInWords = CurrencyTafqeetHelper.ConvertToWords(absBalance, mainCurrName, subCurrName);
+
+                        // إعادة ضبط الرصيد التراكمي وحقن الخلاصة لكل عملة بشكل مستقل
+                        decimal runningBal = 0;
+                        foreach (var item in group)
+                        {
+                            runningBal += (item.Debit - item.Credit);
+                            item.Running_Balance = runningBal;
+
+                            item.AccountId = accIdVal;
+                            item.AccountName = accNameVal;
+                            item.Currency_Name = mainCurrName;
+                            item.Total_Debit = grpDebit;
+                            item.Total_Credit = grpCredit;
+                            item.Final_Balance = absBalance;
+                            item.Balance_Type_Text = balanceTypeText;
+                            item.Amount_In_Words = amountInWords;
+                        }
                     }
                 }
             }
@@ -71,16 +112,30 @@ namespace AlRowad_ERP.Data.Reports
         }
 
         /// <summary>
-        /// استعلام دليل الحسابات لشاشة البحث (F9)
+        /// جلب قائمة العملات لربطها بأداة الاختيار (ComboBox) في واجهة كشف الحساب
         /// </summary>
+        public async Task<DataTable> GetCurrenciesLookupAsync()
+        {
+            string query = @"
+                SELECT 0 AS Currency_ID, N'--- كافة العملات ---' AS Currency_Name
+                UNION ALL
+                SELECT Currency_ID, Currency_Name FROM Currencies WHERE Is_Active = 1";
+
+            return await Task.Run(() => DatabaseHelper.ExecuteQuery(query, null));
+        }
+
+        private string GetDefaultSubCurrency(string mainCurrency)
+        {
+            if (mainCurrency.Contains("دولار")) return "سنت";
+            if (mainCurrency.Contains("سعودي")) return "هللة";
+            return "فلس";
+        }
+
         public string GetAccountsLookupQuery()
         {
             return "SELECT Acc_ID AS [رقم الحساب], Acc_Name AS [اسم الحساب] FROM Accounts";
         }
 
-        /// <summary>
-        /// جلب تاريخ بداية الفترة المالية المفتوحة الحالية
-        /// </summary>
         public DateTime GetCurrentPeriodStartDate()
         {
             string query = "SELECT TOP 1 Start_Date FROM Financial_Periods WHERE Is_Closed = 0 AND @CurrentDate BETWEEN Start_Date AND End_Date";
@@ -92,7 +147,6 @@ namespace AlRowad_ERP.Data.Reports
             if (startDateObj != null && startDateObj != DBNull.Value)
                 return Convert.ToDateTime(startDateObj);
 
-            // قيمة افتراضية احتياطية في حال عدم وجود فترة معرفة
             return new DateTime(DateTime.Now.Year, 1, 1);
         }
     }
