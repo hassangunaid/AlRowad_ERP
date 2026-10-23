@@ -32,7 +32,7 @@
             System.Windows.Forms.Label method_NameLabel;
             this.method_IDTextBox = new System.Windows.Forms.TextBox();
             this.method_NameTextBox = new System.Windows.Forms.TextBox();
-            this.alRowadToolBar1 = new AlRowad_ERP.Controls.AlRowadToolBar();
+            this.alRowadToolBar1 = new AlRowad_ERP.UI.Controls.AlRowadToolBar();
             method_IDLabel = new System.Windows.Forms.Label();
             method_NameLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
@@ -100,6 +100,6 @@
         #endregion
         private System.Windows.Forms.TextBox method_IDTextBox;
         private System.Windows.Forms.TextBox method_NameTextBox;
-        private Controls.AlRowadToolBar alRowadToolBar1;
+        private AlRowad_ERP.UI.Controls.AlRowadToolBar alRowadToolBar1;
     }
 }

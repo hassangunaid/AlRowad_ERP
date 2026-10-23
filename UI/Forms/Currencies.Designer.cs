@@ -44,7 +44,7 @@
             this.exchange_RateTextBox = new System.Windows.Forms.TextBox();
             this.cur_SymbolTextBox = new System.Windows.Forms.TextBox();
             this.is_ActiveCheckBox = new System.Windows.Forms.CheckBox();
-            this.alRowadToolBar1 = new AlRowad_ERP.Controls.AlRowadToolBar();
+            this.alRowadToolBar1 = new AlRowad_ERP.UI.Controls.AlRowadToolBar();
             this.iconToolStripButton2 = new FontAwesome.Sharp.IconToolStripButton();
             this.max_RateTextBox = new System.Windows.Forms.TextBox();
             this.min_RateTextBox = new System.Windows.Forms.TextBox();
@@ -438,7 +438,7 @@
         private System.Windows.Forms.TextBox exchange_RateTextBox;
         private System.Windows.Forms.TextBox cur_SymbolTextBox;
         private System.Windows.Forms.CheckBox is_ActiveCheckBox;
-        private Controls.AlRowadToolBar alRowadToolBar1;
+        private AlRowad_ERP.UI.Controls.AlRowadToolBar alRowadToolBar1;
         private FontAwesome.Sharp.IconToolStripButton iconToolStripButton2;
         private System.Windows.Forms.TextBox max_RateTextBox;
         private System.Windows.Forms.TextBox min_RateTextBox;

@@ -41,7 +41,7 @@
             this.item_IDTextBox = new System.Windows.Forms.TextBox();
             this.store_IDTextBox = new System.Windows.Forms.TextBox();
             this.quantityTextBox = new System.Windows.Forms.TextBox();
-            this.alRowadToolBar1 = new AlRowad_ERP.Controls.AlRowadToolBar();
+            this.alRowadToolBar1 = new AlRowad_ERP.UI.Controls.AlRowadToolBar();
             balance_IDLabel = new System.Windows.Forms.Label();
             item_IDLabel = new System.Windows.Forms.Label();
             store_IDLabel = new System.Windows.Forms.Label();
@@ -201,6 +201,6 @@
         private System.Windows.Forms.TextBox item_IDTextBox;
         private System.Windows.Forms.TextBox store_IDTextBox;
         private System.Windows.Forms.TextBox quantityTextBox;
-        private Controls.AlRowadToolBar alRowadToolBar1;
+        private AlRowad_ERP.UI.Controls.AlRowadToolBar alRowadToolBar1;
     }
 }

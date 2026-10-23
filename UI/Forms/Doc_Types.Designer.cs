@@ -34,7 +34,7 @@
             this.doc_Type_IDTextBox = new System.Windows.Forms.TextBox();
             this.doc_NameTextBox = new System.Windows.Forms.TextBox();
             this.module_NameTextBox = new System.Windows.Forms.TextBox();
-            this.alRowadToolBar1 = new AlRowad_ERP.Controls.AlRowadToolBar();
+            this.alRowadToolBar1 = new AlRowad_ERP.UI.Controls.AlRowadToolBar();
             doc_Type_IDLabel = new System.Windows.Forms.Label();
             doc_NameLabel = new System.Windows.Forms.Label();
             module_NameLabel = new System.Windows.Forms.Label();
@@ -122,6 +122,6 @@
         private System.Windows.Forms.TextBox doc_Type_IDTextBox;
         private System.Windows.Forms.TextBox doc_NameTextBox;
         private System.Windows.Forms.TextBox module_NameTextBox;
-        private Controls.AlRowadToolBar alRowadToolBar1;
+        private AlRowad_ERP.UI.Controls.AlRowadToolBar alRowadToolBar1;
     }
 }

@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace AlRowad_ERP.Controls
+namespace AlRowad_ERP.UI.Controls
 {
     [ToolboxItem(true)]
     public partial class AlRowadToolBar : UserControl

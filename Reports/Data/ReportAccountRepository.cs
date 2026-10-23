@@ -112,18 +112,19 @@ namespace AlRowad_ERP.Data.Reports
         }
 
         /// <summary>
-        /// جلب قائمة العملات لربطها بأداة الاختيار (ComboBox) في واجهة كشف الحساب
+        /// جلب قائمة العملات من جدول Currencies (Cur_ID, Cur_Name) مع خيار كافة العملات
         /// </summary>
         public async Task<DataTable> GetCurrenciesLookupAsync()
         {
             string query = @"
-                SELECT 0 AS Currency_ID, N'--- كافة العملات ---' AS Currency_Name
-                UNION ALL
-                SELECT Currency_ID, Currency_Name FROM Currencies WHERE Is_Active = 1";
+        SELECT 0 AS Currency_ID, N'--- كافة العملات ---' AS Currency_Name
+        UNION ALL
+        SELECT Cur_ID AS Currency_ID, Cur_Name AS Currency_Name 
+        FROM dbo.Currencies 
+        WHERE Is_Active = 1 AND ISNULL(Is_Deleted, 0) = 0";
 
             return await Task.Run(() => DatabaseHelper.ExecuteQuery(query, null));
         }
-
         private string GetDefaultSubCurrency(string mainCurrency)
         {
             if (mainCurrency.Contains("دولار")) return "سنت";

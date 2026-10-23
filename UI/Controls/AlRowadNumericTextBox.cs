@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using AlRowad_ERP.Core;
 
-namespace AlRowad_ERP.Controls
+namespace AlRowad_ERP.UI.Controls
 {
     public class AlRowadNumericTextBox : TextBox
     {

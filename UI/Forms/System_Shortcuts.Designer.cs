@@ -39,7 +39,7 @@
             this.operation_NameTextBox = new System.Windows.Forms.TextBox();
             this.modifier_KeyTextBox = new System.Windows.Forms.TextBox();
             this.primary_KeyTextBox = new System.Windows.Forms.TextBox();
-            this.alRowadToolBar1 = new AlRowad_ERP.Controls.AlRowadToolBar();
+            this.alRowadToolBar1 = new AlRowad_ERP.UI.Controls.AlRowadToolBar();
             operation_NameLabel = new System.Windows.Forms.Label();
             modifier_KeyLabel = new System.Windows.Forms.Label();
             primary_KeyLabel = new System.Windows.Forms.Label();
@@ -178,6 +178,6 @@
         private System.Windows.Forms.TextBox operation_NameTextBox;
         private System.Windows.Forms.TextBox modifier_KeyTextBox;
         private System.Windows.Forms.TextBox primary_KeyTextBox;
-        private Controls.AlRowadToolBar alRowadToolBar1;
+        private AlRowad_ERP.UI.Controls.AlRowadToolBar alRowadToolBar1;
     }
 }

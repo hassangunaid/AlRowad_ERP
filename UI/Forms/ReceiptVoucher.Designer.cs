@@ -44,10 +44,10 @@
             this.split_RV = new System.Windows.Forms.SplitContainer();
             this.rbtnCash = new System.Windows.Forms.CheckBox();
             this.rbtnBank = new System.Windows.Forms.CheckBox();
-            this.voucher_DateDateTimePicker = new AlRowad_ERP.Controls.AlRowadDateTextBox();
-            this.amount_ForeignTextBox = new AlRowad_ERP.Controls.AlRowadNumericTextBox();
-            this.exchange_RateTextBox = new AlRowad_ERP.Controls.AlRowadNumericTextBox();
-            this.amountTextBox = new AlRowad_ERP.Controls.AlRowadNumericTextBox();
+            this.voucher_DateDateTimePicker = new AlRowad_ERP.UI.Controls.AlRowadDateTextBox();
+            this.amount_ForeignTextBox = new AlRowad_ERP.UI.Controls.AlRowadNumericTextBox();
+            this.exchange_RateTextBox = new AlRowad_ERP.UI.Controls.AlRowadNumericTextBox();
+            this.amountTextBox = new AlRowad_ERP.UI.Controls.AlRowadNumericTextBox();
             this.voucher_NoTextBox = new System.Windows.Forms.TextBox();
             this.doc_Type_IDComboBox = new System.Windows.Forms.ComboBox();
             this.box_Acc_IDComboBox = new System.Windows.Forms.ComboBox();
@@ -63,7 +63,7 @@
             this.Amount_Foreign = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Amount_Credit = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Cost_Center_ID = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.AlRowadToolBar = new AlRowad_ERP.Controls.AlRowadToolBar();
+            this.AlRowadToolBar = new AlRowad_ERP.UI.Controls.AlRowadToolBar();
             this.label1 = new System.Windows.Forms.Label();
             this.total_grid = new System.Windows.Forms.TextBox();
             this.txt_Difference = new System.Windows.Forms.TextBox();
@@ -569,7 +569,7 @@
         private System.Windows.Forms.ComboBox cur_IDComboBox;
         private System.Windows.Forms.TextBox notesTextBox;
         private System.Windows.Forms.CheckBox is_PostedCheckBox;
-        private Controls.AlRowadToolBar AlRowadToolBar;
+        private UI.Controls.AlRowadToolBar AlRowadToolBar;
         private System.Windows.Forms.DataGridView grid_Details;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox total_grid;
@@ -582,10 +582,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Amount_Credit;
         private System.Windows.Forms.DataGridViewComboBoxColumn Cost_Center_ID;
         private System.Windows.Forms.TextBox txt_Difference;
-        private Controls.AlRowadNumericTextBox amountTextBox;
-        private Controls.AlRowadNumericTextBox exchange_RateTextBox;
-        private Controls.AlRowadNumericTextBox amount_ForeignTextBox;
-        private Controls.AlRowadDateTextBox voucher_DateDateTimePicker;
+        private UI.Controls.AlRowadNumericTextBox amountTextBox;
+        private UI.Controls.AlRowadNumericTextBox exchange_RateTextBox;
+        private UI.Controls.AlRowadNumericTextBox amount_ForeignTextBox;
+        private UI.Controls.AlRowadDateTextBox voucher_DateDateTimePicker;
         private System.Windows.Forms.CheckBox rbtnCash;
         private System.Windows.Forms.CheckBox rbtnBank;
         private System.Windows.Forms.TextBox txt_UpdatedAt;

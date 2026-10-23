@@ -34,8 +34,8 @@
             System.Windows.Forms.Label label5;
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.dtp_Receipt_Date = new AlRowad_ERP.Controls.AlRowadDateTextBox();
-            this.alRowadToolBar1 = new AlRowad_ERP.Controls.AlRowadToolBar();
+            this.dtp_Receipt_Date = new AlRowad_ERP.UI.Controls.AlRowadDateTextBox();
+            this.alRowadToolBar1 = new AlRowad_ERP.UI.Controls.AlRowadToolBar();
             this.txt_Shipment_ID = new System.Windows.Forms.TextBox();
             this.رقم_المستند = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
@@ -54,8 +54,8 @@
             this.txt_Driver_Name = new System.Windows.Forms.TextBox();
             this.txt_Driver_Phone = new System.Windows.Forms.TextBox();
             this.txt_Total_Estimated = new System.Windows.Forms.TextBox();
-            this.AlRowadToolBar = new AlRowad_ERP.Controls.AlRowadToolBar();
-            this.object_5ff8d5d3_0f9b_4a07_9152_ce98e5e1eeef = new AlRowad_ERP.Controls.AlRowadToolBar();
+            this.AlRowadToolBar = new AlRowad_ERP.UI.Controls.AlRowadToolBar();
+            this.object_5ff8d5d3_0f9b_4a07_9152_ce98e5e1eeef = new AlRowad_ERP.UI.Controls.AlRowadToolBar();
             this.Col_Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col_Estimated_Total = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col_Estimated_Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -489,8 +489,8 @@
 
         #endregion
 
-        private Controls.AlRowadDateTextBox dtp_Receipt_Date;
-        private Controls.AlRowadToolBar alRowadToolBar1;
+        private UI.Controls.AlRowadDateTextBox dtp_Receipt_Date;
+        private UI.Controls.AlRowadToolBar alRowadToolBar1;
         private System.Windows.Forms.TextBox txt_Shipment_ID;
         private System.Windows.Forms.Label رقم_المستند;
         private System.Windows.Forms.ComboBox comboBox1;
@@ -510,8 +510,8 @@
         private System.Windows.Forms.TextBox txt_Driver_Name;
         private System.Windows.Forms.TextBox txt_Driver_Phone;
         private System.Windows.Forms.TextBox txt_Total_Estimated;
-        private Controls.AlRowadToolBar AlRowadToolBar;
-        private Controls.AlRowadToolBar object_5ff8d5d3_0f9b_4a07_9152_ce98e5e1eeef;
+        private UI.Controls.AlRowadToolBar AlRowadToolBar;
+        private UI.Controls.AlRowadToolBar object_5ff8d5d3_0f9b_4a07_9152_ce98e5e1eeef;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_Notes;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_Estimated_Total;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_Estimated_Price;

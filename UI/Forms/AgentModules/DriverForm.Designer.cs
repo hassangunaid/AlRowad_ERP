@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.alRowadToolBar1 = new AlRowad_ERP.Controls.AlRowadToolBar();
+            this.alRowadToolBar1 = new AlRowad_ERP.UI.Controls.AlRowadToolBar();
             this.txt_Driver_Name = new System.Windows.Forms.TextBox();
             this.txt_Notes = new System.Windows.Forms.TextBox();
             this.txt_Driver_ID = new System.Windows.Forms.TextBox();
@@ -177,7 +177,7 @@
 
         #endregion
 
-        private Controls.AlRowadToolBar alRowadToolBar1;
+        private AlRowad_ERP.UI. Controls.AlRowadToolBar alRowadToolBar1;
         private System.Windows.Forms.TextBox txt_Driver_Name;
         private System.Windows.Forms.TextBox txt_Notes;
         private System.Windows.Forms.TextBox txt_Driver_ID;

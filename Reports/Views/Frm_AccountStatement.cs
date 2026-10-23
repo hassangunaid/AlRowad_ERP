@@ -1,4 +1,5 @@
 ﻿using AlRowad_ERP.Core;
+using AlRowad_ERP.Core.Constants;
 using AlRowad_ERP.Data.Reports;
 using AlRowad_ERP.HelpForms;
 using AlRowad_ERP.Models.Reports;
@@ -10,7 +11,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Printing;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -18,27 +18,27 @@ using System.Windows.Forms;
 namespace AlRowad_ERP.UI.Reports
 {
     /// <summary>
-    /// شاشة تقرير كشف الحساب - متوافقة مع دستور الرواد ERP المعماري
+    /// شاشة تقرير كشف الحساب (متعدد العملات والتبويبات) - متوافقة مع دستور الرواد ERP المعماري
     /// </summary>
     public partial class Frm_AccountStatement : BaseEntryForm
     {
         private readonly ReportAccountRepository _reportRepo;
+        private TabControl _tabCurrencies;
+        private List<AccountStatementDto> _currentStatementData;
 
         public Frm_AccountStatement()
         {
             InitializeComponent();
             _reportRepo = new ReportAccountRepository();
 
-            // تهيئة الجريد ليكون مرناً للمستخدم
             if (dgvStatement != null)
             {
                 dgvStatement.AllowUserToOrderColumns = true;
                 dgvStatement.ReadOnly = true;
                 dgvStatement.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                SetupDataGridViewFormatting();
+                SetupDataGridViewFormatting(dgvStatement);
             }
 
-            // ربط أحداث الأزرار بأمان مع منع التكرار
             if (btnPrintGrid != null)
             {
                 btnPrintGrid.Click -= btnPrintGrid_Click;
@@ -50,9 +50,24 @@ namespace AlRowad_ERP.UI.Reports
                 btnPrintOfficial.Click += btnPrintOfficial_Click;
             }
         }
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+
+            // 🌟 نقل التركيز الفوري لحقل رقم الحساب وتجاوز TabIndex = 0 الخاص بزر التحديث
+            this.BeginInvoke(new Action(() =>
+            {
+                if (txtAccountId != null && txtAccountId.CanFocus)
+                {
+                    this.ActiveControl = txtAccountId;
+                    txtAccountId.Focus();
+                    txtAccountId.SelectAll();
+                }
+            }));
+        }
 
         // =========================================================
-        // 1. الالتزام بالمادة (1 و 2 و 3 و 5): تهيئة الشاشة وجلب الفترة عبر المستودع
+        // 1. الالتزام بالمادة (1 و 2 و 3 و 5): تهيئة الشاشة وجلب الفترة والعملات عبر المستودع
         // =========================================================
         protected override async void OnLoad(EventArgs e)
         {
@@ -61,15 +76,12 @@ namespace AlRowad_ERP.UI.Reports
             // فك القفل عن الشاشة عبر الدالة المركزية لأنها شاشة استعلام (تقرير)
             LockControls(this, false);
 
-            // تفعيل خيار "كشف حساب قبل الترحيل" وتاريخ اليوم افتراضياً
             if (chkIncludeUnposted != null) chkIncludeUnposted.Checked = true;
             if (dtpTo != null) dtpTo.DateValue = DateTime.Now.Date;
 
-            // حماية الحقول التي لا يجب الكتابة فيها يدوياً
             if (txtAccountName != null) txtAccountName.ReadOnly = true;
             if (dgvStatement != null) dgvStatement.ReadOnly = true;
 
-            // ربط أحداث الإدخال والبحث
             if (txtAccountId != null)
             {
                 txtAccountId.KeyDown -= txtAccountId_KeyDown;
@@ -83,7 +95,12 @@ namespace AlRowad_ERP.UI.Reports
                 btnLoadData.Click += btnLoadData_Click;
             }
 
-            // جلب تاريخ "بداية الفترة المالية" بشكل غير متزامن من المستودع (Repository) مباشرة
+            // جلب تاريخ بداية الفترة المالية وقائمة العملات بشكل غير متزامن
+            await InitializeLookupsAsync();
+        }
+
+        private async Task InitializeLookupsAsync()
+        {
             if (dtpFrom != null)
             {
                 try
@@ -95,6 +112,24 @@ namespace AlRowad_ERP.UI.Reports
                 {
                     DatabaseHelper.LogSystemError(ex.Message, ex.StackTrace, "Load_Financial_Period");
                     dtpFrom.DateValue = new DateTime(DateTime.Now.Year, 1, 1);
+                }
+            }
+
+            if (cmbCurrency != null)
+            {
+                try
+                {
+                    DataTable dtCurrencies = await _reportRepo.GetCurrenciesLookupAsync();
+                    cmbCurrency.DataSource = dtCurrencies;
+                    cmbCurrency.DisplayMember = "Currency_Name";
+                    cmbCurrency.ValueMember = "Currency_ID";
+                    cmbCurrency.DropDownStyle = ComboBoxStyle.DropDownList;
+                    cmbCurrency.RightToLeft = RightToLeft.Yes;
+                    cmbCurrency.SelectedValue = 0; // 0 = كافة العملات
+                }
+                catch (Exception ex)
+                {
+                    DatabaseHelper.LogSystemError(ex.Message, ex.StackTrace, "Load_Currencies_Lookup");
                 }
             }
         }
@@ -123,7 +158,6 @@ namespace AlRowad_ERP.UI.Reports
 
             if (currentActiveControl != null && currentActiveControl.Name == "txtAccountId")
             {
-                // استدعاء الاستعلام من طبقة البيانات (ReportAccountRepository)
                 string accountQuery = _reportRepo.GetAccountsLookupQuery();
 
                 using (var searchForm = new UniversalSearchForm("دليل الحسابات", accountQuery))
@@ -172,7 +206,7 @@ namespace AlRowad_ERP.UI.Reports
         }
 
         // =========================================================
-        // 5. الالتزام بالمادة (2 و 3): جلب البيانات غير المتزامن (Async/Await)
+        // 5. الالتزام بالمادة (2 و 3): جلب البيانات غير المتزامن وتقسيم التبويبات حسب العملة
         // =========================================================
         private async void btnLoadData_Click(object sender, EventArgs e)
         {
@@ -182,20 +216,30 @@ namespace AlRowad_ERP.UI.Reports
                 return;
             }
 
-            // قفل الشاشة مركزياً أثناء المعالجة
             LockControls(this, true);
             try
             {
-                var data = await _reportRepo.GetStatementAsync(
-                    txtAccountId.Text,
+                int? selectedCurrencyId = null;
+                if (cmbCurrency != null && cmbCurrency.SelectedValue != null &&
+                    int.TryParse(cmbCurrency.SelectedValue.ToString(), out int currId) && currId > 0)
+                {
+                    selectedCurrencyId = currId;
+                }
+
+                _currentStatementData = await _reportRepo.GetStatementAsync(
+                    txtAccountId.Text.Trim(),
                     dtpFrom.DateValue,
                     dtpTo.DateValue,
-                    chkIncludeUnposted.Checked);
+                    chkIncludeUnposted.Checked,
+                    selectedCurrencyId);
 
-                dgvStatement.DataSource = data;
-                SetupDataGridViewFormatting();
+                dgvStatement.DataSource = _currentStatementData;
+                SetupDataGridViewFormatting(dgvStatement);
 
-                if (data == null || data.Count == 0)
+                // تقسيم العرض في الشاشة إلى تبويبات مستقلة لكل عملة
+                BindStatementByCurrencyTabs(_currentStatementData);
+
+                if (_currentStatementData == null || _currentStatementData.Count == 0)
                 {
                     MessageBox.Show("لا توجد حركات مالية لهذا الحساب في الفترة المحددة.", "معلومة", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
@@ -207,7 +251,6 @@ namespace AlRowad_ERP.UI.Reports
             }
             finally
             {
-                // إعادة فتح الأدوات عبر الدالة المركزية بعد انتهاء الجلب
                 LockControls(this, false);
                 if (txtAccountName != null) txtAccountName.ReadOnly = true;
                 if (dgvStatement != null) dgvStatement.ReadOnly = true;
@@ -215,90 +258,215 @@ namespace AlRowad_ERP.UI.Reports
         }
 
         // =========================================================
-        // 6. إعداد وتنسيق الجريد (الترتيب المحاسبي الاحترافي، RTL، والاحتواء التلقائي)
+        // 6. محرك التبويبات الديناميكي (TabControl) لتقسيم الجريد حسب العملة
         // =========================================================
-        private void SetupDataGridViewFormatting()
+        private void BindStatementByCurrencyTabs(List<AccountStatementDto> allData)
         {
-            if (dgvStatement == null) return;
-
-            dgvStatement.RightToLeft = RightToLeft.Yes;
-            dgvStatement.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dgvStatement.RowsDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dgvStatement.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-
-            // أ. التاريخ
-            if (dgvStatement.Columns["Trans_Date"] != null)
+            if (_tabCurrencies == null)
             {
-                dgvStatement.Columns["Trans_Date"].HeaderText = "التاريخ";
-                dgvStatement.Columns["Trans_Date"].Width = 130;
-                dgvStatement.Columns["Trans_Date"].DefaultCellStyle.Format = "yyyy-MM-dd";
-                dgvStatement.Columns["Trans_Date"].DisplayIndex = 0;
+                _tabCurrencies = new TabControl
+                {
+                    Name = "tabCurrencies",
+                    Location = dgvStatement.Location,
+                    Size = dgvStatement.Size,
+                    Anchor = dgvStatement.Anchor,
+                    RightToLeft = RightToLeft.Yes,
+                    RightToLeftLayout = true,
+                    Font = new Font("Arial", 10, FontStyle.Bold)
+                };
+
+                Control parentContainer = dgvStatement.Parent ?? this;
+                parentContainer.Controls.Add(_tabCurrencies);
+                _tabCurrencies.BringToFront();
+
+                // إخفاء الجريد الأصلي واستخدامه كمرجع قياسي
+                dgvStatement.Visible = false;
             }
 
-            // ب. البيان
-            if (dgvStatement.Columns["Description"] != null)
+            _tabCurrencies.SuspendLayout();
+            _tabCurrencies.TabPages.Clear();
+
+            if (allData == null || allData.Count == 0)
             {
-                dgvStatement.Columns["Description"].HeaderText = "البيان";
-                dgvStatement.Columns["Description"].Width = 350;
-                dgvStatement.Columns["Description"].DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-                dgvStatement.Columns["Description"].DisplayIndex = 1;
+                _tabCurrencies.ResumeLayout();
+                return;
             }
 
-            // ج. رقم المستند
-            if (dgvStatement.Columns["Source_ID"] != null)
+            var currencyGroups = allData.GroupBy(x => new { x.Currency_ID, x.Currency_Name });
+
+            foreach (var group in currencyGroups)
             {
-                dgvStatement.Columns["Source_ID"].HeaderText = "رقم المستند";
-                dgvStatement.Columns["Source_ID"].Width = 100;
-                dgvStatement.Columns["Source_ID"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                dgvStatement.Columns["Source_ID"].Visible = true;
-                dgvStatement.Columns["Source_ID"].DisplayIndex = 2;
+                string currencyTitle = !string.IsNullOrWhiteSpace(group.Key.Currency_Name)
+                    ? group.Key.Currency_Name
+                    : "محلي";
+
+                var groupItems = group.ToList();
+                var summaryItem = groupItems.First();
+
+                TabPage tabPage = new TabPage($"{currencyTitle}  ({summaryItem.Final_Balance:#,##0.00} {summaryItem.Balance_Type_Text})")
+                {
+                    BackColor = Color.White,
+                    Padding = new Padding(4),
+                    Tag = currencyTitle
+                };
+
+                AlRowadDataGridView dgvCurrency = new AlRowadDataGridView
+                {
+                    Dock = DockStyle.Fill,
+                    ReadOnly = true,
+                    AllowUserToAddRows = false,
+                    AllowUserToDeleteRows = false,
+                    AllowUserToOrderColumns = true,
+                    BackgroundColor = dgvStatement.BackgroundColor,
+                    BorderStyle = dgvStatement.BorderStyle,
+                    CellBorderStyle = dgvStatement.CellBorderStyle,
+                    ColumnHeadersBorderStyle = dgvStatement.ColumnHeadersBorderStyle,
+                    ColumnHeadersDefaultCellStyle = dgvStatement.ColumnHeadersDefaultCellStyle.Clone(),
+                    EnableHeadersVisualStyles = false,
+                    RightToLeft = RightToLeft.Yes,
+                    RowHeadersVisible = false,
+                    SelectionMode = DataGridViewSelectionMode.FullRowSelect,
+                    DataSource = groupItems
+                };
+
+                SetupDataGridViewFormatting(dgvCurrency);
+
+                // شريط الخلاصة الختامية والتفقيط أسفل كل تبويب عملة
+                Panel pnlSummary = new Panel
+                {
+                    Dock = DockStyle.Bottom,
+                    Height = 40,
+                    BackColor = Color.AliceBlue,
+                    BorderStyle = BorderStyle.FixedSingle
+                };
+
+                Label lblSummary = new Label
+                {
+                    Dock = DockStyle.Fill,
+                    TextAlign = ContentAlignment.MiddleRight,
+                    Font = new Font("Arial", 10, FontStyle.Bold),
+                    ForeColor = Color.DarkBlue,
+                    Padding = new Padding(0, 0, 10, 0),
+                    Text = $"إجمالي المدين: {summaryItem.Total_Debit:#,##0.00}   |   " +
+                           $"إجمالي الدائن: {summaryItem.Total_Credit:#,##0.00}   |   " +
+                           $"الرصيد ({summaryItem.Balance_Type_Text}): {summaryItem.Final_Balance:#,##0.00} {currencyTitle} — {summaryItem.Amount_In_Words}"
+                };
+
+                pnlSummary.Controls.Add(lblSummary);
+                tabPage.Controls.Add(dgvCurrency);
+                tabPage.Controls.Add(pnlSummary);
+
+                _tabCurrencies.TabPages.Add(tabPage);
             }
 
-            // د. مدين
-            if (dgvStatement.Columns["Debit"] != null)
-            {
-                dgvStatement.Columns["Debit"].HeaderText = "مدين";
-                dgvStatement.Columns["Debit"].Width = 110;
-                dgvStatement.Columns["Debit"].DefaultCellStyle.Format = "N2";
-                dgvStatement.Columns["Debit"].DisplayIndex = 3;
-            }
-
-            // هـ. دائن
-            if (dgvStatement.Columns["Credit"] != null)
-            {
-                dgvStatement.Columns["Credit"].HeaderText = "دائن";
-                dgvStatement.Columns["Credit"].Width = 110;
-                dgvStatement.Columns["Credit"].DefaultCellStyle.Format = "N2";
-                dgvStatement.Columns["Credit"].DisplayIndex = 4;
-            }
-
-            // و. الرصيد التراكمي
-            if (dgvStatement.Columns["Running_Balance"] != null)
-            {
-                dgvStatement.Columns["Running_Balance"].HeaderText = "الرصيد التراكمي";
-                dgvStatement.Columns["Running_Balance"].Width = 140;
-                dgvStatement.Columns["Running_Balance"].DefaultCellStyle.Format = "N2";
-                dgvStatement.Columns["Running_Balance"].DisplayIndex = 5;
-            }
-
-            // ز. حالة القيد
-            if (dgvStatement.Columns["Post_Status"] != null)
-            {
-                dgvStatement.Columns["Post_Status"].HeaderText = "حالة القيد";
-                dgvStatement.Columns["Post_Status"].Width = 120;
-                dgvStatement.Columns["Post_Status"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                dgvStatement.Columns["Post_Status"].DisplayIndex = 6;
-            }
-
-            dgvStatement.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            _tabCurrencies.ResumeLayout();
         }
 
         // =========================================================
-        // 7. طباعة الشبكة المرنة (معاينة مخصصة، زوم، وترويسة الحساب) - كاملة
+        // 7. إعداد وتنسيق الجريد بالسياسة الموحدة للأرقام والتواريخ
+        // =========================================================
+        private void SetupDataGridViewFormatting(DataGridView grid)
+        {
+            if (grid == null || grid.Columns.Count == 0) return;
+
+            grid.RightToLeft = RightToLeft.Yes;
+            grid.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            grid.RowsDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+
+            string numberFormat = SystemConstants.Formatting.DefaultCurrencyFormat;
+
+            if (grid.Columns["Trans_Date"] != null)
+            {
+                grid.Columns["Trans_Date"].HeaderText = "التاريخ";
+                grid.Columns["Trans_Date"].Width = 120;
+                grid.Columns["Trans_Date"].DefaultCellStyle.Format = "yyyy-MM-dd";
+                grid.Columns["Trans_Date"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                grid.Columns["Trans_Date"].DisplayIndex = 0;
+            }
+
+            if (grid.Columns["Description"] != null)
+            {
+                grid.Columns["Description"].HeaderText = "البيان";
+                grid.Columns["Description"].Width = 350;
+                grid.Columns["Description"].DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+                grid.Columns["Description"].DisplayIndex = 1;
+            }
+
+            if (grid.Columns["Source_ID"] != null)
+            {
+                grid.Columns["Source_ID"].HeaderText = "رقم المستند";
+                grid.Columns["Source_ID"].Width = 100;
+                grid.Columns["Source_ID"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                grid.Columns["Source_ID"].DisplayIndex = 2;
+            }
+
+            if (grid.Columns["Debit"] != null)
+            {
+                grid.Columns["Debit"].HeaderText = "مدين";
+                grid.Columns["Debit"].Width = 120;
+                grid.Columns["Debit"].DefaultCellStyle.Format = numberFormat;
+                grid.Columns["Debit"].DisplayIndex = 3;
+            }
+
+            if (grid.Columns["Credit"] != null)
+            {
+                grid.Columns["Credit"].HeaderText = "دائن";
+                grid.Columns["Credit"].Width = 120;
+                grid.Columns["Credit"].DefaultCellStyle.Format = numberFormat;
+                grid.Columns["Credit"].DisplayIndex = 4;
+            }
+
+            if (grid.Columns["Running_Balance"] != null)
+            {
+                grid.Columns["Running_Balance"].HeaderText = "الرصيد التراكمي";
+                grid.Columns["Running_Balance"].Width = 140;
+                grid.Columns["Running_Balance"].DefaultCellStyle.Format = numberFormat;
+                grid.Columns["Running_Balance"].DisplayIndex = 5;
+            }
+
+            if (grid.Columns["Currency_Name"] != null)
+            {
+                grid.Columns["Currency_Name"].HeaderText = "العملة";
+                grid.Columns["Currency_Name"].Width = 100;
+                grid.Columns["Currency_Name"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                grid.Columns["Currency_Name"].DisplayIndex = 6;
+            }
+
+            if (grid.Columns["Post_Status"] != null)
+            {
+                grid.Columns["Post_Status"].HeaderText = "حالة القيد";
+                grid.Columns["Post_Status"].Width = 110;
+                grid.Columns["Post_Status"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                grid.Columns["Post_Status"].DisplayIndex = 7;
+            }
+
+            grid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+        }
+
+        /// <summary>
+        /// الحصول على الشبكة النشطة حالياً (من التبويب المفتوح أو الشبكة الافتراضية)
+        /// </summary>
+        private DataGridView GetActiveCurrencyGrid(out string activeCurrencyName)
+        {
+            activeCurrencyName = "كافة العملات";
+            if (_tabCurrencies != null && _tabCurrencies.SelectedTab != null)
+            {
+                activeCurrencyName = _tabCurrencies.SelectedTab.Tag?.ToString() ?? _tabCurrencies.SelectedTab.Text;
+                var gridInTab = _tabCurrencies.SelectedTab.Controls.OfType<DataGridView>().FirstOrDefault();
+                if (gridInTab != null) return gridInTab;
+            }
+            return dgvStatement;
+        }
+
+        // =========================================================
+        // 8. طباعة الشبكة المرنة (تطبع شبكة التبويب النشط مع عملته وخلاصته)
         // =========================================================
         private void btnPrintGrid_Click(object sender, EventArgs e)
         {
-            if (dgvStatement == null || dgvStatement.Rows.Count == 0)
+            DataGridView targetGrid = GetActiveCurrencyGrid(out string activeCurrencyName);
+
+            if (targetGrid == null || targetGrid.Rows.Count == 0)
             {
                 MessageBox.Show("لا توجد بيانات في الشبكة لطباعتها. يرجى تحديث البيانات أولاً.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -323,12 +491,12 @@ namespace AlRowad_ERP.UI.Reports
 
                     // 1. ترويسة التقرير الرئيسية
                     Font titleFont = new Font("Arial", 14, FontStyle.Bold);
-                    ev.Graphics.DrawString("كشف حساب تفصيلي - نظام الرواد ERP", titleFont, Brushes.DarkBlue, rightMargin, currentY, rtlFormat);
+                    ev.Graphics.DrawString($"كشف حساب تفصيلي ({activeCurrencyName}) - نظام الرواد ERP", titleFont, Brushes.DarkBlue, rightMargin, currentY, rtlFormat);
                     currentY += 35;
 
-                    // 2. ترويسة معلومات الحساب (الرقم والاسم)
+                    // 2. ترويسة معلومات الحساب
                     Font infoFont = new Font("Arial", 10, FontStyle.Bold);
-                    string accountInfo = $"رقم الحساب: {txtAccountId.Text}    |    اسم الحساب: {txtAccountName.Text}";
+                    string accountInfo = $"رقم الحساب: {txtAccountId.Text}    |    اسم الحساب: {txtAccountName.Text}    |    العملة: {activeCurrencyName}";
                     ev.Graphics.DrawString(accountInfo, infoFont, Brushes.Black, rightMargin, currentY, rtlFormat);
                     currentY += 25;
 
@@ -337,8 +505,8 @@ namespace AlRowad_ERP.UI.Reports
                     ev.Graphics.DrawString(periodInfo, subInfoFont, Brushes.Gray, rightMargin, currentY, rtlFormat);
                     currentY += 35;
 
-                    // 3. جلب الأعمدة المرئية مرتبة تماماً حسب الشاشة (DisplayIndex)
-                    var visibleCols = dgvStatement.Columns.Cast<DataGridViewColumn>()
+                    // 3. جلب الأعمدة المرئية مرتبة حسب الشاشة
+                    var visibleCols = targetGrid.Columns.Cast<DataGridViewColumn>()
                         .Where(c => c.Visible)
                         .OrderBy(c => c.DisplayIndex)
                         .ToList();
@@ -383,9 +551,9 @@ namespace AlRowad_ERP.UI.Reports
                     Pen cellPen = new Pen(Color.Silver, 1);
                     float lineHeight = 25;
 
-                    while (currentRow < dgvStatement.Rows.Count)
+                    while (currentRow < targetGrid.Rows.Count)
                     {
-                        DataGridViewRow row = dgvStatement.Rows[currentRow];
+                        DataGridViewRow row = targetGrid.Rows[currentRow];
 
                         foreach (var col in visibleCols)
                         {
@@ -399,13 +567,13 @@ namespace AlRowad_ERP.UI.Reports
                             {
                                 cellValue = dt.ToString("yyyy-MM-dd");
                             }
+                            else if (rawVal is decimal decVal)
+                            {
+                                cellValue = decVal.ToString(SystemConstants.Formatting.DefaultCurrencyFormat);
+                            }
                             else if (rawVal != null)
                             {
                                 cellValue = rawVal.ToString();
-                                if (DateTime.TryParse(cellValue, out DateTime parsedDate) && cellValue.Contains("00:00:00"))
-                                {
-                                    cellValue = parsedDate.ToString("yyyy-MM-dd");
-                                }
                             }
 
                             ev.Graphics.DrawRectangle(cellPen, colX, currentY, colW, lineHeight);
@@ -413,7 +581,7 @@ namespace AlRowad_ERP.UI.Reports
                             StringAlignment alignment = StringAlignment.Near;
                             if (col.Name == "Debit" || col.Name == "Credit" || col.Name == "Running_Balance")
                                 alignment = StringAlignment.Far;
-                            else if (col.Name == "Trans_Date" || col.Name == "Source_ID" || col.Name == "Post_Status")
+                            else if (col.Name == "Trans_Date" || col.Name == "Source_ID" || col.Name == "Post_Status" || col.Name == "Currency_Name")
                                 alignment = StringAlignment.Center;
 
                             StringFormat cellFormat = new StringFormat
@@ -436,14 +604,24 @@ namespace AlRowad_ERP.UI.Reports
                         }
                     }
 
+                    // رسم خلاصة العملة أسفل الجدول في الصفحة الأخيرة
+                    if (targetGrid.DataSource is List<AccountStatementDto> tabList && tabList.Count > 0)
+                    {
+                        var summary = tabList.First();
+                        currentY += 10;
+                        string summaryLine = $"إجمالي المدين: {summary.Total_Debit:#,##0.00}  |  إجمالي الدائن: {summary.Total_Credit:#,##0.00}  |  الرصيد ({summary.Balance_Type_Text}): {summary.Final_Balance:#,##0.00} {summary.Currency_Name}";
+                        ev.Graphics.DrawString(summaryLine, infoFont, Brushes.DarkBlue, rightMargin, currentY, rtlFormat);
+                        currentY += 22;
+                        ev.Graphics.DrawString($"المبلغ كتابةً: {summary.Amount_In_Words}", infoFont, Brushes.DarkRed, rightMargin, currentY, rtlFormat);
+                    }
+
                     ev.HasMorePages = false;
                     currentRow = 0;
                 };
 
-                // 6. نافذة المعاينة المخصصة
                 Form customPreviewForm = new Form
                 {
-                    Text = "معاينة طباعة كشف الحساب - نظام الرواد ERP",
+                    Text = $"معاينة طباعة كشف الحساب ({activeCurrencyName}) - نظام الرواد ERP",
                     Width = 1000,
                     Height = 800,
                     RightToLeft = RightToLeft.Yes,
@@ -495,12 +673,14 @@ namespace AlRowad_ERP.UI.Reports
         }
 
         // =========================================================
-        // 8. الطباعة الرسمية: فصل اسم التقرير العام عن بيانات صاحب الحساب
+        // 9. الطباعة الرسمية RDLC: تطبع العملة المختارة أو كافة العملات (كل عملة في صفحة مستقلة)
+        // =========================================================
+        // =========================================================
+        // 9. الطباعة الرسمية RDLC: فصل اسم التقرير الرسمي عن عنوان التبويب ودعم تعدد التقارير غير المقيد
         // =========================================================
         private async void btnPrintOfficial_Click(object sender, EventArgs e)
         {
-            var currentData = dgvStatement.DataSource as List<AccountStatementDto>;
-            if (currentData == null || currentData.Count == 0)
+            if (_currentStatementData == null || _currentStatementData.Count == 0)
             {
                 MessageBox.Show("لا توجد بيانات لطباعتها. يرجى استدعاء البيانات أولاً.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -508,27 +688,28 @@ namespace AlRowad_ERP.UI.Reports
 
             try
             {
-                // 1. المتغير الخاص باسم التقرير العام (يظهر في الترويسة مكان [@ReportTitle])
-                // يمكنك قراءته ديناميكياً من عنوان الشاشة this.Text أو كتابته بوضوح:
-                string reportTitle = "تقرير كشف حساب تفصيلي";
+                // 1. الاسم الرسمي للتقرير (يظهر في منتصف الورقة أعلى التواريخ)
+                string officialReportTitle = "تقرير كشف حساب تفصيلي";
 
-                // 2. المتغيرات الخاصة بتقرير كشف الحساب (تظهر في الـ Body أسفل الخط)
+                // 2. عنوان التبويب في شاشة العارض (لتمييز التبويبات عند فتح أكثر من كشف حساب)
+                string tabHeaderTitle = $"كشف حساب: {txtAccountName.Text}";
+
                 var extraParams = new Dictionary<string, string>
                 {
                     ["FromDate"] = dtpFrom.DateValue.ToString("yyyy-MM-dd"),
-                    ["ToDate"] = dtpTo.DateValue.ToString("yyyy-MM-dd"),
-                    ["AccountId"] = txtAccountId.Text,
-                    ["AccountName"] = txtAccountName.Text
+                    ["ToDate"] = dtpTo.DateValue.ToString("yyyy-MM-dd")
                 };
 
-                using (Frm_ReportViewer viewer = new Frm_ReportViewer())
-                {
-                    string dataSetName = "Rpt_AccountStatement";
+                string dataSetName = "Rpt_AccountStatement";
 
-                    // إرسال اسم التقرير الصافي لـ [@ReportTitle]، وإرسال صاحب الحساب ضمن extraParams
-                    await viewer.LoadReportAsync("Rpt_AccountStatement.rdlc", dataSetName, currentData, reportTitle, extraParams);
-                    viewer.ShowDialog(this);
-                }
+                // 🌟 استدعاء العارض المركزي غير المقيد مع تمرير اسم التقرير وعنوان التبويب منفصلين
+                await Frm_ReportViewer.OpenReportTabAsync(
+                    "Rpt_AccountStatement.rdlc",
+                    dataSetName,
+                    _currentStatementData,
+                    officialReportTitle,
+                    extraParams,
+                    tabHeaderTitle);
             }
             catch (Exception ex)
             {

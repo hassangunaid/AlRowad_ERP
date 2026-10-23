@@ -44,47 +44,53 @@ namespace AlRowad_ERP.Forms
             treeNode3,
             treeNode4,
             treeNode5});
-            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("دليل الحسابات");
-            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("بيانات العملاء");
-            System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("سند قبض");
+            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("بيانات العملاء");
+            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("تقرير كشف حساب");
+            System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("تقارير ادارة الحسابات", new System.Windows.Forms.TreeNode[] {
+            treeNode8});
             System.Windows.Forms.TreeNode treeNode10 = new System.Windows.Forms.TreeNode("سند صرف");
-            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("تقرير كشف حساب");
-            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("تقارير ادارة الحسابات", new System.Windows.Forms.TreeNode[] {
-            treeNode11});
-            System.Windows.Forms.TreeNode treeNode13 = new System.Windows.Forms.TreeNode("ادارة الحسابات", new System.Windows.Forms.TreeNode[] {
-            treeNode7,
-            treeNode8,
-            treeNode9,
+            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("سند قبض");
+            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("عمليات ادارة الحسابات", new System.Windows.Forms.TreeNode[] {
             treeNode10,
-            treeNode12});
-            System.Windows.Forms.TreeNode treeNode14 = new System.Windows.Forms.TreeNode("بيانات العملاء");
-            System.Windows.Forms.TreeNode treeNode15 = new System.Windows.Forms.TreeNode("ادارة المبيعات", new System.Windows.Forms.TreeNode[] {
+            treeNode11});
+            System.Windows.Forms.TreeNode treeNode13 = new System.Windows.Forms.TreeNode("دليل الحسابات");
+            System.Windows.Forms.TreeNode treeNode14 = new System.Windows.Forms.TreeNode("الارصدة الافتتاحية");
+            System.Windows.Forms.TreeNode treeNode15 = new System.Windows.Forms.TreeNode("مدخلات ادارة الحسابات", new System.Windows.Forms.TreeNode[] {
+            treeNode13,
             treeNode14});
-            System.Windows.Forms.TreeNode treeNode16 = new System.Windows.Forms.TreeNode("بيانات الموردين");
-            System.Windows.Forms.TreeNode treeNode17 = new System.Windows.Forms.TreeNode("ادارة المشتريات", new System.Windows.Forms.TreeNode[] {
-            treeNode16});
-            System.Windows.Forms.TreeNode treeNode18 = new System.Windows.Forms.TreeNode("بيانات الاصناف");
-            System.Windows.Forms.TreeNode treeNode19 = new System.Windows.Forms.TreeNode("ادارة المخازن", new System.Windows.Forms.TreeNode[] {
-            treeNode18});
-            System.Windows.Forms.TreeNode treeNode20 = new System.Windows.Forms.TreeNode("ادارة نظام الوكلاء");
-            System.Windows.Forms.TreeNode treeNode21 = new System.Windows.Forms.TreeNode("بيانات السائقين");
-            System.Windows.Forms.TreeNode treeNode22 = new System.Windows.Forms.TreeNode("فاتورة الحراج الفوري");
-            System.Windows.Forms.TreeNode treeNode23 = new System.Windows.Forms.TreeNode("تجميع الحراجات");
-            System.Windows.Forms.TreeNode treeNode24 = new System.Windows.Forms.TreeNode("ادارةا الوكيل وسيط", new System.Windows.Forms.TreeNode[] {
-            treeNode22,
-            treeNode23});
-            System.Windows.Forms.TreeNode treeNode25 = new System.Windows.Forms.TreeNode("بيانات الحمولة ");
-            System.Windows.Forms.TreeNode treeNode26 = new System.Windows.Forms.TreeNode("تقيم الحمولات");
-            System.Windows.Forms.TreeNode treeNode27 = new System.Windows.Forms.TreeNode("فاتورة شراء ");
-            System.Windows.Forms.TreeNode treeNode28 = new System.Windows.Forms.TreeNode("ادارة الوكيل مسوق", new System.Windows.Forms.TreeNode[] {
+            System.Windows.Forms.TreeNode treeNode16 = new System.Windows.Forms.TreeNode("ادارة الحسابات", new System.Windows.Forms.TreeNode[] {
+            treeNode7,
+            treeNode9,
+            treeNode12,
+            treeNode15});
+            System.Windows.Forms.TreeNode treeNode17 = new System.Windows.Forms.TreeNode("بيانات العملاء");
+            System.Windows.Forms.TreeNode treeNode18 = new System.Windows.Forms.TreeNode("ادارة المبيعات", new System.Windows.Forms.TreeNode[] {
+            treeNode17});
+            System.Windows.Forms.TreeNode treeNode19 = new System.Windows.Forms.TreeNode("بيانات الموردين");
+            System.Windows.Forms.TreeNode treeNode20 = new System.Windows.Forms.TreeNode("ادارة المشتريات", new System.Windows.Forms.TreeNode[] {
+            treeNode19});
+            System.Windows.Forms.TreeNode treeNode21 = new System.Windows.Forms.TreeNode("بيانات الاصناف");
+            System.Windows.Forms.TreeNode treeNode22 = new System.Windows.Forms.TreeNode("ادارة المخازن", new System.Windows.Forms.TreeNode[] {
+            treeNode21});
+            System.Windows.Forms.TreeNode treeNode23 = new System.Windows.Forms.TreeNode("ادارة نظام الوكلاء");
+            System.Windows.Forms.TreeNode treeNode24 = new System.Windows.Forms.TreeNode("بيانات السائقين");
+            System.Windows.Forms.TreeNode treeNode25 = new System.Windows.Forms.TreeNode("فاتورة الحراج الفوري");
+            System.Windows.Forms.TreeNode treeNode26 = new System.Windows.Forms.TreeNode("تجميع الحراجات");
+            System.Windows.Forms.TreeNode treeNode27 = new System.Windows.Forms.TreeNode("ادارةا الوكيل وسيط", new System.Windows.Forms.TreeNode[] {
             treeNode25,
-            treeNode26,
-            treeNode27});
-            System.Windows.Forms.TreeNode treeNode29 = new System.Windows.Forms.TreeNode("نـظـام ادارة الـوكـلاء", new System.Windows.Forms.TreeNode[] {
-            treeNode20,
-            treeNode21,
+            treeNode26});
+            System.Windows.Forms.TreeNode treeNode28 = new System.Windows.Forms.TreeNode("بيانات الحمولة ");
+            System.Windows.Forms.TreeNode treeNode29 = new System.Windows.Forms.TreeNode("تقيم الحمولات");
+            System.Windows.Forms.TreeNode treeNode30 = new System.Windows.Forms.TreeNode("فاتورة شراء ");
+            System.Windows.Forms.TreeNode treeNode31 = new System.Windows.Forms.TreeNode("ادارة الوكيل مسوق", new System.Windows.Forms.TreeNode[] {
+            treeNode28,
+            treeNode29,
+            treeNode30});
+            System.Windows.Forms.TreeNode treeNode32 = new System.Windows.Forms.TreeNode("نـظـام ادارة الـوكـلاء", new System.Windows.Forms.TreeNode[] {
+            treeNode23,
             treeNode24,
-            treeNode28});
+            treeNode27,
+            treeNode31});
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.treeView = new System.Windows.Forms.TreeView();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -123,75 +129,82 @@ namespace AlRowad_ERP.Forms
             treeNode5.Text = "النسخ الاحتياطي";
             treeNode6.Name = "sec_SysAdmin";
             treeNode6.Text = "ادارة النظام";
-            treeNode7.Name = "AccountsForm";
-            treeNode7.Tag = "AccountsForm";
-            treeNode7.Text = "دليل الحسابات";
-            treeNode8.Name = "Customers";
-            treeNode8.Tag = "Customers";
-            treeNode8.Text = "بيانات العملاء";
-            treeNode9.Name = "ReceiptVoucher";
-            treeNode9.Tag = "ReceiptVoucher";
-            treeNode9.Text = "سند قبض";
+            treeNode7.Name = "Customers";
+            treeNode7.Tag = "Customers";
+            treeNode7.Text = "بيانات العملاء";
+            treeNode8.Name = "Frm_AccountStatement";
+            treeNode8.Tag = "Frm_AccountStatement";
+            treeNode8.Text = "تقرير كشف حساب";
+            treeNode9.Name = "";
+            treeNode9.Text = "تقارير ادارة الحسابات";
             treeNode10.Name = "PaymentVoucher";
             treeNode10.Tag = "PaymentVoucher";
             treeNode10.Text = "سند صرف";
-            treeNode11.Name = "Frm_AccountStatement";
-            treeNode11.Tag = "Frm_AccountStatement";
-            treeNode11.Text = "تقرير كشف حساب";
+            treeNode11.Name = "ReceiptVoucher";
+            treeNode11.Tag = "ReceiptVoucher";
+            treeNode11.Text = "سند قبض";
             treeNode12.Name = "";
-            treeNode12.Text = "تقارير ادارة الحسابات";
-            treeNode13.Name = "sec_AccManagement";
-            treeNode13.Text = "ادارة الحسابات";
-            treeNode14.Name = "Customers";
-            treeNode14.Tag = "Customers";
-            treeNode14.Text = "بيانات العملاء";
-            treeNode15.Name = "sec_SalesManagement";
-            treeNode15.Text = "ادارة المبيعات";
-            treeNode16.Name = "Node4";
-            treeNode16.Tag = "Suppliers";
-            treeNode16.Text = "بيانات الموردين";
-            treeNode17.Name = "Node0";
-            treeNode17.Text = "ادارة المشتريات";
-            treeNode18.Name = "Items";
-            treeNode18.Tag = "Items";
-            treeNode18.Text = "بيانات الاصناف";
-            treeNode19.Name = "Node0";
-            treeNode19.Text = "ادارة المخازن";
-            treeNode20.Name = "AgencySettingsForm";
-            treeNode20.Tag = "AgencySettingsForm";
-            treeNode20.Text = "ادارة نظام الوكلاء";
-            treeNode21.Name = "Node0";
-            treeNode21.Tag = "DriverForm";
-            treeNode21.Text = "بيانات السائقين";
-            treeNode22.Name = "AuctionReceiptForm";
-            treeNode22.Tag = "AuctionReceiptForm";
-            treeNode22.Text = "فاتورة الحراج الفوري";
-            treeNode23.Name = "Node9";
-            treeNode23.Tag = "AuctionSalesDetails";
-            treeNode23.Text = "تجميع الحراجات";
-            treeNode24.Name = "Node3";
-            treeNode24.Text = "ادارةا الوكيل وسيط";
-            treeNode25.Name = "Node6";
-            treeNode25.Tag = "ShipmentReceiptForm";
-            treeNode25.Text = "بيانات الحمولة ";
-            treeNode26.Name = "Node7";
-            treeNode26.Tag = "ShipmentEvaluationForm";
-            treeNode26.Text = "تقيم الحمولات";
-            treeNode27.Name = "Node8";
-            treeNode27.Tag = "FarmerInvoiceForm";
-            treeNode27.Text = "فاتورة شراء ";
-            treeNode28.Name = "Node5";
-            treeNode28.Text = "ادارة الوكيل مسوق";
-            treeNode29.Name = "AgentsManagemen";
-            treeNode29.Tag = "";
-            treeNode29.Text = "نـظـام ادارة الـوكـلاء";
+            treeNode12.Text = "عمليات ادارة الحسابات";
+            treeNode13.Name = "AccountsForm";
+            treeNode13.Tag = "AccountsForm";
+            treeNode13.Text = "دليل الحسابات";
+            treeNode14.Name = "Frm_OpeningBalances";
+            treeNode14.Tag = "Frm_OpeningBalances";
+            treeNode14.Text = "الارصدة الافتتاحية";
+            treeNode15.Name = "Node1";
+            treeNode15.Text = "مدخلات ادارة الحسابات";
+            treeNode16.Name = "sec_AccManagement";
+            treeNode16.Text = "ادارة الحسابات";
+            treeNode17.Name = "Customers";
+            treeNode17.Tag = "Customers";
+            treeNode17.Text = "بيانات العملاء";
+            treeNode18.Name = "sec_SalesManagement";
+            treeNode18.Text = "ادارة المبيعات";
+            treeNode19.Name = "Node4";
+            treeNode19.Tag = "Suppliers";
+            treeNode19.Text = "بيانات الموردين";
+            treeNode20.Name = "Node0";
+            treeNode20.Text = "ادارة المشتريات";
+            treeNode21.Name = "Items";
+            treeNode21.Tag = "Items";
+            treeNode21.Text = "بيانات الاصناف";
+            treeNode22.Name = "Node0";
+            treeNode22.Text = "ادارة المخازن";
+            treeNode23.Name = "AgencySettingsForm";
+            treeNode23.Tag = "AgencySettingsForm";
+            treeNode23.Text = "ادارة نظام الوكلاء";
+            treeNode24.Name = "Node0";
+            treeNode24.Tag = "DriverForm";
+            treeNode24.Text = "بيانات السائقين";
+            treeNode25.Name = "AuctionReceiptForm";
+            treeNode25.Tag = "AuctionReceiptForm";
+            treeNode25.Text = "فاتورة الحراج الفوري";
+            treeNode26.Name = "Node9";
+            treeNode26.Tag = "AuctionSalesDetails";
+            treeNode26.Text = "تجميع الحراجات";
+            treeNode27.Name = "Node3";
+            treeNode27.Text = "ادارةا الوكيل وسيط";
+            treeNode28.Name = "Node6";
+            treeNode28.Tag = "ShipmentReceiptForm";
+            treeNode28.Text = "بيانات الحمولة ";
+            treeNode29.Name = "Node7";
+            treeNode29.Tag = "ShipmentEvaluationForm";
+            treeNode29.Text = "تقيم الحمولات";
+            treeNode30.Name = "Node8";
+            treeNode30.Tag = "FarmerInvoiceForm";
+            treeNode30.Text = "فاتورة شراء ";
+            treeNode31.Name = "Node5";
+            treeNode31.Text = "ادارة الوكيل مسوق";
+            treeNode32.Name = "AgentsManagemen";
+            treeNode32.Tag = "";
+            treeNode32.Text = "نـظـام ادارة الـوكـلاء";
             this.treeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode6,
-            treeNode13,
-            treeNode15,
-            treeNode17,
-            treeNode19,
-            treeNode29});
+            treeNode16,
+            treeNode18,
+            treeNode20,
+            treeNode22,
+            treeNode32});
             this.treeView.Scrollable = false;
             this.treeView.Size = new System.Drawing.Size(391, 954);
             this.treeView.TabIndex = 0;

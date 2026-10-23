@@ -34,8 +34,8 @@
             this.txtAccountId = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.txtAccountName = new System.Windows.Forms.TextBox();
-            this.dtpFrom = new AlRowad_ERP.Controls.AlRowadDateTextBox();
-            this.dtpTo = new AlRowad_ERP.Controls.AlRowadDateTextBox();
+            this.dtpFrom = new AlRowad_ERP.UI.Controls.AlRowadDateTextBox();
+            this.dtpTo = new AlRowad_ERP.UI.Controls.AlRowadDateTextBox();
             this.chkIncludeUnposted = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -229,8 +229,8 @@
         private System.Windows.Forms.TextBox txtAccountId;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtAccountName;
-        private AlRowad_ERP.Controls.AlRowadDateTextBox dtpFrom;
-        private AlRowad_ERP.Controls.AlRowadDateTextBox dtpTo;
+        private AlRowad_ERP.UI.Controls.AlRowadDateTextBox dtpFrom;
+        private AlRowad_ERP.UI.Controls.AlRowadDateTextBox dtpTo;
         private System.Windows.Forms.CheckBox chkIncludeUnposted;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;

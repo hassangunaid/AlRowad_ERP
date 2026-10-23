@@ -43,7 +43,7 @@
             this.cust_Phone = new System.Windows.Forms.TextBox();
             this.cust_Name = new System.Windows.Forms.TextBox();
             this.cust_ID = new System.Windows.Forms.TextBox();
-            this.alRowadToolBar = new AlRowad_ERP.Controls.AlRowadToolBar();
+            this.alRowadToolBar = new AlRowad_ERP.UI.Controls.AlRowadToolBar();
             this.cmb_parent_ID = new System.Windows.Forms.ComboBox();
             this.GrBox_currencies = new System.Windows.Forms.GroupBox();
             this.dgv_currencies = new System.Windows.Forms.DataGridView();
@@ -404,7 +404,7 @@
         private System.Windows.Forms.TextBox cust_Phone;
         private System.Windows.Forms.TextBox cust_Name;
         private System.Windows.Forms.TextBox cust_ID;
-        private Controls.AlRowadToolBar alRowadToolBar;
+        private AlRowad_ERP.UI.Controls.AlRowadToolBar alRowadToolBar;
         private System.Windows.Forms.ComboBox cmb_parent_ID;
         private System.Windows.Forms.GroupBox GrBox_currencies;
         private System.Windows.Forms.DataGridView dgv_currencies;

@@ -43,7 +43,7 @@
             this.txt_Supp_Phone = new System.Windows.Forms.TextBox();
             this.txt_Supp_Address = new System.Windows.Forms.TextBox();
             this.txt_Acc_ID = new System.Windows.Forms.TextBox();
-            this.alRowadToolBar1 = new AlRowad_ERP.Controls.AlRowadToolBar();
+            this.alRowadToolBar1 = new AlRowad_ERP.UI.Controls.AlRowadToolBar();
             this.GrBox_currencies = new System.Windows.Forms.GroupBox();
             this.dgv_currencies = new System.Windows.Forms.DataGridView();
             this.Is_Active = new System.Windows.Forms.DataGridViewCheckBoxColumn();
@@ -400,7 +400,7 @@
         private System.Windows.Forms.TextBox txt_Supp_Phone;
         private System.Windows.Forms.TextBox txt_Supp_Address;
         private System.Windows.Forms.TextBox txt_Acc_ID;
-        private Controls.AlRowadToolBar alRowadToolBar1;
+        private AlRowad_ERP.UI.Controls.AlRowadToolBar alRowadToolBar1;
         private System.Windows.Forms.GroupBox GrBox_currencies;
         private System.Windows.Forms.DataGridView dgv_currencies;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Is_Active;

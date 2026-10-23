@@ -53,7 +53,7 @@ namespace AlRowad_ERP.Forms
             this.report_Type = new System.Windows.Forms.ComboBox();
             this.is_Stopped = new System.Windows.Forms.CheckBox();
             this.treeAccounts = new System.Windows.Forms.TreeView();
-            this.alRowadToolBar = new AlRowad_ERP.Controls.AlRowadToolBar();
+            this.alRowadToolBar = new AlRowad_ERP.UI.Controls.AlRowadToolBar();
             this.GrBox_currencies = new System.Windows.Forms.GroupBox();
             this.dgv_currencies = new System.Windows.Forms.DataGridView();
             this.Is_Active = new System.Windows.Forms.DataGridViewCheckBoxColumn();
@@ -608,7 +608,7 @@ namespace AlRowad_ERP.Forms
         private System.Windows.Forms.ComboBox report_Type;
         private System.Windows.Forms.CheckBox is_Stopped;
         private System.Windows.Forms.TreeView treeAccounts;
-        private Controls.AlRowadToolBar alRowadToolBar;
+        private AlRowad_ERP.UI.Controls.AlRowadToolBar alRowadToolBar;
         private GroupBox GrBox_currencies;
         private ComboBox acc_Nature;
         private Button btnCollapseAll;

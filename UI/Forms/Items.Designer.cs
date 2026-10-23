@@ -40,7 +40,7 @@
             this.item_IDTextBox = new System.Windows.Forms.TextBox();
             this.item_NameTextBox = new System.Windows.Forms.TextBox();
             this.default_PriceTextBox = new System.Windows.Forms.TextBox();
-            this.alRowadToolBar1 = new AlRowad_ERP.Controls.AlRowadToolBar();
+            this.alRowadToolBar1 = new AlRowad_ERP.UI.Controls.AlRowadToolBar();
             this.cmb_BaseUnit = new System.Windows.Forms.ComboBox();
             this.txt_UpdatedAt = new System.Windows.Forms.TextBox();
             this.txt_UpdatedBy = new System.Windows.Forms.TextBox();
@@ -271,7 +271,7 @@
         private System.Windows.Forms.TextBox item_IDTextBox;
         private System.Windows.Forms.TextBox item_NameTextBox;
         private System.Windows.Forms.TextBox default_PriceTextBox;
-        private Controls.AlRowadToolBar alRowadToolBar1;
+        private AlRowad_ERP.UI. Controls.AlRowadToolBar alRowadToolBar1;
         private System.Windows.Forms.ComboBox cmb_BaseUnit;
         private System.Windows.Forms.TextBox txt_UpdatedAt;
         private System.Windows.Forms.TextBox txt_UpdatedBy;

@@ -12,6 +12,7 @@ using AlRowad_ERP.Core.Helpers;
 using AlRowad_ERP.Core.Constants;
 using AlRowad_ERP.AlRowad_ERPDataSetTableAdapters;
 using AlRowad_ERP.Core;
+using AlRowad_ERP.UI.Controls;
 
 namespace AlRowad_ERP.UI.Base
 {

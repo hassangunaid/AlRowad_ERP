@@ -36,7 +36,7 @@
             this.txtCompanyNameEn = new System.Windows.Forms.TextBox();
             this.txtEmail = new System.Windows.Forms.TextBox();
             this.picLogo = new System.Windows.Forms.PictureBox();
-            this.alRowadToolBar1 = new AlRowad_ERP.Controls.AlRowadToolBar();
+            this.alRowadToolBar1 = new AlRowad_ERP.UI.Controls.AlRowadToolBar();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -236,7 +236,7 @@
         private System.Windows.Forms.TextBox txtCompanyNameEn;
         private System.Windows.Forms.TextBox txtEmail;
         private System.Windows.Forms.PictureBox picLogo;
-        private AlRowad_ERP.Controls.AlRowadToolBar alRowadToolBar1;
+        private AlRowad_ERP.UI.Controls.AlRowadToolBar alRowadToolBar1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;

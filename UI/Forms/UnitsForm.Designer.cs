@@ -29,7 +29,7 @@ namespace AlRowad_ERP.Forms
             this.unit_NameTextBox = new System.Windows.Forms.TextBox();
             this.conversion_FactorTextBox = new System.Windows.Forms.TextBox();
             this.unitsDataGridView = new System.Windows.Forms.DataGridView();
-            this.alRowadToolBar1 = new AlRowad_ERP.Controls.AlRowadToolBar();
+            this.alRowadToolBar1 = new AlRowad_ERP.UI.Controls.AlRowadToolBar();
             this.txt_UpdatedAt = new System.Windows.Forms.TextBox();
             this.txt_UpdatedBy = new System.Windows.Forms.TextBox();
             this.txt_CreatedBy = new System.Windows.Forms.TextBox();
@@ -243,7 +243,7 @@ namespace AlRowad_ERP.Forms
         private System.Windows.Forms.TextBox conversion_FactorTextBox;
         private System.Windows.Forms.DataGridView unitsDataGridView;
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn;
-        private Controls.AlRowadToolBar alRowadToolBar1;
+        private AlRowad_ERP.UI.Controls.AlRowadToolBar alRowadToolBar1;
         private TextBox txt_UpdatedAt;
         private TextBox txt_UpdatedBy;
         private TextBox txt_CreatedBy;

@@ -10,7 +10,7 @@ namespace AlRowad_ERP.UI.Helpers
         /// <summary>
         /// الدالة المركزية لمعالجة كافة اختصارات النظام وفقاً لحالة الشاشة
         /// </summary>
-        public static bool HandleCommandKey(BaseEntryForm form, AlRowadToolBar toolBar, ref Message msg, Keys keyData)
+        public static bool HandleCommandKey(BaseEntryForm form, AlRowad_ERP.UI.Controls.AlRowadToolBar toolBar, ref Message msg, Keys keyData)
         {
             // 1. العمليات السيادية الأساسية
             if (keyData == Keys.F10 && toolBar != null && toolBar.btn_Save.Enabled) { form.OnSave(); return true; }

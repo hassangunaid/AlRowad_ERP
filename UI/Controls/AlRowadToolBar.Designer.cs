@@ -1,4 +1,4 @@
-﻿namespace AlRowad_ERP.Controls
+﻿namespace AlRowad_ERP.UI.Controls
 {
     partial class AlRowadToolBar
     {

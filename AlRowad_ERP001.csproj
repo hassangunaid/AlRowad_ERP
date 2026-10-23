@@ -222,11 +222,20 @@
     <Compile Include="Models\JournalHeaderModel.cs" />
     <Compile Include="Models\CustomerCurrencyDto.cs" />
     <Compile Include="Models\Reports\AccountStatementDto.cs" />
+    <Compile Include="UI\Controls\AlRowadAccountsGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UI\Controls\AlRowadSettingsToolBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UI\Controls\AlRowadSettingsToolBar.Designer.cs">
       <DependentUpon>AlRowadSettingsToolBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Forms\Accounts\Frm_OpeningBalances.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\Accounts\Frm_OpeningBalances.Designer.cs">
+      <DependentUpon>Frm_OpeningBalances.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Forms\Frm_CompanyInfo.cs">
       <SubType>Form</SubType>
@@ -485,10 +494,15 @@
     <EmbeddedResource Include="Reports\Templates\121213.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Templates\Rpt_AccountStatement.rdlc" />
+    <EmbeddedResource Include="Reports\Templates\Rpt_AccountStatement.rdlc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\Templates\Master Report Template.rdlc" />
     <EmbeddedResource Include="UI\Controls\AlRowadSettingsToolBar.resx">
       <DependentUpon>AlRowadSettingsToolBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\Accounts\Frm_OpeningBalances.resx">
+      <DependentUpon>Frm_OpeningBalances.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\Frm_CompanyInfo.resx">
       <DependentUpon>Frm_CompanyInfo.cs</DependentUpon>

@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 
-namespace AlRowad_ERP.Controls
+namespace AlRowad_ERP.UI.Controls
 {
     public class AlRowadDateTextBox : TextBox
     {
